@@ -87,6 +87,7 @@
       background-position: center;
       background-repeat: no-repeat;
       background-attachment: fixed;
+      overflow-x: hidden; /* Prevent horizontal scrollbar during transitions */
     }
 
     h1,
@@ -738,6 +739,30 @@
     .view-hidden {
       display: none !important;
     }
+
+    /* Page/View Transition Animations */
+    #landing-view,
+    #login-view,
+    #register-view,
+    #kanban-view {
+      /* Initial state before becoming visible */
+      opacity: 0;
+      transform: translateY(20px); /* Start slightly lower */
+      transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+      will-change: opacity, transform; /* Performance hint for the browser */
+    }
+
+    /* State when a view is active (the .view-hidden class is removed) */
+    /* This will trigger the transition from the initial state above */
+    #landing-view:not(.view-hidden),
+    #login-view:not(.view-hidden),
+    #register-view:not(.view-hidden),
+    #kanban-view:not(.view-hidden) {
+      opacity: 1;
+      transform: translateY(0px);
+    }
+    /* .view-hidden is already defined with display: none !important; */
+
 
     .auth-form-container {
       max-width: 500px;
