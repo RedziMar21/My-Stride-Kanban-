@@ -145,7 +145,7 @@
       position: relative;
       box-shadow: 0 1px 5px var(--color-ui-shadow);
       cursor: pointer;
-      transition: box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out, border-color 0.2s ease-in-out;
+      transition: box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out, border-color 0.2s ease-in-out, opacity 0.3s ease-out, max-height 0.3s ease-out; /* Added for filtering */
       background-color: var(--color-card-bg);
       border: 1px solid var(--color-card-border);
       color: var(--color-text-primary);
@@ -161,6 +161,17 @@
       animation: fadeIn 0.4s ease-out;
     }
 
+    .task-card.hidden-by-filter { 
+        opacity: 0;
+        max-height: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+        margin-bottom: 0;
+        overflow: hidden;
+        border-width: 0; 
+    }
+
+
     .task-card.priority-low {
       border-left-color: var(--color-priority-low);
     }
@@ -173,7 +184,7 @@
       border-left-color: var(--color-priority-high);
     }
 
-    .task-card:last-child {
+    .task-card:last-child:not(.hidden-by-filter) { 
       margin-bottom: 0;
     }
 
@@ -373,14 +384,14 @@
       background-color: var(--color-ui-bg-light);
       border: 1px solid var(--color-ui-border);
       color: var(--color-text-primary);
-      padding: 1rem 1.5rem;
+      padding: 1rem 1.5rem; /* Default padding */
       box-shadow: inset 0 1px 3px var(--color-ui-shadow);
       font-size: 1.05rem;
       backdrop-filter: blur(6px);
       -webkit-backdrop-filter: blur(6px);
     }
 
-    .input-field-custom.pr-10 {
+    .input-field-custom.pr-10 { /* Specific for password field */
       padding-right: 2.5rem;
     }
 
@@ -455,6 +466,9 @@
       margin-right: 0.3rem;
       flex-shrink: 0;
     }
+    .task-meta i.fa-exclamation-circle { color: var(--color-priority-high); }
+    .task-meta i.fa-clock { color: var(--color-upcoming-text); }
+
 
     .task-meta .priority-low-text {
       color: var(--color-priority-low);
@@ -740,20 +754,16 @@
       display: none !important;
     }
 
-    /* Page/View Transition Animations */
     #landing-view,
     #login-view,
     #register-view,
     #kanban-view {
-      /* Initial state before becoming visible */
       opacity: 0;
-      transform: translateY(20px); /* Start slightly lower */
+      transform: translateY(20px); 
       transition: opacity 0.4s ease-out, transform 0.4s ease-out;
-      will-change: opacity, transform; /* Performance hint for the browser */
+      will-change: opacity, transform; 
     }
 
-    /* State when a view is active (the .view-hidden class is removed) */
-    /* This will trigger the transition from the initial state above */
     #landing-view:not(.view-hidden),
     #login-view:not(.view-hidden),
     #register-view:not(.view-hidden),
@@ -761,8 +771,6 @@
       opacity: 1;
       transform: translateY(0px);
     }
-    /* .view-hidden is already defined with display: none !important; */
-
 
     .auth-form-container {
       max-width: 500px;
@@ -976,6 +984,35 @@
       color: var(--color-text-primary);
     }
 
+    /* MODIFIED: Search Filter Styling */
+    #search-task-container {
+      margin: 1.5rem auto; /* A bit more vertical space */
+      padding: 0 1.5rem;
+      width: 100%;
+      max-width: 600px;
+    }
+    .search-input-wrapper {
+        position: relative; /* For absolute positioning the icon */
+    }
+    #search-task-input.input-field-custom { /* Be specific to override base .input-field-custom if needed */
+      width: 100%;
+      /* Override only padding-left from .input-field-custom for the icon */
+      /* Default .input-field-custom has padding: 1rem 1.5rem; */
+      /* So, we only need to ensure left padding is enough for the icon + space */
+      padding-left: 3rem; /* e.g., 1rem for icon position + 1.2rem for icon width + 0.8rem for space */
+    }
+    .search-input-wrapper .search-icon {
+        position: absolute;
+        left: 1rem; /* Position icon where default padding would start */
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--color-text-muted);
+        pointer-events: none; 
+        font-size: 1rem; /* Or adjust as needed */
+        z-index: 5; /* Ensure icon is above input background, if needed */
+    }
+
+
     .global-footer {
       position: fixed;
       bottom: 0;
@@ -998,7 +1035,6 @@
         max-width: 380px;
         flex-basis: 330px;
       }
-
       .kanban-columns-container {
         gap: 1.5rem;
       }
@@ -1010,419 +1046,93 @@
         justify-content: flex-start;
         padding: 0 1.5rem 2rem 1.5rem;
       }
-
       .kanban-column-wrapper {
         min-width: 320px;
         margin: 0 0.75rem;
         flex-basis: 320px;
       }
-
-      .column-header-title {
-        font-size: 1.45rem;
-      }
-
-      .column-header-title .icon {
-        width: 1.8rem;
-        height: 1.8rem;
-        margin-right: 1rem;
-      }
-
-      .tasks-container {
-        padding: 0.75rem;
-      }
-
-      .task-card {
-        padding: 1.1rem;
-      }
-
-      .task-description {
-        padding-right: 2.8rem;
-      }
+      .column-header-title { font-size: 1.45rem; }
+      .column-header-title .icon { width: 1.8rem; height: 1.8rem; margin-right: 1rem; }
+      .tasks-container { padding: 0.75rem; }
+      .task-card { padding: 1.1rem; }
+      .task-description { padding-right: 2.8rem; }
     }
 
     @media (max-width: 768px) {
-      body {
-        padding-bottom: 5rem;
-      }
+      body { padding-bottom: 5rem; }
+      .kanban-columns-container { flex-direction: column; align-items: center; margin: 2rem auto; overflow-x: hidden; gap: 2rem; padding: 0 0 1.5rem 0; }
+      .kanban-column-wrapper { margin: 0; width: 90%; max-width: 500px; min-width: unset; padding: 1.5rem; border-radius: 1.2rem; }
+      .landing-header h1 { font-size: 2.5rem; }
+      .landing-header p { font-size: 0.9rem; }
+      .glass { border-radius: 1.2rem; padding: 1.5rem; margin-bottom: 2rem; }
+      .column-header { margin-bottom: 1rem; }
+      .column-header-title { font-size: 1.3rem; }
+      .column-header-title .icon { width: 1.6rem; height: 1.6rem; margin-right: 0.8rem; }
+      .tasks-container { padding: 0.5rem; margin-top: 0.75rem; }
+      .task-card { padding: 1rem; border-radius: 0.75rem; font-size: 0.9rem; margin-bottom: 0.8rem; border-left-width: 5px; }
+      .task-actions { top: 0.6rem; right: 0.6rem; gap: 0.4rem; }
+      .task-actions button { font-size: 0.9rem; }
+      .task-description { padding-right: 2.5rem; }
+      #add-task-section h2 { font-size: 1.1rem; }
+      .input-field-custom, .btn-primary-accent, .btn-secondary, .btn-neutral { padding: 0.8rem 1.2rem; font-size: 0.95rem; border-radius: 0.6rem; }
+      .task-meta { font-size: 0.8rem; gap: 0.5rem 0.8rem; margin-top: 0.6rem; padding-top: 0.4rem; }
+      .task-meta i { font-size: 0.9em; }
+      .progress-container { margin: 1.5rem auto; }
+      .export-buttons { flex-direction: column; gap: 0.75rem; padding: 0 1rem; }
+      #landing-features { margin-top: 2rem; }
+      .feature-item { margin-bottom: 2.5rem; }
+      #search-task-container { max-width: 90%; margin-bottom: 1rem; } /* Adjust search container on mobile */
+      #search-task-input.input-field-custom { padding-left: 2.75rem; /* Slightly less padding on mobile if needed */ }
+      .search-input-wrapper .search-icon { left: 0.85rem; font-size: 0.9rem; }
 
-      .kanban-columns-container {
-        flex-direction: column;
-        align-items: center;
-        margin: 2rem auto;
-        overflow-x: hidden;
-        gap: 2rem;
-        padding: 0 0 1.5rem 0;
-      }
-
-      .kanban-column-wrapper {
-        margin: 0;
-        width: 90%;
-        max-width: 500px;
-        min-width: unset;
-        padding: 1.5rem;
-        border-radius: 1.2rem;
-      }
-
-      .landing-header h1 {
-        font-size: 2.5rem;
-      }
-
-      .landing-header p {
-        font-size: 0.9rem;
-      }
-
-      .glass {
-        border-radius: 1.2rem;
-        padding: 1.5rem;
-        margin-bottom: 2rem;
-      }
-
-      .column-header {
-        margin-bottom: 1rem;
-      }
-
-      .column-header-title {
-        font-size: 1.3rem;
-      }
-
-      .column-header-title .icon {
-        width: 1.6rem;
-        height: 1.6rem;
-        margin-right: 0.8rem;
-      }
-
-      .tasks-container {
-        padding: 0.5rem;
-        margin-top: 0.75rem;
-      }
-
-      .task-card {
-        padding: 1rem;
-        border-radius: 0.75rem;
-        font-size: 0.9rem;
-        margin-bottom: 0.8rem;
-        border-left-width: 5px;
-      }
-
-      .task-actions {
-        top: 0.6rem;
-        right: 0.6rem;
-        gap: 0.4rem;
-      }
-
-      .task-actions button {
-        font-size: 0.9rem;
-      }
-
-      .task-description {
-        padding-right: 2.5rem;
-      }
-
-      #add-task-section h2 {
-        font-size: 1.1rem;
-      }
-
-      .input-field-custom,
-      .btn-primary-accent,
-      .btn-secondary,
-      .btn-neutral {
-        padding: 0.8rem 1.2rem;
-        font-size: 0.95rem;
-        border-radius: 0.6rem;
-      }
-
-      .task-meta {
-        font-size: 0.8rem;
-        gap: 0.5rem 0.8rem;
-        margin-top: 0.6rem;
-        padding-top: 0.4rem;
-      }
-
-      .task-meta i {
-        font-size: 0.9em;
-      }
-
-      .progress-container {
-        margin: 1.5rem auto;
-      }
-
-      .export-buttons {
-        flex-direction: column;
-        gap: 0.75rem;
-        padding: 0 1rem;
-      }
-
-      #landing-features {
-        margin-top: 2rem;
-      }
-
-      .feature-item {
-        margin-bottom: 2.5rem;
-      }
     }
 
     @media (max-width: 480px) {
-      .kanban-column-wrapper {
-        width: 95%;
-        max-width: 350px;
-        padding: 1.2rem;
-      }
-
-      .landing-header h1 {
-        font-size: 2rem;
-      }
-
-      .landing-header p {
-        font-size: 0.8rem;
-      }
-
-      .glass {
-        padding: 1.2rem;
-        margin-bottom: 1.5rem;
-      }
-
-      .task-card {
-        padding: 0.9rem;
-        border-radius: 0.7rem;
-        font-size: 0.85rem;
-        margin-bottom: 0.7rem;
-        border-left-width: 4px;
-      }
-
-      .task-description {
-        padding-right: 2.2rem;
-      }
-
-      .task-actions {
-        top: 0.5rem;
-        right: 0.5rem;
-        gap: 0.3rem;
-      }
-
-      .task-actions button {
-        font-size: 0.85rem;
-      }
-
-      .input-field-custom,
-      .btn-primary-accent,
-      .btn-secondary,
-      .btn-neutral {
-        padding: 0.7rem 1rem;
-        font-size: 0.9rem;
-      }
-
-      .column-header-title {
-        font-size: 1.2rem;
-      }
-
-      .column-header-title .icon {
-        width: 1.5rem;
-        height: 1.5rem;
-        margin-right: 0.6rem;
-      }
+      .kanban-column-wrapper { width: 95%; max-width: 350px; padding: 1.2rem; }
+      .landing-header h1 { font-size: 2rem; }
+      .landing-header p { font-size: 0.8rem; }
+      .glass { padding: 1.2rem; margin-bottom: 1.5rem; }
+      .task-card { padding: 0.9rem; border-radius: 0.7rem; font-size: 0.85rem; margin-bottom: 0.7rem; border-left-width: 4px; }
+      .task-description { padding-right: 2.2rem; }
+      .task-actions { top: 0.5rem; right: 0.5rem; gap: 0.3rem; }
+      .task-actions button { font-size: 0.85rem; }
+      .input-field-custom, .btn-primary-accent, .btn-secondary, .btn-neutral { padding: 0.7rem 1rem; font-size: 0.9rem; }
+      .column-header-title { font-size: 1.2rem; }
+      .column-header-title .icon { width: 1.5rem; height: 1.5rem; margin-right: 0.6rem; }
+      #search-task-input.input-field-custom { padding-left: 2.5rem; }
+      .search-input-wrapper .search-icon { left: 0.75rem; }
     }
 
     @media print {
-
-      html,
-      body {
-        width: 100% !important;
-        height: auto !important;
-        overflow: visible !important;
-        background: white !important;
-        color: black !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        font-size: 9pt !important;
-        line-height: 1.2 !important;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-      }
-
-      #landing-view,
-      #login-view,
-      #register-view,
-      .theme-toggle-container,
-      #kanban-view-header,
-      #add-task-section,
-      .progress-container,
-      .export-buttons,
-      footer.global-footer {
-        display: none !important;
-      }
-
-      #kanban-view {
-        display: block !important;
-        width: 100% !important;
-        margin: 0 !important;
-        padding: 1cm !important;
-        box-sizing: border-box !important;
-      }
-
-      .kanban-columns-container {
-        display: flex !important;
-        flex-direction: row !important;
-        flex-wrap: wrap !important;
-        justify-content: flex-start !important;
-        gap: 10px !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        overflow: visible !important;
-      }
-
-      .kanban-column-wrapper {
-        border: 1px solid #ccc !important;
-        box-shadow: none !important;
-        background-color: #fff !important;
-        padding: 0.5rem !important;
-        margin: 0 !important;
-        flex: 1 1 200px !important;
-        min-width: 180px !important;
-        max-width: 30% !important;
-        break-inside: avoid !important;
-        page-break-inside: avoid !important;
-        min-height: unset !important;
-        height: auto !important;
-        overflow: visible !important;
-        backdrop-filter: none !important;
-        -webkit-backdrop-filter: none !important;
-      }
-
-      .kanban-column-wrapper:hover {
-        transform: none !important;
-      }
-
-      .column-header {
-        margin-bottom: 0.5rem !important;
-      }
-
-      .column-header-title {
-        border-bottom: 1px solid #ccc !important;
-        padding-bottom: 0.25rem !important;
-        margin-bottom: 0.5rem !important;
-        color: #333 !important;
-        font-size: 11pt !important;
-      }
-
-      .column-header-title .icon {
-        display: none !important;
-      }
-
-      .column-header-title span.task-count {
-        font-size: 9pt !important;
-        color: #555 !important;
-      }
-
-      .tasks-container {
-        overflow: visible !important;
-        max-height: none !important;
-        min-height: unset !important;
-        padding: 0.25rem !important;
-        margin-top: 0.25rem !important;
-        padding-bottom: 0 !important;
-      }
-
-      .tasks-container>.task-card {
-        margin-bottom: 0.3rem !important;
-      }
-
-      .task-card {
-        box-shadow: none !important;
-        border: 1px solid #e0e0e0 !important;
-        background-color: #fff !important;
-        padding: 0.4rem !important;
-        break-inside: avoid !important;
-        page-break-inside: avoid !important;
-        cursor: auto !important;
-        backdrop-filter: none !important;
-        -webkit-backdrop-filter: none !important;
-      }
-
-      .task-card.priority-low {
-        border-left: 4px solid #48BB78 !important;
-      }
-
-      .task-card.priority-medium {
-        border-left: 4px solid #ED8936 !important;
-      }
-
-      .task-card.priority-high {
-        border-left: 4px solid #E53E3E !important;
-      }
-
-      .task-card:hover {
-        transform: none !important;
-      }
-
-      .task-actions,
-      .edit-form {
-        display: none !important;
-      }
-
-      .task-content-view {
-        display: block !important;
-      }
-
-      .task-description {
-        padding-right: 0 !important;
-        font-size: 8.5pt !important;
-        line-height: 1.2 !important;
-        color: #333 !important;
-        margin-bottom: 0.25rem !important;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-      }
-
-      .task-meta {
-        color: #555 !important;
-        max-height: none !important;
-        opacity: 1 !important;
-        margin-top: 0.25rem !important;
-        padding-top: 0.25rem !important;
-        border-top: 1px dotted #eee !important;
-        font-size: 7.5pt !important;
-        line-height: 1.1 !important;
-        display: block !important;
-        transition: none !important;
-        pointer-events: auto !important;
-      }
-
-      .task-meta span {
-        display: block !important;
-        margin-bottom: 2px !important;
-      }
-
-      .task-meta i {
-        color: #666 !important;
-        margin-right: 3px !important;
-        font-size: 0.9em !important;
-      }
-
-      .task-meta .priority-low-text {
-        color: #48BB78 !important;
-      }
-
-      .task-meta .priority-medium-text {
-        color: #ED8936 !important;
-      }
-
-      .task-meta .priority-high-text {
-        color: #E53E3E !important;
-      }
-
-      .task-meta .overdue-text {
-        color: #E53E3E !important;
-      }
-
-      .task-meta .upcoming-text {
-        color: #D69E2E !important;
-      }
-
-      .task-meta .normal-date-text {
-        color: #718096 !important;
-      }
+      html, body { width: 100% !important; height: auto !important; overflow: visible !important; background: white !important; color: black !important; margin: 0 !important; padding: 0 !important; font-size: 9pt !important; line-height: 1.2 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+      #landing-view, #login-view, #register-view, .theme-toggle-container, #kanban-view-header, #add-task-section, .progress-container, .export-buttons, #search-task-container, footer.global-footer { display: none !important; }
+      #kanban-view { display: block !important; width: 100% !important; margin: 0 !important; padding: 1cm !important; box-sizing: border-box !important; }
+      .kanban-columns-container { display: flex !important; flex-direction: row !important; flex-wrap: wrap !important; justify-content: flex-start !important; gap: 10px !important; margin: 0 !important; padding: 0 !important; width: 100% !important; max-width: 100% !important; overflow: visible !important; }
+      .kanban-column-wrapper { border: 1px solid #ccc !important; box-shadow: none !important; background-color: #fff !important; padding: 0.5rem !important; margin: 0 !important; flex: 1 1 200px !important; min-width: 180px !important; max-width: 30% !important; break-inside: avoid !important; page-break-inside: avoid !important; min-height: unset !important; height: auto !important; overflow: visible !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+      .kanban-column-wrapper:hover { transform: none !important; }
+      .column-header { margin-bottom: 0.5rem !important; }
+      .column-header-title { border-bottom: 1px solid #ccc !important; padding-bottom: 0.25rem !important; margin-bottom: 0.5rem !important; color: #333 !important; font-size: 11pt !important; }
+      .column-header-title .icon { display: none !important; }
+      .column-header-title span.task-count { font-size: 9pt !important; color: #555 !important; }
+      .tasks-container { overflow: visible !important; max-height: none !important; min-height: unset !important; padding: 0.25rem !important; margin-top: 0.25rem !important; padding-bottom: 0 !important; }
+      .tasks-container>.task-card { margin-bottom: 0.3rem !important; }
+      .task-card { box-shadow: none !important; border: 1px solid #e0e0e0 !important; background-color: #fff !important; padding: 0.4rem !important; break-inside: avoid !important; page-break-inside: avoid !important; cursor: auto !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; opacity: 1 !important; max-height: none !important; }
+      .task-card.priority-low { border-left: 4px solid #48BB78 !important; }
+      .task-card.priority-medium { border-left: 4px solid #ED8936 !important; }
+      .task-card.priority-high { border-left: 4px solid #E53E3E !important; }
+      .task-card:hover { transform: none !important; }
+      .task-actions, .edit-form { display: none !important; }
+      .task-content-view { display: block !important; }
+      .task-description { padding-right: 0 !important; font-size: 8.5pt !important; line-height: 1.2 !important; color: #333 !important; margin-bottom: 0.25rem !important; word-wrap: break-word; overflow-wrap: break-word; }
+      .task-meta { color: #555 !important; max-height: none !important; opacity: 1 !important; margin-top: 0.25rem !important; padding-top: 0.25rem !important; border-top: 1px dotted #eee !important; font-size: 7.5pt !important; line-height: 1.1 !important; display: block !important; transition: none !important; pointer-events: auto !important; }
+      .task-meta span { display: block !important; margin-bottom: 2px !important; }
+      .task-meta i { color: #666 !important; margin-right: 3px !important; font-size: 0.9em !important; }
+      .task-meta .priority-low-text { color: #48BB78 !important; }
+      .task-meta .priority-medium-text { color: #ED8936 !important; }
+      .task-meta .priority-high-text { color: #E53E3E !important; }
+      .task-meta .overdue-text { color: #E53E3E !important; }
+      .task-meta .upcoming-text { color: #D69E2E !important; }
+      .task-meta .normal-date-text { color: #718096 !important; }
     }
   </style>
 </head>
@@ -1579,9 +1289,9 @@
     </div>
     <section id="add-task-section" class="add-task-section my-12 md:my-16 w-full max-w-xl mx-auto">
       <div class="glass p-7 md:p-10 rounded-xl shadow-lg">
-        <h2 class="text-xl font-semibold font-poppins mb-6" style="color: var(--color-text-primary);">Add New Task</h2>
+        <h2 class="text-xl font-semibold font-poppins mb-6" style="color: var(--color-text-primary);">Add New Task (Alt+N to focus)</h2>
         <div class="flex flex-col space-y-5">
-          <input type="text" id="taskInput" class="input-field-custom" placeholder="What are you working on?">
+          <input type="text" id="taskInput" class="input-field-custom" placeholder="What are you working on? (Ctrl+Enter to add)">
           <button id="addTaskBtn" class="btn-primary-accent flex items-center justify-center">
             <i class="fas fa-plus mr-2"></i><span class="font-poppins">Add Task</span>
           </button>
@@ -1589,6 +1299,15 @@
         <p id="task-error-message" class="error-message hidden mt-5">Oops! Please add a task description.</p>
       </div>
     </section>
+
+    <!-- MODIFIED: Search Filter HTML Structure -->
+    <section id="search-task-container">
+        <div class="search-input-wrapper"> 
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="search-task-input" class="input-field-custom" placeholder="Search tasks by text or labels...">
+        </div>
+    </section>
+
     <main class="w-full max-w-screen-xl flex-grow mx-auto">
       <div class="kanban-columns-container">
         <div id="todo" class="kanban-column-wrapper">
@@ -1639,7 +1358,7 @@
   </footer>
 
   <script>
-    const API_BASE_URL = 'http://127.0.0.1/stride_project/api';
+    const API_BASE_URL = 'http://127.0.0.1/stride_project/api'; // Replace with your actual API base URL if deployed
 
     
     const views = {
@@ -1670,7 +1389,7 @@
     const passwordToggleButtons = document.querySelectorAll('.toggle-password-visibility');
 
     let taskInput, addTaskBtn, todoColumnTasks, inprogressColumnTasks, doneColumnTasks, columnsTasksContainers, taskErrorMessageElement,
-      progressFill, progressText, exportJsonBtn, printBoardBtn;
+      progressFill, progressText, exportJsonBtn, printBoardBtn, searchTaskInput; 
 
     let lastDragEnd = 0;
     const DRAG_CLICK_THRESHOLD = 100;
@@ -1688,6 +1407,22 @@
     const scrollObserver = new IntersectionObserver(observerCallback, observerOptions);
     if (scrollAnimatedElements && scrollAnimatedElements.length > 0) {
       scrollAnimatedElements.forEach(el => scrollObserver.observe(el));
+    }
+
+    function setButtonLoadingState(button, isLoading, loadingText = 'Processing...') {
+        if (!button) return;
+        if (isLoading) {
+            button.disabled = true;
+            if (!button.dataset.originalInnerHTML) {
+                button.dataset.originalInnerHTML = button.innerHTML;
+            }
+            button.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i> ${loadingText}`;
+        } else {
+            button.disabled = false;
+            if (button.dataset.originalInnerHTML) {
+                button.innerHTML = button.dataset.originalInnerHTML;
+            }
+        }
     }
 
     function navigateTo(viewName) {
@@ -1721,13 +1456,16 @@
 
     async function handleRegister(event) {
       event.preventDefault();
+      const registerButton = registerForm.querySelector('button[type="submit"]');
+      setButtonLoadingState(registerButton, true, 'Registering...');
+
       const email = registerEmailInput.value.trim();
       const password = registerPasswordInput.value;
       const confirmPassword = registerConfirmPasswordInput.value;
       if(registerErrorMessage) registerErrorMessage.classList.add('hidden');
-      if (!email || !password || !confirmPassword) { showAuthError(registerErrorMessage, "All fields are required."); return; }
-      if (password !== confirmPassword) { showAuthError(registerErrorMessage, "Passwords do not match."); return; }
-      if (password.length < 6) { showAuthError(registerErrorMessage, "Password must be at least 6 characters."); return; }
+      if (!email || !password || !confirmPassword) { showAuthError(registerErrorMessage, "All fields are required."); setButtonLoadingState(registerButton, false); return; }
+      if (password !== confirmPassword) { showAuthError(registerErrorMessage, "Passwords do not match."); setButtonLoadingState(registerButton, false); return; }
+      if (password.length < 6) { showAuthError(registerErrorMessage, "Password must be at least 6 characters."); setButtonLoadingState(registerButton, false); return; }
 
       try {
         const response = await fetch(`${API_BASE_URL}/register.php`, {
@@ -1740,16 +1478,26 @@
         if (response.ok && result.success) {
           navigateTo('kanban');
           if(registerForm) registerForm.reset();
+          if(registerErrorMessage) registerErrorMessage.classList.add('hidden');
         } else { showAuthError(registerErrorMessage, result.error || "Registration failed."); }
       } catch (error) { console.error('Registration error:', error); showAuthError(registerErrorMessage, "An error occurred. Please try again."); }
+      finally {
+        setButtonLoadingState(registerButton, false);
+        if (registerButton && registerButton.dataset.originalInnerHTML) {
+             registerButton.innerHTML = registerButton.dataset.originalInnerHTML;
+        }
+      }
     }
 
     async function handleLogin(event) {
       event.preventDefault();
+      const loginButton = loginForm.querySelector('button[type="submit"]');
+      setButtonLoadingState(loginButton, true, 'Logging in...');
+
       const email = loginEmailInput.value.trim();
       const password = loginPasswordInput.value;
       if(loginErrorMessage) loginErrorMessage.classList.add('hidden');
-      if (!email || !password) { showAuthError(loginErrorMessage, "Email and password are required."); return; }
+      if (!email || !password) { showAuthError(loginErrorMessage, "Email and password are required."); setButtonLoadingState(loginButton, false); return; }
 
       try {
         const response = await fetch(`${API_BASE_URL}/login.php`, {
@@ -1762,11 +1510,19 @@
         if (response.ok && result.success) {
           navigateTo('kanban');
           if(loginForm) loginForm.reset();
+          if(loginErrorMessage) loginErrorMessage.classList.add('hidden');
         } else { showAuthError(loginErrorMessage, result.error || "Login failed."); }
       } catch (error) { console.error('Login error:', error); showAuthError(loginErrorMessage, "An error occurred. Please try again."); }
+      finally {
+        setButtonLoadingState(loginButton, false);
+        if (loginButton && loginButton.dataset.originalInnerHTML) {
+             loginButton.innerHTML = loginButton.dataset.originalInnerHTML;
+        }
+      }
     }
 
     async function handleLogout() {
+      setButtonLoadingState(logoutBtn, true, 'Logging out...');
       try {
         const response = await fetch(`${API_BASE_URL}/logout.php`, {
           method: 'POST',
@@ -1776,6 +1532,14 @@
         if (response.ok && result.success) { navigateTo('login'); }
         else { alert("Logout failed. Please try again."); }
       } catch (error) { console.error('Logout error:', error); alert("An error occurred during logout."); }
+      finally {
+        setButtonLoadingState(logoutBtn, false);
+        if (logoutBtn && logoutBtn.dataset.originalInnerHTML) {
+             logoutBtn.innerHTML = logoutBtn.dataset.originalInnerHTML;
+        } else if (logoutBtn) {
+             logoutBtn.innerHTML = '<i class="fas fa-sign-out-alt mr-1"></i>Logout';
+        }
+      }
     }
 
     async function checkLoginStatus() {
@@ -1791,7 +1555,6 @@
     function showAuthError(el, msg) { if (el) { el.textContent = msg; el.classList.remove('hidden'); } }
 
     function initializeKanbanDOM() {
-      if (initializeKanbanDOM.initialized && document.getElementById('taskInput')) { return; }
       taskInput = document.getElementById('taskInput');
       addTaskBtn = document.getElementById('addTaskBtn');
       todoColumnTasks = document.getElementById('todo')?.querySelector('.tasks-container');
@@ -1803,6 +1566,7 @@
       progressText = document.getElementById('progress-text');
       exportJsonBtn = document.getElementById('export-json');
       printBoardBtn = document.getElementById('print-board');
+      searchTaskInput = document.getElementById('search-task-input'); 
 
       if (addTaskBtn) {
         addTaskBtn.removeEventListener('click', addTask); addTaskBtn.addEventListener('click', addTask);
@@ -1820,16 +1584,43 @@
       }
       if (exportJsonBtn) { exportJsonBtn.removeEventListener('click', exportBoardAsJson); exportJsonBtn.addEventListener('click', exportBoardAsJson); }
       if (printBoardBtn) { printBoardBtn.removeEventListener('click', printBoard); printBoardBtn.addEventListener('click', printBoard); }
-      initializeKanbanDOM.initialized = true;
+      
+      if (searchTaskInput) {
+          searchTaskInput.removeEventListener('input', filterTasks);
+          searchTaskInput.addEventListener('input', filterTasks);
+      }
     }
-    initializeKanbanDOM.initialized = false;
-
-    function handleTaskInputKeypress(event) { if (event.key === 'Enter') { addTask(); } }
+    
+    function handleTaskInputKeypress(event) {
+      if (event.key === 'Enter' && event.ctrlKey) { 
+        event.preventDefault(); 
+        addTask();
+      }
+    }
     function handleTaskInput() { if (taskInput && taskInput.value.trim() !== '') { if (taskErrorMessageElement) taskErrorMessageElement.classList.add('hidden'); } }
 
     function formatDate(date) { if (!date) { return ''; } if (typeof date === 'string' && date.match(/^\d{4}-\d{2}-\d{2}$/)) { return date; } const d = new Date(date); if (isNaN(d.getTime())) { return ''; } const year = d.getFullYear(); const month = ('0' + (d.getMonth() + 1)).slice(-2); const day = ('0' + d.getDate()).slice(-2); return `${year}-${month}-${day}`; }
     function getDaysRemaining(dueDate) { if (!dueDate) { return null; } const today = new Date(); today.setHours(0, 0, 0, 0); const [year, month, day] = dueDate.split('-').map(Number); const due = new Date(Date.UTC(year, month - 1, day)); const diffTime = due - today; return Math.ceil(diffTime / (1000 * 60 * 60 * 24)); }
-    function getDueDateDisplay(dueDate) { if (!dueDate) { return { text: '', class: '' }; } const days = getDaysRemaining(dueDate); if (days < 0) { const absDays = Math.abs(days); return { text: `Overdue by ${absDays} day${absDays > 1 ? 's' : ''}`, class: 'overdue-text' }; } else if (days === 0) { return { text: 'Due Today', class: 'upcoming-text' }; } else if (days === 1) { return { text: 'Due Tomorrow', class: 'upcoming-text' }; } else if (days <= 7) { return { text: `Due in ${days} days`, class: 'upcoming-text' }; } else { const [year, month, day] = dueDate.split('-').map(Number); const displayDate = new Date(year, month - 1, day).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }); return { text: `Due ${displayDate}`, class: 'normal-date-text' }; } }
+    
+    function getDueDateDisplay(dueDate) {
+        if (!dueDate) { return { text: '', class: '', iconClass: '' }; }
+        const days = getDaysRemaining(dueDate);
+        if (days < 0) {
+            const absDays = Math.abs(days);
+            return { text: `Overdue by ${absDays} day${absDays > 1 ? 's' : ''}`, class: 'overdue-text', iconClass: 'fas fa-exclamation-circle' };
+        } else if (days === 0) {
+            return { text: 'Due Today', class: 'upcoming-text', iconClass: 'fas fa-clock' };
+        } else if (days === 1) {
+            return { text: 'Due Tomorrow', class: 'upcoming-text', iconClass: 'fas fa-clock' };
+        } else if (days <= 7) {
+            return { text: `Due in ${days} days`, class: 'upcoming-text', iconClass: '' };
+        } else {
+            const [year, month, day] = dueDate.split('-').map(Number);
+            const displayDate = new Date(year, month - 1, day).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+            return { text: `Due ${displayDate}`, class: 'normal-date-text', iconClass: '' };
+        }
+    }
+
 
     function createTaskCard({ id, text, priority = 'low', due_date = '', labels = '', column_id = 'todo', sort_order = 0 }) {
       const taskCard = document.createElement('div');
@@ -1847,10 +1638,19 @@
       const textElement = document.createElement('p'); textElement.classList.add('task-description'); textElement.textContent = text;
       const metaElement = document.createElement('div'); metaElement.classList.add('task-meta');
       const priorityDisplay = document.createElement('span'); priorityDisplay.innerHTML = `<i class="fas fa-flag"></i> Priority: <strong class="priority-${priority}-text">${priority.charAt(0).toUpperCase() + priority.slice(1)}</strong>`; metaElement.appendChild(priorityDisplay);
-      const dueDateDisplayElement = document.createElement('span'); const dueDateInfo = getDueDateDisplay(displayDueDate); 
-      if (dueDateInfo.text) { dueDateDisplayElement.innerHTML = `<i class="fas fa-calendar-alt"></i> ${dueDateInfo.text}`; dueDateDisplayElement.classList.add(dueDateInfo.class); }
-      else { dueDateDisplayElement.innerHTML = ''; dueDateDisplayElement.classList.remove('overdue-text', 'upcoming-text', 'normal-date-text'); }
+      
+      const dueDateDisplayElement = document.createElement('span'); 
+      const dueDateInfo = getDueDateDisplay(displayDueDate); 
+      if (dueDateInfo.text) { 
+          let iconHTML = dueDateInfo.iconClass ? `<i class="${dueDateInfo.iconClass} mr-1"></i>` : '';
+          dueDateDisplayElement.innerHTML = `<i class="fas fa-calendar-alt mr-1"></i> ${iconHTML}${dueDateInfo.text}`; 
+          dueDateDisplayElement.classList.add(dueDateInfo.class); 
+      } else { 
+          dueDateDisplayElement.innerHTML = ''; 
+          dueDateDisplayElement.classList.remove('overdue-text', 'upcoming-text', 'normal-date-text'); 
+      }
       metaElement.appendChild(dueDateDisplayElement);
+
       const labelsDisplay = document.createElement('span'); const labelTags = (labels || '').split(',').map(l => l.trim()).filter(l => l);
       if (labelTags.length > 0) { labelsDisplay.innerHTML = `<i class="fas fa-tags"></i> ${labelTags.join(', ')}`; } else { labelsDisplay.innerHTML = ''; }
       metaElement.appendChild(labelsDisplay);
@@ -1873,29 +1673,34 @@
 
       deleteButton.addEventListener('click', async (e) => {
         e.stopPropagation();
-        try {
-          const response = await fetch(`${API_BASE_URL}/tasks_api.php?id=${taskCard.id}`, {
-            method: 'DELETE', credentials: 'include'
-          });
-          const result = await response.json();
-          if (response.ok && result.success) {
-            taskCard.classList.add('removing');
-            taskCard.addEventListener('animationend', () => { taskCard.remove(); updateProgressStats(); }, { once: true });
-          } else { alert("Failed to delete task: " + (result.error || "Server error.")); }
-        } catch (error) { console.error("Error deleting task:", error); alert("Error deleting task."); }
+        const taskTextPreview = textElement.textContent.length > 50 ? textElement.textContent.substring(0, 50) + "..." : textElement.textContent;
+        if (confirm(`Are you sure you want to delete the task: "${taskTextPreview}"?`)) {
+            try {
+              const response = await fetch(`${API_BASE_URL}/tasks_api.php?id=${taskCard.id}`, {
+                method: 'DELETE', credentials: 'include'
+              });
+              const result = await response.json();
+              if (response.ok && result.success) {
+                taskCard.classList.add('removing');
+                taskCard.addEventListener('animationend', () => { taskCard.remove(); updateProgressStats(); }, { once: true });
+              } else { alert("Failed to delete task: " + (result.error || "Server error.")); }
+            } catch (error) { console.error("Error deleting task:", error); alert("Error deleting task."); }
+        }
       });
 
       editButton.addEventListener('click', (e) => { e.stopPropagation(); taskCard.classList.add('editing'); editForm.querySelector('.edit-text').value = textElement.textContent; editForm.querySelector('.edit-priority').value = taskCard.getAttribute('data-priority'); editForm.querySelector('.edit-duedate').value = taskCard.getAttribute('data-duedate'); editForm.querySelector('.edit-labels').value = taskCard.getAttribute('data-labels'); editForm.querySelector('.edit-text').focus(); });
       editForm.querySelector('.cancel-btn').addEventListener('click', (e) => { e.stopPropagation(); taskCard.classList.remove('editing'); });
 
-      editForm.querySelector('.save-btn').addEventListener('click', async (e) => {
+      const saveEditButton = editForm.querySelector('.save-btn');
+      saveEditButton.addEventListener('click', async (e) => {
         e.stopPropagation();
+        setButtonLoadingState(saveEditButton, true, 'Saving...');
         const newText = editForm.querySelector('.edit-text').value.trim();
         const newPriority = editForm.querySelector('.edit-priority').value;
         const newDueDateRaw = editForm.querySelector('.edit-duedate').value;
         const newDueDateForDB = newDueDateRaw === '' ? null : newDueDateRaw;
         const newLabels = editForm.querySelector('.edit-labels').value.trim();
-        if (newText === '') { alert("Task description cannot be empty!"); editForm.querySelector('.edit-text').focus(); return; }
+        if (newText === '') { alert("Task description cannot be empty!"); editForm.querySelector('.edit-text').focus(); setButtonLoadingState(saveEditButton, false); return; }
         const updatedTaskData = { id: taskCard.id, text: newText, priority: newPriority, dueDate: newDueDateForDB, labels: newLabels }; 
         try {
           const response = await fetch(`${API_BASE_URL}/tasks_api.php`, {
@@ -1908,9 +1713,17 @@
             taskCard.classList.remove('priority-low', 'priority-medium', 'priority-high');
             taskCard.classList.add(`priority-${newPriority}`);
             priorityDisplay.innerHTML = `<i class="fas fa-flag"></i> Priority: <strong class="priority-${newPriority}-text">${newPriority.charAt(0).toUpperCase() + newPriority.slice(1)}</strong>`;
-            const updatedDueDateInfo = getDueDateDisplay(newDueDateRaw);
+            
+            const updatedDueDateInfo = getDueDateDisplay(newDueDateRaw); 
             dueDateDisplayElement.classList.remove('overdue-text', 'upcoming-text', 'normal-date-text');
-            if (updatedDueDateInfo.text) { dueDateDisplayElement.innerHTML = `<i class="fas fa-calendar-alt"></i> ${updatedDueDateInfo.text}`; dueDateDisplayElement.classList.add(updatedDueDateInfo.class); } else { dueDateDisplayElement.innerHTML = ''; }
+            if (updatedDueDateInfo.text) { 
+                let iconHTML = updatedDueDateInfo.iconClass ? `<i class="${updatedDueDateInfo.iconClass} mr-1"></i>` : '';
+                dueDateDisplayElement.innerHTML = `<i class="fas fa-calendar-alt mr-1"></i> ${iconHTML}${updatedDueDateInfo.text}`; 
+                dueDateDisplayElement.classList.add(updatedDueDateInfo.class); 
+            } else { 
+                dueDateDisplayElement.innerHTML = ''; 
+            }
+
             const newLabelTags = newLabels.split(',').map(l => l.trim()).filter(l => l);
             if (newLabelTags.length > 0) { labelsDisplay.innerHTML = `<i class="fas fa-tags"></i> ${newLabelTags.join(', ')}`; } else { labelsDisplay.innerHTML = ''; }
             taskCard.setAttribute('data-priority', newPriority);
@@ -1919,8 +1732,17 @@
             taskCard.classList.remove('editing');
             if (!taskCard.classList.contains('expanded')) { taskCard.classList.add('expanded'); }
             updateProgressStats();
+            filterTasks(); // Apply filter in case task text/labels changed
           } else { alert("Failed to update task: " + (result.error || "Server error.")); }
         } catch (error) { console.error('Error updating task:', error); alert("Error updating task."); }
+        finally {
+            setButtonLoadingState(saveEditButton, false);
+            if (saveEditButton && saveEditButton.dataset.originalInnerHTML) {
+                saveEditButton.innerHTML = saveEditButton.dataset.originalInnerHTML;
+            } else { 
+                saveEditButton.innerHTML = '<i class="fas fa-check mr-1"></i> Save';
+            }
+        }
       });
       taskCard.addEventListener('dragstart', handleDragStart);
       taskCard.addEventListener('dragend', handleDragEnd);
@@ -1945,6 +1767,7 @@
       if (taskErrorMessageElement) {
         taskErrorMessageElement.classList.add('hidden');
       }
+      setButtonLoadingState(addTaskBtn, true, 'Adding...');
 
       const newTaskPayload = {
         text: taskText,
@@ -1974,6 +1797,7 @@
               taskInput.value = '';
             }
             updateProgressStats();
+            filterTasks(); 
           } else {
             alert("Failed to add task: " + (result.error || "Server error: " + response.statusText));
           }
@@ -1985,6 +1809,14 @@
       } catch (error) {
         console.error('Error adding task:', error);
         alert("Error adding task. Please try again or check the console.");
+      }
+      finally {
+        setButtonLoadingState(addTaskBtn, false);
+        if (addTaskBtn && addTaskBtn.dataset.originalInnerHTML) {
+             addTaskBtn.innerHTML = addTaskBtn.dataset.originalInnerHTML;
+        } else if (addTaskBtn) { 
+             addTaskBtn.innerHTML = '<i class="fas fa-plus mr-2"></i><span class="font-poppins">Add Task</span>';
+        }
       }
     }
 
@@ -2019,19 +1851,14 @@
         targetDropZone.insertBefore(draggableElement, beforeElement);
         draggableElement.setAttribute('data-column', targetColumnId);
         
-
         const tasksToUpdatePayload = [];
-
-        
         const cardsInTarget = Array.from(targetDropZone.querySelectorAll('.task-card'));
         cardsInTarget.forEach((card, index) => {
           tasksToUpdatePayload.push({ id: card.id, column_id: targetColumnId, sort_order: index });
         });
-
         
         if (originalColumnId && originalColumnId !== targetColumnId && oldParent && oldParent.classList.contains('tasks-container')) {
           Array.from(oldParent.querySelectorAll('.task-card')).forEach((card, index) => {
-            
             if (!tasksToUpdatePayload.find(t => t.id === card.id)) {
                 tasksToUpdatePayload.push({ id: card.id, column_id: originalColumnId, sort_order: index });
             }
@@ -2042,8 +1869,6 @@
 
         if (uniqueTasksToUpdate.length > 0) {
           try {
-            
-            
             for (const taskData of uniqueTasksToUpdate) {
               const response = await fetch(`${API_BASE_URL}/tasks_api.php`, {
                 method: 'PUT', headers: { 'Content-Type': 'application/json' },
@@ -2069,9 +1894,10 @@
 
     function updateTaskCountsInHeaders() {
       if (!todoColumnTasks || !inprogressColumnTasks || !doneColumnTasks) return;
-      const todoCount = todoColumnTasks.children.length;
-      const ipCount = inprogressColumnTasks.children.length;
-      const dCount = doneColumnTasks.children.length;
+      const todoCount = Array.from(todoColumnTasks.children).filter(c => !c.classList.contains('hidden-by-filter')).length; 
+      const ipCount = Array.from(inprogressColumnTasks.children).filter(c => !c.classList.contains('hidden-by-filter')).length; 
+      const dCount = Array.from(doneColumnTasks.children).filter(c => !c.classList.contains('hidden-by-filter')).length; 
+      
       const todoCountEl = document.getElementById('todo-count');
       const ipCountEl = document.getElementById('inprogress-count');
       const doneCountEl = document.getElementById('done-count');
@@ -2122,6 +1948,7 @@
             });
           }
         });
+        filterTasks(); 
         updateProgressStats();
       } catch (error) { console.error("Error loading tasks:", error); }
     }
@@ -2129,7 +1956,21 @@
     function setTheme(theme) { document.body.classList.toggle('dark-mode', theme === 'dark'); sunIcon.classList.toggle('hidden', theme === 'dark'); moonIcon.classList.toggle('hidden', theme === 'light'); localStorage.setItem('strideKanbanTheme', theme); }
     function loadThemePreference() { const savedTheme = localStorage.getItem('strideKanbanTheme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); setTheme(savedTheme); }
 
-    function updateProgressStats() { if (!todoColumnTasks || !inprogressColumnTasks || !doneColumnTasks || !progressFill || !progressText) return; const todoCount = todoColumnTasks.children.length; const inprogressCount = inprogressColumnTasks.children.length; const doneCount = doneColumnTasks.children.length; const totalTasks = todoCount + inprogressCount + doneCount; updateTaskCountsInHeaders(); let progress = totalTasks > 0 ? (doneCount / totalTasks) * 100 : 0; progressFill.style.width = `${progress}%`; progressText.textContent = `${Math.round(progress)}% Complete`; }
+    function updateProgressStats() { 
+        if (!todoColumnTasks || !inprogressColumnTasks || !doneColumnTasks || !progressFill || !progressText) return; 
+        
+        const todoCount = Array.from(document.querySelectorAll('#todo .task-card:not(.hidden-by-filter)')).length;
+        const inprogressCount = Array.from(document.querySelectorAll('#inprogress .task-card:not(.hidden-by-filter)')).length;
+        const doneCount = Array.from(document.querySelectorAll('#done .task-card:not(.hidden-by-filter)')).length;
+        
+        const totalVisibleTasks = todoCount + inprogressCount + doneCount;
+        updateTaskCountsInHeaders(); 
+        
+        let progress = totalVisibleTasks > 0 ? (doneCount / totalVisibleTasks) * 100 : 0; 
+        progressFill.style.width = `${progress}%`; 
+        progressText.textContent = `${Math.round(progress)}% Complete (Visible)`; 
+    }
+
 
     async function exportBoardAsJson() {
       try {
@@ -2148,6 +1989,30 @@
       } catch (e) { console.error("Error exporting JSON:", e); alert("Could not export tasks."); }
     }
     function printBoard() { window.print(); }
+
+    function filterTasks() {
+        if (!searchTaskInput || !columnsTasksContainers) return;
+        const searchTerm = searchTaskInput.value.toLowerCase().trim();
+        
+        columnsTasksContainers.forEach(container => {
+            const tasks = container.querySelectorAll('.task-card');
+            tasks.forEach(taskCard => {
+                const taskTextElement = taskCard.querySelector('.task-description');
+                const taskText = taskTextElement ? taskTextElement.textContent.toLowerCase() : '';
+                const taskLabels = (taskCard.getAttribute('data-labels') || '').toLowerCase();
+                
+                const matchesSearch = taskText.includes(searchTerm) || taskLabels.includes(searchTerm);
+                
+                if (matchesSearch) {
+                    taskCard.classList.remove('hidden-by-filter');
+                } else {
+                    taskCard.classList.add('hidden-by-filter');
+                }
+            });
+        });
+        updateProgressStats(); 
+    }
+
 
     function initEventListeners() {
       if(landingLoginBtn) landingLoginBtn.addEventListener('click', () => navigateTo('login'));
@@ -2189,6 +2054,21 @@
           });
         });
       }
+
+      if (loginEmailInput) loginEmailInput.addEventListener('input', () => { if(loginErrorMessage) loginErrorMessage.classList.add('hidden'); });
+      if (loginPasswordInput) loginPasswordInput.addEventListener('input', () => { if(loginErrorMessage) loginErrorMessage.classList.add('hidden'); });
+      if (registerEmailInput) registerEmailInput.addEventListener('input', () => { if(registerErrorMessage) registerErrorMessage.classList.add('hidden'); });
+      if (registerPasswordInput) registerPasswordInput.addEventListener('input', () => { if(registerErrorMessage) registerErrorMessage.classList.add('hidden'); });
+      if (registerConfirmPasswordInput) registerConfirmPasswordInput.addEventListener('input', () => { if(registerErrorMessage) registerErrorMessage.classList.add('hidden'); });
+
+      document.addEventListener('keydown', (event) => {
+        if (event.altKey && (event.key === 'n' || event.key === 'N')) { 
+          event.preventDefault(); 
+          if (views.kanban && !views.kanban.classList.contains('view-hidden')) {
+            if (taskInput) taskInput.focus();
+          }
+        }
+      });
     }
 
     document.addEventListener('DOMContentLoaded', () => {
