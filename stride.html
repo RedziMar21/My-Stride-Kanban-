@@ -1,0 +1,2176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stride Kanban Board</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <style>
+    :root {
+      
+      --color-bg-page-start: #FFFFFF;
+      --color-bg-page-end: #F0F4F1;
+      --color-text-primary: #2D3748;
+      --color-text-secondary: #718096;
+      --color-text-muted: #A0AEC0;
+      --color-accent: #7FB34C;
+      --color-accent-rgb: 127, 179, 76;
+      --color-accent-hover: #67913D;
+      --color-bg-page-start-rgb: 255, 255, 255;
+      --color-bg-page-end-rgb: 240, 244, 241;
+      --bg-image-url: url('2.png');
+      
+      --color-ui-bg-light: rgba(255, 255, 255, 0.8);
+      --color-ui-bg-medium: rgba(255, 255, 255, 0.7);
+      --color-ui-border: rgba(200, 210, 205, 0.6);
+      --color-ui-shadow: rgba(0, 0, 0, 0.06);
+      --color-ui-shadow-hover: rgba(0, 0, 0, 0.12);
+      --color-card-bg: rgba(255, 255, 255, 0.9);
+      --color-card-border: rgba(220, 230, 225, 0.8);
+      --color-priority-low: #48BB78;
+      --color-priority-medium: #ED8936;
+      --color-priority-high: #E53E3E;
+      --color-overdue-text: #E53E3E;
+      --color-upcoming-text: #D69E2E;
+      --color-normal-date-text: var(--color-text-muted);
+      --color-warning-bg: #fefcbf;
+      --color-warning-text: #744210;
+      --color-warning-border: #fde68a;
+    }
+
+    body.dark-mode {
+      --color-bg-page-start: #1E2621;
+      --color-bg-page-end: #101714;
+      --color-text-primary: #EAE7E3;
+      --color-text-secondary: #A0AEC0;
+      --color-text-muted: #718096;
+      --color-bg-page-start-rgb: 30, 38, 33;
+      --color-bg-page-end-rgb: 16, 23, 20;
+      --bg-image-url: url('4.png');
+      
+      --color-ui-bg-light: rgba(45, 66, 59, 0.7);
+      --color-ui-bg-medium: rgba(45, 66, 59, 0.5);
+      --color-ui-border: rgba(70, 96, 86, 0.5);
+      --color-ui-shadow: rgba(0, 0, 0, 0.18);
+      --color-ui-shadow-hover: rgba(0, 0, 0, 0.3);
+      --color-card-bg: rgba(45, 66, 59, 0.9);
+      --color-card-border: rgba(70, 96, 86, 0.7);
+      --color-priority-low: #68D391;
+      --color-priority-medium: #F6AD55;
+      --color-priority-high: #FC8181;
+      --color-overdue-text: #FC8181;
+      --color-upcoming-text: #F6E05E;
+      --color-warning-bg: #4A5568;
+      --color-warning-text: #F6E05E;
+      --color-warning-border: #ECC94B;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--color-text-primary);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      padding-bottom: 5rem;
+      
+      box-sizing: border-box;
+      background-image: linear-gradient(to bottom right, rgba(var(--color-bg-page-start-rgb), 0.85), rgba(var(--color-bg-page-end-rgb), 0.95)), var(--bg-image-url);
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    .font-poppins {
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .glass {
+      background: var(--color-ui-bg-light);
+      border: 1px solid var(--color-ui-border);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 1.5rem;
+      box-shadow: 0 4px 12px var(--color-ui-shadow);
+    }
+
+    .kanban-column-wrapper {
+      padding: 1.5rem;
+      border-radius: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      min-height: 450px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      flex: 1;
+      margin: 0 0.75rem;
+      border: 1px solid var(--color-ui-border);
+      background-color: var(--color-ui-bg-medium);
+      max-width: 400px;
+      box-shadow: 0 2px 8px var(--color-ui-shadow);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .kanban-column-wrapper:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 8px 20px var(--color-ui-shadow-hover);
+    }
+
+    .tasks-container {
+      min-height: 100px;
+      flex-grow: 1;
+      padding: 1rem;
+      margin-top: 1.2rem;
+      padding-bottom: 1.5rem;
+    }
+
+    .task-card {
+      padding: 1.25rem;
+      border-radius: 0.85rem;
+      position: relative;
+      box-shadow: 0 1px 5px var(--color-ui-shadow);
+      cursor: pointer;
+      transition: box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out, border-color 0.2s ease-in-out;
+      background-color: var(--color-card-bg);
+      border: 1px solid var(--color-card-border);
+      color: var(--color-text-primary);
+      margin-bottom: 1.2rem;
+      border-left: 6px solid var(--color-card-border);
+      font-size: 0.98rem;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      animation: fadeIn 0.4s ease-out;
+    }
+
+    .task-card.priority-low {
+      border-left-color: var(--color-priority-low);
+    }
+
+    .task-card.priority-medium {
+      border-left-color: var(--color-priority-medium);
+    }
+
+    .task-card.priority-high {
+      border-left-color: var(--color-priority-high);
+    }
+
+    .task-card:last-child {
+      margin-bottom: 0;
+    }
+
+    .task-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 14px var(--color-ui-shadow-hover);
+      border-color: var(--color-ui-border);
+    }
+
+    .task-card:active {
+      transform: scale(0.98);
+      box-shadow: 0 2px 10px rgba(var(--color-accent-rgb), 0.3);
+    }
+
+    .dragging {
+      opacity: 0.8;
+      outline: 2px dashed var(--color-accent);
+      outline-offset: 8px;
+      transform: scale(1.03) !important;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .tasks-container.drag-over {
+      background-color: rgba(var(--color-accent-rgb), 0.08);
+      border-radius: 1rem;
+      border: 2px dashed var(--color-accent);
+    }
+
+    .task-actions {
+      position: absolute;
+      top: 0.8rem;
+      right: 0.8rem;
+      display: flex;
+      gap: 0.5rem;
+      z-index: 10;
+    }
+
+    .task-actions button {
+      opacity: 0;
+      transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+      color: var(--color-text-muted);
+      font-size: 1rem;
+      line-height: 1;
+      padding: 0.3rem;
+      border-radius: 0.4rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .task-card:hover .task-actions button {
+      opacity: 0.8;
+    }
+
+    .task-actions button:hover {
+      opacity: 1;
+      color: var(--color-accent);
+      transform: scale(1.1);
+    }
+
+    .delete-btn:hover {
+      color: var(--color-priority-high);
+    }
+
+    .tasks-container::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .tasks-container::-webkit-scrollbar-track {
+      background: rgba(var(--color-accent-rgb), 0.05);
+      border-radius: 1rem;
+    }
+
+    body.dark-mode .tasks-container::-webkit-scrollbar-track {
+      background: rgba(var(--color-accent-rgb), 0.1);
+    }
+
+    .tasks-container::-webkit-scrollbar-thumb {
+      background: rgba(var(--color-accent-rgb), 0.3);
+      border-radius: 1rem;
+      border: 2px solid transparent;
+      background-clip: padding-box;
+    }
+
+    body.dark-mode .tasks-container::-webkit-scrollbar-thumb {
+      background: rgba(var(--color-accent-rgb), 0.4);
+    }
+
+    .tasks-container::-webkit-scrollbar-thumb:hover {
+      background: rgba(var(--color-accent-rgb), 0.5);
+    }
+
+    body.dark-mode .tasks-container::-webkit-scrollbar-thumb:hover {
+      background: rgba(var(--color-accent-rgb), 0.6);
+    }
+
+    .column-header-title {
+      font-weight: 600;
+      color: var(--color-text-primary);
+      display: flex;
+      align-items: center;
+      font-size: 1.55rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .column-header-title span.task-count {
+      font-size: 0.95rem;
+      font-weight: 400;
+      margin-left: 0.7rem;
+      color: var(--color-text-secondary);
+    }
+
+    .column-header-title .icon {
+      margin-right: 1.2rem;
+      width: 2.0rem;
+      height: 2.0rem;
+      color: var(--color-accent);
+    }
+
+    .btn-primary-accent,
+    .btn-secondary,
+    .btn-neutral {
+      white-space: nowrap;
+      font-weight: 500;
+      border-radius: 0.85rem;
+      transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out, filter 0.2s ease-in-out;
+      padding: 1rem 2.5rem;
+      box-shadow: 0 2px 8px var(--color-ui-shadow);
+      border: 1px solid transparent;
+      font-size: 1.05rem;
+      font-family: 'Poppins', sans-serif;
+      cursor: pointer;
+    }
+
+    .btn-primary-accent {
+      background-color: var(--color-accent);
+      color: white;
+    }
+
+    .btn-primary-accent:hover {
+      background-color: var(--color-accent-hover);
+      transform: translateY(-4px);
+      box-shadow: 0 6px 16px var(--color-ui-shadow-hover);
+    }
+
+    .btn-primary-accent:active {
+      transform: scale(0.96) translateY(-2px);
+      box-shadow: 0 1px 4px var(--color-ui-shadow);
+      filter: brightness(0.95);
+    }
+
+    .btn-secondary {
+      background-color: var(--color-ui-bg-light);
+      color: var(--color-text-primary);
+      border-color: var(--color-ui-border);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .btn-secondary:hover {
+      background-color: rgba(var(--color-accent-rgb), 0.15);
+      border-color: var(--color-accent);
+      transform: translateY(-4px);
+      box-shadow: 0 6px 16px var(--color-ui-shadow-hover);
+      color: var(--color-accent);
+    }
+
+    body.dark-mode .btn-secondary:hover {
+      background-color: rgba(var(--color-accent-rgb), 0.1);
+      color: var(--color-accent);
+    }
+
+    .btn-secondary:active {
+      transform: scale(0.96) translateY(-2px);
+      box-shadow: 0 1px 4px var(--color-ui-shadow);
+      filter: brightness(0.95);
+    }
+
+    .btn-neutral {
+      background-color: var(--color-text-muted);
+      color: white;
+    }
+
+    .btn-neutral:hover {
+      background-color: var(--color-text-secondary);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px var(--color-ui-shadow);
+    }
+
+    .input-field-custom {
+      width: 100%;
+      border-radius: 0.85rem;
+      transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out, background-color 0.2s ease-in-out;
+      background-color: var(--color-ui-bg-light);
+      border: 1px solid var(--color-ui-border);
+      color: var(--color-text-primary);
+      padding: 1rem 1.5rem;
+      box-shadow: inset 0 1px 3px var(--color-ui-shadow);
+      font-size: 1.05rem;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+
+    .input-field-custom.pr-10 {
+      padding-right: 2.5rem;
+    }
+
+    .input-field-custom::placeholder {
+      color: var(--color-text-muted);
+      opacity: 1;
+    }
+
+    .input-field-custom:focus {
+      outline: none;
+      border-color: var(--color-accent);
+      box-shadow: 0 0 0 4px rgba(var(--color-accent-rgb), 0.25), inset 0 1px 3px var(--color-ui-shadow);
+      background-color: var(--color-card-bg);
+    }
+
+    .error-message {
+      color: var(--color-warning-text);
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      background-color: var(--color-warning-bg);
+      padding: 0.6rem 1rem;
+      border-radius: 0.65rem;
+      border: 1px solid var(--color-warning-border);
+      opacity: 1;
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      text-align: center;
+    }
+
+    .task-description {
+      color: var(--color-text-primary);
+      font-size: 0.98rem;
+      line-height: 1.6;
+      margin-top: 0;
+      word-break: break-word;
+      padding-right: 3rem;
+      transition: padding-right 0.2s ease-in-out;
+    }
+
+    .task-meta {
+      font-size: 0.88rem;
+      color: var(--color-text-secondary);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem 1rem;
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      margin-top: 0;
+      transition: max-height 0.4s ease-out, opacity 0.3s ease-out, margin-top 0.4s ease-out;
+      pointer-events: none;
+      align-items: center;
+      padding-top: 0.7rem;
+      border-top: 1px solid var(--color-ui-border);
+    }
+
+    .task-meta span {
+      display: flex;
+      align-items: center;
+    }
+
+    .task-card.expanded .task-meta {
+      max-height: 300px;
+      opacity: 1;
+      margin-top: 0.75rem;
+      transition: max-height 0.4s ease-in, opacity 0.3s ease-in, margin-top 0.4s ease-in;
+      pointer-events: auto;
+    }
+
+    .task-meta i {
+      color: var(--color-text-muted);
+      margin-right: 0.3rem;
+      flex-shrink: 0;
+    }
+
+    .task-meta .priority-low-text {
+      color: var(--color-priority-low);
+    }
+
+    .task-meta .priority-medium-text {
+      color: var(--color-priority-medium);
+    }
+
+    .task-meta .priority-high-text {
+      color: var(--color-priority-high);
+    }
+
+    .task-meta .overdue-text {
+      color: var(--color-overdue-text);
+      font-weight: 500;
+    }
+
+    .task-meta .upcoming-text {
+      color: var(--color-upcoming-text);
+      font-weight: 500;
+    }
+
+    .task-meta .normal-date-text {
+      color: var(--color-normal-date-text);
+    }
+
+    .column-header {
+      margin-bottom: 1.2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .kanban-columns-container {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      margin: 3rem auto;
+      width: 100%;
+      max-width: 1600px;
+      overflow-x: auto;
+      padding-bottom: 2rem;
+      gap: 2rem;
+    }
+
+    .kanban-column-wrapper {
+      flex-shrink: 0;
+      flex-basis: 350px;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .task-card.removing {
+      animation: fadeOut 0.3s ease-in forwards;
+    }
+
+    @keyframes fadeOut {
+      from {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      to {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+    }
+
+    .task-card .edit-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      width: 100%;
+    }
+
+    .task-card .edit-form textarea,
+    .task-card .edit-form select,
+    .task-card .edit-form input[type="date"],
+    .task-card .edit-form input[type="text"] {
+      width: 100%;
+      min-height: 80px;
+      padding: 0.6rem;
+      border-radius: 0.4rem;
+      border: 1px solid var(--color-card-border);
+      background-color: var(--color-card-bg);
+      color: var(--color-text-primary);
+      font-size: 0.9rem;
+      line-height: 1.5;
+      resize: vertical;
+      font-family: 'Inter', sans-serif;
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+    }
+
+    .task-card .edit-form textarea:focus,
+    .task-card .edit-form select:focus,
+    .task-card .edit-form input[type="date"]:focus,
+    .task-card .edit-form input[type="text"]:focus {
+      outline: none;
+      border-color: var(--color-accent);
+      box-shadow: 0 0 0 3px rgba(var(--color-accent-rgb), 0.15);
+    }
+
+    .task-card .edit-form .edit-buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.6rem;
+    }
+
+    .task-card .edit-form .edit-buttons button {
+      font-size: 0.85rem;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      opacity: 1;
+      position: relative;
+      top: unset;
+      right: unset;
+      color: white;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.2s ease, transform 0.15s ease, filter 0.15s ease;
+      border: none;
+      cursor: pointer;
+    }
+
+    .task-card .edit-form .edit-buttons button:hover {
+      transform: translateY(-2px);
+    }
+
+    .task-card .edit-form .edit-buttons button:active {
+      transform: scale(0.97) translateY(-1px);
+      filter: brightness(0.95);
+    }
+
+    .task-card .edit-form .edit-buttons .save-btn {
+      background-color: var(--color-accent);
+    }
+
+    .task-card .edit-form .edit-buttons .save-btn:hover {
+      background-color: var(--color-accent-hover);
+    }
+
+    .task-card .edit-form .edit-buttons .cancel-btn {
+      background-color: var(--color-text-muted);
+    }
+
+    .task-card .edit-form .edit-buttons .cancel-btn:hover {
+      background-color: var(--color-text-secondary);
+    }
+
+    .task-card .edit-form {
+      display: none;
+    }
+
+    .task-card.editing .task-content-view,
+    .task-card.editing .task-actions .edit-btn,
+    .task-card.editing .task-actions .delete-btn {
+      display: none !important;
+    }
+
+    .task-card.editing .edit-form {
+      display: flex;
+    }
+
+    .theme-toggle-container {
+      position: fixed;
+      top: 1.5rem;
+      right: 1.5rem;
+      z-index: 1000;
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .theme-toggle-button.glass {
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .theme-toggle-button.glass:hover {
+      transform: scale(1.1);
+      background: rgba(var(--color-bg-page-start-rgb), 0.95);
+      box-shadow: 0 4px 12px var(--color-ui-shadow-hover);
+    }
+
+    body.dark-mode .theme-toggle-button.glass:hover {
+      background: rgba(var(--color-bg-page-start-rgb), 0.9);
+    }
+
+    .theme-toggle-button svg {
+      width: 26px;
+      height: 26px;
+      color: var(--color-text-primary);
+      transition: color 0.3s ease;
+    }
+
+    .progress-container {
+      width: 100%;
+      max-width: 1600px;
+      margin: 2.5rem auto 2rem auto;
+      padding: 0 1.5rem;
+      box-sizing: border-box;
+    }
+
+    .progress-bar {
+      height: 30px;
+      background-color: var(--color-ui-bg-light);
+      border: 1px solid var(--color-ui-border);
+      border-radius: 1rem;
+      overflow: hidden;
+      position: relative;
+      box-shadow: inset 0 1px 4px var(--color-ui-shadow);
+      display: flex;
+      align-items: center;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(to right, var(--color-accent), var(--color-accent-hover));
+      transition: width 0.5s ease-in-out;
+      position: absolute;
+      top: 0;
+      left: 0;
+      border-radius: 1rem 0 0 1rem;
+    }
+
+    .progress-text {
+      position: absolute;
+      width: 100%;
+      text-align: center;
+      font-weight: 600;
+      color: white;
+      mix-blend-mode: difference;
+      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3), 0 0 3px rgba(0, 0, 0, 0.2);
+      font-size: 1rem;
+      pointer-events: none;
+    }
+
+    body.dark-mode .progress-text {
+      color: var(--color-text-primary);
+      mix-blend-mode: unset;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    body.dark-mode .progress-fill {
+      background: linear-gradient(to right, var(--color-accent-hover), var(--color-accent));
+    }
+
+    .export-buttons {
+      width: 100%;
+      max-width: 700px;
+      margin: 2rem auto;
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .export-buttons .btn-secondary {
+      padding: 0.9rem 2rem;
+    }
+
+    .view-hidden {
+      display: none !important;
+    }
+
+    .auth-form-container {
+      max-width: 500px;
+      margin: 4rem auto;
+    }
+
+    .auth-form-container h2 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .auth-form-container .input-field-custom {
+      margin-bottom: 1.5rem;
+    }
+
+    .auth-form-container .password-wrapper {
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+
+    .auth-form-container .password-wrapper .input-field-custom {
+      margin-bottom: 0;
+    }
+
+    .toggle-password-visibility {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      padding-right: 0.75rem;
+      display: flex;
+      align-items: center;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: var(--color-text-muted);
+    }
+
+    .toggle-password-visibility:hover {
+      color: var(--color-accent);
+    }
+
+    .toggle-password-visibility i {
+      font-size: 1rem;
+    }
+
+    .auth-form-container .btn-primary-accent {
+      width: 100%;
+      margin-top: 0.5rem;
+    }
+
+    .auth-switch-link {
+      display: block;
+      text-align: center;
+      margin-top: 1.5rem;
+      color: var(--color-text-secondary);
+      text-decoration: none;
+      font-size: 0.95rem;
+    }
+
+    .auth-switch-link.small-text {
+      font-size: 0.85rem;
+      margin-top: 0.75rem;
+    }
+
+    .auth-switch-link:hover {
+      color: var(--color-accent);
+      text-decoration: underline;
+    }
+
+    #landing-view {
+      padding-bottom: 8rem;
+    }
+
+    #landing-view .landing-header {
+      margin-top: 8rem;
+      margin-bottom: 3rem;
+    }
+
+    #landing-view .landing-content {
+      max-width: 700px;
+    }
+
+    #landing-view .landing-content h2 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+    }
+
+    #landing-view .landing-content p {
+      font-size: 1.1rem;
+      margin-bottom: 2.5rem;
+      line-height: 1.7;
+      color: var(--color-text-secondary);
+    }
+
+    #landing-view .landing-actions button {
+      margin: 0.5rem;
+      padding: 1rem 2.5rem;
+      font-size: 1.1rem;
+    }
+
+    #landing-features {
+      margin-top: 4rem;
+      padding: 0 1rem;
+      max-width: 1000px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .feature-item {
+      background: var(--color-ui-bg-light);
+      border: 1px solid var(--color-ui-border);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-radius: 1.5rem;
+      box-shadow: 0 4px 12px var(--color-ui-shadow);
+      padding: 2rem 2.5rem;
+      margin-bottom: 3rem;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
+    .feature-item.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .feature-item .feature-icon {
+      font-size: 2.8rem;
+      color: var(--color-accent);
+      margin-bottom: 1.5rem;
+      display: inline-block;
+      background: rgba(var(--color-accent-rgb), 0.1);
+      padding: 1.2rem;
+      border-radius: 50%;
+      line-height: 1;
+    }
+
+    .feature-item h3 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+      color: var(--color-text-primary);
+      text-align: center;
+    }
+
+    .feature-item p {
+      font-size: 1rem;
+      line-height: 1.65;
+      color: var(--color-text-secondary);
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+    }
+
+    @media (min-width: 768px) {
+      .feature-item {
+        flex-direction: row;
+        text-align: left;
+        align-items: flex-start;
+      }
+
+      .feature-item:nth-child(even) {
+        flex-direction: row-reverse;
+      }
+
+      .feature-item .feature-icon {
+        margin-right: 2rem;
+        margin-bottom: 0;
+        margin-left: 0;
+      }
+
+      .feature-item:nth-child(even) .feature-icon {
+        margin-left: 2rem;
+        margin-right: 0;
+      }
+
+      .feature-item .feature-content {
+        flex: 1;
+      }
+
+      .feature-item h3,
+      .feature-item p {
+        text-align: left;
+      }
+    }
+
+    #kanban-view-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      max-width: 1600px;
+      margin: 2rem auto 0 auto;
+      padding: 0 1.5rem;
+      box-sizing: border-box;
+    }
+
+    #kanban-view-header .app-title {
+      font-size: 1.75rem;
+      font-weight: 600;
+      font-family: 'Poppins', sans-serif;
+      color: var(--color-text-primary);
+    }
+
+    .global-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 0.75rem;
+      text-align: center;
+      font-size: 0.875rem;
+      color: var(--color-text-muted);
+      opacity: 0.9;
+      background-color: rgba(var(--color-bg-page-end-rgb), 0.7);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 900;
+    }
+
+    
+    @media (max-width: 1280px) {
+      .kanban-column-wrapper {
+        max-width: 380px;
+        flex-basis: 330px;
+      }
+
+      .kanban-columns-container {
+        gap: 1.5rem;
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .kanban-columns-container {
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        padding: 0 1.5rem 2rem 1.5rem;
+      }
+
+      .kanban-column-wrapper {
+        min-width: 320px;
+        margin: 0 0.75rem;
+        flex-basis: 320px;
+      }
+
+      .column-header-title {
+        font-size: 1.45rem;
+      }
+
+      .column-header-title .icon {
+        width: 1.8rem;
+        height: 1.8rem;
+        margin-right: 1rem;
+      }
+
+      .tasks-container {
+        padding: 0.75rem;
+      }
+
+      .task-card {
+        padding: 1.1rem;
+      }
+
+      .task-description {
+        padding-right: 2.8rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding-bottom: 5rem;
+      }
+
+      .kanban-columns-container {
+        flex-direction: column;
+        align-items: center;
+        margin: 2rem auto;
+        overflow-x: hidden;
+        gap: 2rem;
+        padding: 0 0 1.5rem 0;
+      }
+
+      .kanban-column-wrapper {
+        margin: 0;
+        width: 90%;
+        max-width: 500px;
+        min-width: unset;
+        padding: 1.5rem;
+        border-radius: 1.2rem;
+      }
+
+      .landing-header h1 {
+        font-size: 2.5rem;
+      }
+
+      .landing-header p {
+        font-size: 0.9rem;
+      }
+
+      .glass {
+        border-radius: 1.2rem;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .column-header {
+        margin-bottom: 1rem;
+      }
+
+      .column-header-title {
+        font-size: 1.3rem;
+      }
+
+      .column-header-title .icon {
+        width: 1.6rem;
+        height: 1.6rem;
+        margin-right: 0.8rem;
+      }
+
+      .tasks-container {
+        padding: 0.5rem;
+        margin-top: 0.75rem;
+      }
+
+      .task-card {
+        padding: 1rem;
+        border-radius: 0.75rem;
+        font-size: 0.9rem;
+        margin-bottom: 0.8rem;
+        border-left-width: 5px;
+      }
+
+      .task-actions {
+        top: 0.6rem;
+        right: 0.6rem;
+        gap: 0.4rem;
+      }
+
+      .task-actions button {
+        font-size: 0.9rem;
+      }
+
+      .task-description {
+        padding-right: 2.5rem;
+      }
+
+      #add-task-section h2 {
+        font-size: 1.1rem;
+      }
+
+      .input-field-custom,
+      .btn-primary-accent,
+      .btn-secondary,
+      .btn-neutral {
+        padding: 0.8rem 1.2rem;
+        font-size: 0.95rem;
+        border-radius: 0.6rem;
+      }
+
+      .task-meta {
+        font-size: 0.8rem;
+        gap: 0.5rem 0.8rem;
+        margin-top: 0.6rem;
+        padding-top: 0.4rem;
+      }
+
+      .task-meta i {
+        font-size: 0.9em;
+      }
+
+      .progress-container {
+        margin: 1.5rem auto;
+      }
+
+      .export-buttons {
+        flex-direction: column;
+        gap: 0.75rem;
+        padding: 0 1rem;
+      }
+
+      #landing-features {
+        margin-top: 2rem;
+      }
+
+      .feature-item {
+        margin-bottom: 2.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .kanban-column-wrapper {
+        width: 95%;
+        max-width: 350px;
+        padding: 1.2rem;
+      }
+
+      .landing-header h1 {
+        font-size: 2rem;
+      }
+
+      .landing-header p {
+        font-size: 0.8rem;
+      }
+
+      .glass {
+        padding: 1.2rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .task-card {
+        padding: 0.9rem;
+        border-radius: 0.7rem;
+        font-size: 0.85rem;
+        margin-bottom: 0.7rem;
+        border-left-width: 4px;
+      }
+
+      .task-description {
+        padding-right: 2.2rem;
+      }
+
+      .task-actions {
+        top: 0.5rem;
+        right: 0.5rem;
+        gap: 0.3rem;
+      }
+
+      .task-actions button {
+        font-size: 0.85rem;
+      }
+
+      .input-field-custom,
+      .btn-primary-accent,
+      .btn-secondary,
+      .btn-neutral {
+        padding: 0.7rem 1rem;
+        font-size: 0.9rem;
+      }
+
+      .column-header-title {
+        font-size: 1.2rem;
+      }
+
+      .column-header-title .icon {
+        width: 1.5rem;
+        height: 1.5rem;
+        margin-right: 0.6rem;
+      }
+    }
+
+    @media print {
+
+      html,
+      body {
+        width: 100% !important;
+        height: auto !important;
+        overflow: visible !important;
+        background: white !important;
+        color: black !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        font-size: 9pt !important;
+        line-height: 1.2 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      #landing-view,
+      #login-view,
+      #register-view,
+      .theme-toggle-container,
+      #kanban-view-header,
+      #add-task-section,
+      .progress-container,
+      .export-buttons,
+      footer.global-footer {
+        display: none !important;
+      }
+
+      #kanban-view {
+        display: block !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 1cm !important;
+        box-sizing: border-box !important;
+      }
+
+      .kanban-columns-container {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        justify-content: flex-start !important;
+        gap: 10px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow: visible !important;
+      }
+
+      .kanban-column-wrapper {
+        border: 1px solid #ccc !important;
+        box-shadow: none !important;
+        background-color: #fff !important;
+        padding: 0.5rem !important;
+        margin: 0 !important;
+        flex: 1 1 200px !important;
+        min-width: 180px !important;
+        max-width: 30% !important;
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+        min-height: unset !important;
+        height: auto !important;
+        overflow: visible !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+      }
+
+      .kanban-column-wrapper:hover {
+        transform: none !important;
+      }
+
+      .column-header {
+        margin-bottom: 0.5rem !important;
+      }
+
+      .column-header-title {
+        border-bottom: 1px solid #ccc !important;
+        padding-bottom: 0.25rem !important;
+        margin-bottom: 0.5rem !important;
+        color: #333 !important;
+        font-size: 11pt !important;
+      }
+
+      .column-header-title .icon {
+        display: none !important;
+      }
+
+      .column-header-title span.task-count {
+        font-size: 9pt !important;
+        color: #555 !important;
+      }
+
+      .tasks-container {
+        overflow: visible !important;
+        max-height: none !important;
+        min-height: unset !important;
+        padding: 0.25rem !important;
+        margin-top: 0.25rem !important;
+        padding-bottom: 0 !important;
+      }
+
+      .tasks-container>.task-card {
+        margin-bottom: 0.3rem !important;
+      }
+
+      .task-card {
+        box-shadow: none !important;
+        border: 1px solid #e0e0e0 !important;
+        background-color: #fff !important;
+        padding: 0.4rem !important;
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+        cursor: auto !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+      }
+
+      .task-card.priority-low {
+        border-left: 4px solid #48BB78 !important;
+      }
+
+      .task-card.priority-medium {
+        border-left: 4px solid #ED8936 !important;
+      }
+
+      .task-card.priority-high {
+        border-left: 4px solid #E53E3E !important;
+      }
+
+      .task-card:hover {
+        transform: none !important;
+      }
+
+      .task-actions,
+      .edit-form {
+        display: none !important;
+      }
+
+      .task-content-view {
+        display: block !important;
+      }
+
+      .task-description {
+        padding-right: 0 !important;
+        font-size: 8.5pt !important;
+        line-height: 1.2 !important;
+        color: #333 !important;
+        margin-bottom: 0.25rem !important;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+      }
+
+      .task-meta {
+        color: #555 !important;
+        max-height: none !important;
+        opacity: 1 !important;
+        margin-top: 0.25rem !important;
+        padding-top: 0.25rem !important;
+        border-top: 1px dotted #eee !important;
+        font-size: 7.5pt !important;
+        line-height: 1.1 !important;
+        display: block !important;
+        transition: none !important;
+        pointer-events: auto !important;
+      }
+
+      .task-meta span {
+        display: block !important;
+        margin-bottom: 2px !important;
+      }
+
+      .task-meta i {
+        color: #666 !important;
+        margin-right: 3px !important;
+        font-size: 0.9em !important;
+      }
+
+      .task-meta .priority-low-text {
+        color: #48BB78 !important;
+      }
+
+      .task-meta .priority-medium-text {
+        color: #ED8936 !important;
+      }
+
+      .task-meta .priority-high-text {
+        color: #E53E3E !important;
+      }
+
+      .task-meta .overdue-text {
+        color: #E53E3E !important;
+      }
+
+      .task-meta .upcoming-text {
+        color: #D69E2E !important;
+      }
+
+      .task-meta .normal-date-text {
+        color: #718096 !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col items-center px-4 sm:px-6 lg:px-8">
+
+  <div class="theme-toggle-container">
+    <button id="logout-btn" class="btn-secondary py-2 px-4 text-sm view-hidden"><i
+        class="fas fa-sign-out-alt mr-1"></i>Logout</button>
+    <button id="theme-toggle" class="theme-toggle-button glass" title="Toggle Theme">
+      <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+        stroke="currentColor" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.602-.386l1.591-1.591M3 12h2.25m-.386-6.364l1.591 1.591M12 12a3 3 0 110-6 3 3 0 010 6z" />
+      </svg>
+      <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+        stroke="currentColor" class="w-6 h-6 hidden">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M21.752 15.002A9.72 9.72 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25c0 5.083 3.659 9.334 8.408 10.153h.38c2.49-.402 4.729-1.734 6.333-3.567ZM12 18.75c0-1.036.17-2.05.491-3.002h-7.08a8.25 8.25 0 006.208 6.002v-.002z" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- Landing View -->
+  <section id="landing-view" class="w-full text-center view-hidden">
+    <header class="landing-header mb-12 mt-16 md:mb-16 text-center w-full max-w-5xl mx-auto">
+      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-semibold font-poppins uppercase"
+        style="color: var(--color-text-primary); opacity: 0.9;">STRIDE</h1>
+      <p style="color: var(--color-text-secondary);" class="mt-4 text-base sm:text-lg md:text-xl">Build momentum,
+        achieve your goals, seamlessly.</p>
+    </header>
+    <div class="landing-content glass p-7 md:p-10 rounded-xl shadow-lg w-full max-w-2xl mx-auto">
+      <h2 class="font-poppins font-semibold" style="color: var(--color-text-primary);">Welcome to Stride Kanban</h2>
+      <p>
+        Organize your projects, track your progress, and visualize your workflow.
+        Stride helps you stay on top of your tasks and build unstoppable momentum.
+      </p>
+      <div class="landing-actions mt-8 flex flex-col sm:flex-row justify-center items-center">
+        <button id="landing-login-btn" class="btn-primary-accent">Login</button>
+        <button id="landing-register-btn" class="btn-secondary">Get Started</button>
+      </div>
+    </div>
+
+    <div id="landing-features" class="w-full max-w-4xl mx-auto mt-16 md:mt-24 px-4">
+      <div class="feature-item scroll-animate">
+        <span class="feature-icon"><i class="fas fa-columns"></i></span>
+        <div class="feature-content">
+          <h3>Visual Workflow</h3>
+          <p>Easily visualize your tasks moving through different stages with our intuitive drag-and-drop columns. See
+            your entire project at a glance.</p>
+        </div>
+      </div>
+      <div class="feature-item scroll-animate">
+        <span class="feature-icon"><i class="fas fa-tasks"></i></span>
+        <div class="feature-content">
+          <h3>Detailed Task Management</h3>
+          <p>Set task priorities, assign due dates, add descriptive labels, and attach notes to keep every detail
+            organized and actionable.</p>
+        </div>
+      </div>
+      <div class="feature-item scroll-animate">
+        <span class="feature-icon"><i class="fas fa-chart-bar"></i></span>
+        <div class="feature-content">
+          <h3>Progress Tracking</h3>
+          <p>Monitor your overall project completion with a clear progress bar. Stay informed and motivated as you work
+            towards your goals.</p>
+        </div>
+      </div>
+      <div class="feature-item scroll-animate">
+        <span class="feature-icon"><i class="fas fa-palette"></i></span>
+        <div class="feature-content">
+          <h3>Customizable Themes</h3>
+          <p>Choose between light and dark modes to suit your preference and reduce eye strain, ensuring a comfortable
+            experience day or night.</p>
+        </div>
+      </div>
+      <div class="feature-item scroll-animate">
+        <span class="feature-icon"><i class="fas fa-mobile-alt"></i></span>
+        <div class="feature-content">
+          <h3>Responsive Design</h3>
+          <p>Access and manage your Stride board seamlessly across all your devices – desktop, tablet, or smartphone.
+            Productivity on the go!</p>
+        </div>
+      </div>
+      <div class="feature-item scroll-animate">
+        <span class="feature-icon"><i class="fas fa-file-export"></i></span>
+        <div class="feature-content">
+          <h3>Data Export & Print</h3>
+          <p>Easily export your board data as JSON for backups or integration, or print a clean PDF version for offline
+            use and reporting.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Login View -->
+  <section id="login-view" class="w-full auth-form-container view-hidden">
+    <div class="glass p-7 md:p-10 rounded-xl shadow-lg">
+      <h2 class="font-poppins font-semibold" style="color: var(--color-text-primary);">Login to Stride</h2>
+      <form id="login-form">
+        <input type="email" id="login-email" class="input-field-custom" placeholder="Email Address" required>
+        <div class="password-wrapper">
+          <input type="password" id="login-password" class="input-field-custom pr-10" placeholder="Password" required>
+          <button type="button" class="toggle-password-visibility" data-target="login-password"
+            title="Toggle password visibility">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
+        <button type="submit" class="btn-primary-accent flex items-center justify-center w-full">
+          <i class="fas fa-sign-in-alt mr-2"></i> Login
+        </button>
+      </form>
+      <p id="login-error-message" class="error-message hidden"></p>
+      <a href="#" id="forgot-password-link" class="auth-switch-link small-text">Forgot Password?</a>
+      <a href="#" id="goto-register-link" class="auth-switch-link">Don't have an account? Register</a>
+    </div>
+  </section>
+
+  <!-- Register View -->
+  <section id="register-view" class="w-full auth-form-container view-hidden">
+    <div class="glass p-7 md:p-10 rounded-xl shadow-lg">
+      <h2 class="font-poppins font-semibold" style="color: var(--color-text-primary);">Create Stride Account</h2>
+      <form id="register-form">
+        <input type="email" id="register-email" class="input-field-custom" placeholder="Email Address" required>
+        <div class="password-wrapper">
+          <input type="password" id="register-password" class="input-field-custom pr-10"
+            placeholder="Password (min. 6 chars)" required>
+          <button type="button" class="toggle-password-visibility" data-target="register-password"
+            title="Toggle password visibility">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
+        <div class="password-wrapper">
+          <input type="password" id="register-confirm-password" class="input-field-custom pr-10"
+            placeholder="Confirm Password" required>
+          <button type="button" class="toggle-password-visibility" data-target="register-confirm-password"
+            title="Toggle password visibility">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
+        <button type="submit" class="btn-primary-accent flex items-center justify-center w-full">
+          <i class="fas fa-user-plus mr-2"></i> Register
+        </button>
+      </form>
+      <p id="register-error-message" class="error-message hidden"></p>
+      <a href="#" id="goto-login-link" class="auth-switch-link">Already have an account? Login</a>
+    </div>
+  </section>
+
+  <!-- Kanban App View -->
+  <section id="kanban-view" class="w-full view-hidden">
+    <div id="kanban-view-header" class="hidden">
+      <span class="app-title">Stride Dashboard</span>
+    </div>
+    <section id="add-task-section" class="add-task-section my-12 md:my-16 w-full max-w-xl mx-auto">
+      <div class="glass p-7 md:p-10 rounded-xl shadow-lg">
+        <h2 class="text-xl font-semibold font-poppins mb-6" style="color: var(--color-text-primary);">Add New Task</h2>
+        <div class="flex flex-col space-y-5">
+          <input type="text" id="taskInput" class="input-field-custom" placeholder="What are you working on?">
+          <button id="addTaskBtn" class="btn-primary-accent flex items-center justify-center">
+            <i class="fas fa-plus mr-2"></i><span class="font-poppins">Add Task</span>
+          </button>
+        </div>
+        <p id="task-error-message" class="error-message hidden mt-5">Oops! Please add a task description.</p>
+      </div>
+    </section>
+    <main class="w-full max-w-screen-xl flex-grow mx-auto">
+      <div class="kanban-columns-container">
+        <div id="todo" class="kanban-column-wrapper">
+          <div class="column-header">
+            <h3 class="column-header-title"> <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M9 6.75h10.5M9 12h10.5M9 17.25h10.5M3.75 6.75h.007v.008H3.75V6.75zm0 5.25h.007v.008H3.75V12zm0 5.25h.007v.008H3.75V17.25z" />
+              </svg> To Do <span class="task-count" id="todo-count">(0)</span> </h3>
+          </div>
+          <div class="tasks-container space-y-4 flex-grow max-h-[65vh] md:max-h-[70vh] overflow-y-auto pr-2"></div>
+        </div>
+        <div id="inprogress" class="kanban-column-wrapper">
+          <div class="column-header">
+            <h3 class="column-header-title"> <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg> In Progress <span class="task-count" id="inprogress-count">(0)</span> </h3>
+          </div>
+          <div class="tasks-container space-y-4 flex-grow max-h-[65vh] md:max-h-[70vh] overflow-y-auto pr-2"></div>
+        </div>
+        <div id="done" class="kanban-column-wrapper">
+          <div class="column-header">
+            <h3 class="column-header-title"> <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+              </svg> Done <span class="task-count" id="done-count">(0)</span> </h3>
+          </div>
+          <div class="tasks-container space-y-4 flex-grow max-h-[65vh] md:max-h-[70vh] overflow-y-auto pr-2"></div>
+        </div>
+      </div>
+    </main>
+    <section class="progress-container">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div> <span class="progress-text" id="progress-text">0%
+          Complete</span>
+      </div>
+    </section>
+    <section class="export-buttons"> <button id="export-json" class="btn-secondary"><i
+          class="fas fa-file-code mr-2"></i>Export as JSON</button> <button id="print-board" class="btn-secondary"><i
+          class="fas fa-print mr-2"></i>Print Board (Save as PDF)</button> </section>
+  </section>
+
+  <footer class="global-footer">
+    <p>© 2025 Stride Kanban by Redzi Mar Yambao. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const API_BASE_URL = 'http://127.0.0.1/stride_project/api';
+
+    
+    const views = {
+      landing: document.getElementById('landing-view'),
+      login: document.getElementById('login-view'),
+      register: document.getElementById('register-view'),
+      kanban: document.getElementById('kanban-view')
+    };
+    const kanbanViewHeader = document.getElementById('kanban-view-header');
+    const logoutBtn = document.getElementById('logout-btn');
+    const loginForm = document.getElementById('login-form');
+    const loginEmailInput = document.getElementById('login-email');
+    const loginPasswordInput = document.getElementById('login-password');
+    const loginErrorMessage = document.getElementById('login-error-message');
+    const registerForm = document.getElementById('register-form');
+    const registerEmailInput = document.getElementById('register-email');
+    const registerPasswordInput = document.getElementById('register-password');
+    const registerConfirmPasswordInput = document.getElementById('register-confirm-password');
+    const registerErrorMessage = document.getElementById('register-error-message');
+    const landingLoginBtn = document.getElementById('landing-login-btn');
+    const landingRegisterBtn = document.getElementById('landing-register-btn');
+    const gotoRegisterLink = document.getElementById('goto-register-link');
+    const gotoLoginLink = document.getElementById('goto-login-link');
+    const forgotPasswordLink = document.getElementById('forgot-password-link');
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const sunIcon = document.getElementById('sun-icon');
+    const moonIcon = document.getElementById('moon-icon');
+    const passwordToggleButtons = document.querySelectorAll('.toggle-password-visibility');
+
+    let taskInput, addTaskBtn, todoColumnTasks, inprogressColumnTasks, doneColumnTasks, columnsTasksContainers, taskErrorMessageElement,
+      progressFill, progressText, exportJsonBtn, printBoardBtn;
+
+    let lastDragEnd = 0;
+    const DRAG_CLICK_THRESHOLD = 100;
+
+    const scrollAnimatedElements = document.querySelectorAll('.scroll-animate');
+    const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
+    const observerCallback = (entries, observerInstance) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+          observerInstance.unobserve(entry.target);
+        }
+      });
+    };
+    const scrollObserver = new IntersectionObserver(observerCallback, observerOptions);
+    if (scrollAnimatedElements && scrollAnimatedElements.length > 0) {
+      scrollAnimatedElements.forEach(el => scrollObserver.observe(el));
+    }
+
+    function navigateTo(viewName) {
+      Object.keys(views).forEach(key => {
+        if (views[key]) views[key].classList.add('view-hidden');
+      });
+      if (views[viewName]) {
+        views[viewName].classList.remove('view-hidden');
+        window.scrollTo({ top: 0, behavior: 'auto' });
+        if (viewName === 'kanban') {
+          if(kanbanViewHeader) kanbanViewHeader.classList.remove('hidden');
+          if(logoutBtn) logoutBtn.classList.remove('view-hidden');
+          initializeKanbanDOM();
+          loadTasksFromServer();
+        } else {
+          if(kanbanViewHeader) kanbanViewHeader.classList.add('hidden');
+          if(logoutBtn) logoutBtn.classList.add('view-hidden');
+          if (viewName === 'landing' && scrollAnimatedElements && scrollAnimatedElements.length > 0) {
+            scrollAnimatedElements.forEach(el => {
+              if (!el.classList.contains('active')) {
+                scrollObserver.observe(el);
+              }
+            });
+          }
+        }
+      } else {
+        if (views.landing) views.landing.classList.remove('view-hidden'); 
+        console.error("View not found: ", viewName);
+      }
+    }
+
+    async function handleRegister(event) {
+      event.preventDefault();
+      const email = registerEmailInput.value.trim();
+      const password = registerPasswordInput.value;
+      const confirmPassword = registerConfirmPasswordInput.value;
+      if(registerErrorMessage) registerErrorMessage.classList.add('hidden');
+      if (!email || !password || !confirmPassword) { showAuthError(registerErrorMessage, "All fields are required."); return; }
+      if (password !== confirmPassword) { showAuthError(registerErrorMessage, "Passwords do not match."); return; }
+      if (password.length < 6) { showAuthError(registerErrorMessage, "Password must be at least 6 characters."); return; }
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/register.php`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+          credentials: 'include'
+        });
+        const result = await response.json();
+        if (response.ok && result.success) {
+          navigateTo('kanban');
+          if(registerForm) registerForm.reset();
+        } else { showAuthError(registerErrorMessage, result.error || "Registration failed."); }
+      } catch (error) { console.error('Registration error:', error); showAuthError(registerErrorMessage, "An error occurred. Please try again."); }
+    }
+
+    async function handleLogin(event) {
+      event.preventDefault();
+      const email = loginEmailInput.value.trim();
+      const password = loginPasswordInput.value;
+      if(loginErrorMessage) loginErrorMessage.classList.add('hidden');
+      if (!email || !password) { showAuthError(loginErrorMessage, "Email and password are required."); return; }
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/login.php`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+          credentials: 'include'
+        });
+        const result = await response.json();
+        if (response.ok && result.success) {
+          navigateTo('kanban');
+          if(loginForm) loginForm.reset();
+        } else { showAuthError(loginErrorMessage, result.error || "Login failed."); }
+      } catch (error) { console.error('Login error:', error); showAuthError(loginErrorMessage, "An error occurred. Please try again."); }
+    }
+
+    async function handleLogout() {
+      try {
+        const response = await fetch(`${API_BASE_URL}/logout.php`, {
+          method: 'POST',
+          credentials: 'include'
+        });
+        const result = await response.json();
+        if (response.ok && result.success) { navigateTo('login'); }
+        else { alert("Logout failed. Please try again."); }
+      } catch (error) { console.error('Logout error:', error); alert("An error occurred during logout."); }
+    }
+
+    async function checkLoginStatus() {
+      try {
+        const response = await fetch(`${API_BASE_URL}/check_session.php`, {
+          credentials: 'include'
+        });
+        const result = await response.json();
+        if (result.loggedIn) { navigateTo('kanban'); }
+        else { navigateTo('landing'); }
+      } catch (error) { console.error("Error checking session:", error); navigateTo('landing'); }
+    }
+    function showAuthError(el, msg) { if (el) { el.textContent = msg; el.classList.remove('hidden'); } }
+
+    function initializeKanbanDOM() {
+      if (initializeKanbanDOM.initialized && document.getElementById('taskInput')) { return; }
+      taskInput = document.getElementById('taskInput');
+      addTaskBtn = document.getElementById('addTaskBtn');
+      todoColumnTasks = document.getElementById('todo')?.querySelector('.tasks-container');
+      inprogressColumnTasks = document.getElementById('inprogress')?.querySelector('.tasks-container');
+      doneColumnTasks = document.getElementById('done')?.querySelector('.tasks-container');
+      columnsTasksContainers = document.querySelectorAll('#kanban-view .tasks-container');
+      taskErrorMessageElement = document.getElementById('task-error-message');
+      progressFill = document.getElementById('progress-fill');
+      progressText = document.getElementById('progress-text');
+      exportJsonBtn = document.getElementById('export-json');
+      printBoardBtn = document.getElementById('print-board');
+
+      if (addTaskBtn) {
+        addTaskBtn.removeEventListener('click', addTask); addTaskBtn.addEventListener('click', addTask);
+        if (taskInput) {
+          taskInput.removeEventListener('keypress', handleTaskInputKeypress); taskInput.addEventListener('keypress', handleTaskInputKeypress);
+          taskInput.removeEventListener('input', handleTaskInput); taskInput.addEventListener('input', handleTaskInput);
+        }
+      }
+      if (columnsTasksContainers && columnsTasksContainers.length > 0) {
+        columnsTasksContainers.forEach(container => {
+          container.removeEventListener('dragover', handleDragOver); container.addEventListener('dragover', handleDragOver);
+          container.removeEventListener('dragleave', handleDragLeave); container.addEventListener('dragleave', handleDragLeave);
+          container.removeEventListener('drop', handleDrop); container.addEventListener('drop', handleDrop);
+        });
+      }
+      if (exportJsonBtn) { exportJsonBtn.removeEventListener('click', exportBoardAsJson); exportJsonBtn.addEventListener('click', exportBoardAsJson); }
+      if (printBoardBtn) { printBoardBtn.removeEventListener('click', printBoard); printBoardBtn.addEventListener('click', printBoard); }
+      initializeKanbanDOM.initialized = true;
+    }
+    initializeKanbanDOM.initialized = false;
+
+    function handleTaskInputKeypress(event) { if (event.key === 'Enter') { addTask(); } }
+    function handleTaskInput() { if (taskInput && taskInput.value.trim() !== '') { if (taskErrorMessageElement) taskErrorMessageElement.classList.add('hidden'); } }
+
+    function formatDate(date) { if (!date) { return ''; } if (typeof date === 'string' && date.match(/^\d{4}-\d{2}-\d{2}$/)) { return date; } const d = new Date(date); if (isNaN(d.getTime())) { return ''; } const year = d.getFullYear(); const month = ('0' + (d.getMonth() + 1)).slice(-2); const day = ('0' + d.getDate()).slice(-2); return `${year}-${month}-${day}`; }
+    function getDaysRemaining(dueDate) { if (!dueDate) { return null; } const today = new Date(); today.setHours(0, 0, 0, 0); const [year, month, day] = dueDate.split('-').map(Number); const due = new Date(Date.UTC(year, month - 1, day)); const diffTime = due - today; return Math.ceil(diffTime / (1000 * 60 * 60 * 24)); }
+    function getDueDateDisplay(dueDate) { if (!dueDate) { return { text: '', class: '' }; } const days = getDaysRemaining(dueDate); if (days < 0) { const absDays = Math.abs(days); return { text: `Overdue by ${absDays} day${absDays > 1 ? 's' : ''}`, class: 'overdue-text' }; } else if (days === 0) { return { text: 'Due Today', class: 'upcoming-text' }; } else if (days === 1) { return { text: 'Due Tomorrow', class: 'upcoming-text' }; } else if (days <= 7) { return { text: `Due in ${days} days`, class: 'upcoming-text' }; } else { const [year, month, day] = dueDate.split('-').map(Number); const displayDate = new Date(year, month - 1, day).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }); return { text: `Due ${displayDate}`, class: 'normal-date-text' }; } }
+
+    function createTaskCard({ id, text, priority = 'low', due_date = '', labels = '', column_id = 'todo', sort_order = 0 }) {
+      const taskCard = document.createElement('div');
+      taskCard.id = String(id);
+      taskCard.classList.add('task-card', `priority-${priority}`);
+      taskCard.setAttribute('draggable', 'true');
+      taskCard.setAttribute('data-column', column_id);
+      taskCard.setAttribute('data-priority', priority);
+      const displayDueDate = due_date ? formatDate(new Date(due_date)) : '';
+      taskCard.setAttribute('data-duedate', displayDueDate);
+      taskCard.setAttribute('data-labels', labels || '');
+      taskCard.setAttribute('data-sort-order', sort_order);
+
+      const viewContent = document.createElement('div'); viewContent.classList.add('task-content-view');
+      const textElement = document.createElement('p'); textElement.classList.add('task-description'); textElement.textContent = text;
+      const metaElement = document.createElement('div'); metaElement.classList.add('task-meta');
+      const priorityDisplay = document.createElement('span'); priorityDisplay.innerHTML = `<i class="fas fa-flag"></i> Priority: <strong class="priority-${priority}-text">${priority.charAt(0).toUpperCase() + priority.slice(1)}</strong>`; metaElement.appendChild(priorityDisplay);
+      const dueDateDisplayElement = document.createElement('span'); const dueDateInfo = getDueDateDisplay(displayDueDate); 
+      if (dueDateInfo.text) { dueDateDisplayElement.innerHTML = `<i class="fas fa-calendar-alt"></i> ${dueDateInfo.text}`; dueDateDisplayElement.classList.add(dueDateInfo.class); }
+      else { dueDateDisplayElement.innerHTML = ''; dueDateDisplayElement.classList.remove('overdue-text', 'upcoming-text', 'normal-date-text'); }
+      metaElement.appendChild(dueDateDisplayElement);
+      const labelsDisplay = document.createElement('span'); const labelTags = (labels || '').split(',').map(l => l.trim()).filter(l => l);
+      if (labelTags.length > 0) { labelsDisplay.innerHTML = `<i class="fas fa-tags"></i> ${labelTags.join(', ')}`; } else { labelsDisplay.innerHTML = ''; }
+      metaElement.appendChild(labelsDisplay);
+      viewContent.appendChild(textElement); viewContent.appendChild(metaElement);
+
+      const editForm = document.createElement('div'); editForm.classList.add('edit-form');
+      editForm.innerHTML = `<textarea class="edit-text"></textarea><div><label for="edit-priority-${taskCard.id}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Priority:</label><select class="edit-priority input-field-custom" id="edit-priority-${taskCard.id}"><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option></select></div><div><label for="edit-duedate-${taskCard.id}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Due Date:</label><input type="date" class="edit-duedate input-field-custom" id="edit-duedate-${taskCard.id}"></div><div><label for="edit-labels-${taskCard.id}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Labels (comma-sep):</label><input type="text" class="edit-labels input-field-custom" placeholder="e.g., Bug, Feature" id="edit-labels-${taskCard.id}"></div><div class="edit-buttons"><button class="save-btn" title="Save changes"><i class="fas fa-check mr-1"></i> Save</button><button class="cancel-btn" title="Cancel editing"><i class="fas fa-times mr-1"></i> Cancel</button></div>`;
+      editForm.querySelector('.edit-text').value = text;
+      editForm.querySelector('.edit-priority').value = priority;
+      editForm.querySelector('.edit-duedate').value = displayDueDate;
+      editForm.querySelector('.edit-labels').value = labels || '';
+
+      const actionButtons = document.createElement('div'); actionButtons.classList.add('task-actions');
+      const deleteButton = document.createElement('button'); deleteButton.classList.add('delete-btn'); deleteButton.setAttribute('title', 'Delete task'); deleteButton.innerHTML = '<i class="fas fa-trash-alt"></i>';
+      const editButton = document.createElement('button'); editButton.classList.add('edit-btn'); editButton.setAttribute('title', 'Edit task'); editButton.innerHTML = '<i class="fas fa-edit"></i>';
+      actionButtons.appendChild(deleteButton); actionButtons.appendChild(editButton);
+      taskCard.appendChild(viewContent); taskCard.appendChild(editForm); taskCard.appendChild(actionButtons);
+
+      taskCard.addEventListener('click', (event) => { if (Date.now() - lastDragEnd < DRAG_CLICK_THRESHOLD || event.target.closest('.task-actions button') || event.target.closest('.edit-form') || taskCard.classList.contains('editing')) return; taskCard.classList.toggle('expanded'); });
+
+      deleteButton.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        try {
+          const response = await fetch(`${API_BASE_URL}/tasks_api.php?id=${taskCard.id}`, {
+            method: 'DELETE', credentials: 'include'
+          });
+          const result = await response.json();
+          if (response.ok && result.success) {
+            taskCard.classList.add('removing');
+            taskCard.addEventListener('animationend', () => { taskCard.remove(); updateProgressStats(); }, { once: true });
+          } else { alert("Failed to delete task: " + (result.error || "Server error.")); }
+        } catch (error) { console.error("Error deleting task:", error); alert("Error deleting task."); }
+      });
+
+      editButton.addEventListener('click', (e) => { e.stopPropagation(); taskCard.classList.add('editing'); editForm.querySelector('.edit-text').value = textElement.textContent; editForm.querySelector('.edit-priority').value = taskCard.getAttribute('data-priority'); editForm.querySelector('.edit-duedate').value = taskCard.getAttribute('data-duedate'); editForm.querySelector('.edit-labels').value = taskCard.getAttribute('data-labels'); editForm.querySelector('.edit-text').focus(); });
+      editForm.querySelector('.cancel-btn').addEventListener('click', (e) => { e.stopPropagation(); taskCard.classList.remove('editing'); });
+
+      editForm.querySelector('.save-btn').addEventListener('click', async (e) => {
+        e.stopPropagation();
+        const newText = editForm.querySelector('.edit-text').value.trim();
+        const newPriority = editForm.querySelector('.edit-priority').value;
+        const newDueDateRaw = editForm.querySelector('.edit-duedate').value;
+        const newDueDateForDB = newDueDateRaw === '' ? null : newDueDateRaw;
+        const newLabels = editForm.querySelector('.edit-labels').value.trim();
+        if (newText === '') { alert("Task description cannot be empty!"); editForm.querySelector('.edit-text').focus(); return; }
+        const updatedTaskData = { id: taskCard.id, text: newText, priority: newPriority, dueDate: newDueDateForDB, labels: newLabels }; 
+        try {
+          const response = await fetch(`${API_BASE_URL}/tasks_api.php`, {
+            method: 'PUT', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updatedTaskData), credentials: 'include'
+          });
+          const result = await response.json();
+          if (response.ok && result.success) {
+            textElement.textContent = newText;
+            taskCard.classList.remove('priority-low', 'priority-medium', 'priority-high');
+            taskCard.classList.add(`priority-${newPriority}`);
+            priorityDisplay.innerHTML = `<i class="fas fa-flag"></i> Priority: <strong class="priority-${newPriority}-text">${newPriority.charAt(0).toUpperCase() + newPriority.slice(1)}</strong>`;
+            const updatedDueDateInfo = getDueDateDisplay(newDueDateRaw);
+            dueDateDisplayElement.classList.remove('overdue-text', 'upcoming-text', 'normal-date-text');
+            if (updatedDueDateInfo.text) { dueDateDisplayElement.innerHTML = `<i class="fas fa-calendar-alt"></i> ${updatedDueDateInfo.text}`; dueDateDisplayElement.classList.add(updatedDueDateInfo.class); } else { dueDateDisplayElement.innerHTML = ''; }
+            const newLabelTags = newLabels.split(',').map(l => l.trim()).filter(l => l);
+            if (newLabelTags.length > 0) { labelsDisplay.innerHTML = `<i class="fas fa-tags"></i> ${newLabelTags.join(', ')}`; } else { labelsDisplay.innerHTML = ''; }
+            taskCard.setAttribute('data-priority', newPriority);
+            taskCard.setAttribute('data-duedate', newDueDateRaw || '');
+            taskCard.setAttribute('data-labels', newLabels);
+            taskCard.classList.remove('editing');
+            if (!taskCard.classList.contains('expanded')) { taskCard.classList.add('expanded'); }
+            updateProgressStats();
+          } else { alert("Failed to update task: " + (result.error || "Server error.")); }
+        } catch (error) { console.error('Error updating task:', error); alert("Error updating task."); }
+      });
+      taskCard.addEventListener('dragstart', handleDragStart);
+      taskCard.addEventListener('dragend', handleDragEnd);
+      return taskCard;
+    }
+
+    async function addTask() { 
+      if (!taskInput || !taskErrorMessageElement || !todoColumnTasks) {
+        console.error("addTask DOM not ready");
+        return;
+      }
+      const taskText = taskInput.value.trim();
+      if (taskText === '') {
+        if (taskErrorMessageElement) {
+          taskErrorMessageElement.classList.remove('hidden');
+        }
+        if (taskInput) {
+          taskInput.focus();
+        }
+        return;
+      }
+      if (taskErrorMessageElement) {
+        taskErrorMessageElement.classList.add('hidden');
+      }
+
+      const newTaskPayload = {
+        text: taskText,
+        priority: 'low',
+        dueDate: null, 
+        labels: '',
+        columnId: 'todo'
+      };
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/tasks_api.php`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newTaskPayload),
+          credentials: 'include' 
+        });
+
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.indexOf("application/json") !== -1) {
+          const result = await response.json();
+          if (response.ok && result.success && result.task) {
+            const newTaskCard = createTaskCard(result.task);
+            if (todoColumnTasks) {
+              todoColumnTasks.appendChild(newTaskCard);
+            }
+            if (taskInput) {
+              taskInput.value = '';
+            }
+            updateProgressStats();
+          } else {
+            alert("Failed to add task: " + (result.error || "Server error: " + response.statusText));
+          }
+        } else {
+          const errorText = await response.text();
+          console.error("Failed to add task. Server did not return JSON.", response.status, errorText);
+          alert("Failed to add task. Server communication error.");
+        }
+      } catch (error) {
+        console.error('Error adding task:', error);
+        alert("Error adding task. Please try again or check the console.");
+      }
+    }
+
+    let draggedElement = null;
+    function handleDragStart(event) { if (event.target.classList.contains('editing')) { event.preventDefault(); return; } event.target.classList.remove('expanded'); draggedElement = event.target; event.dataTransfer.setData('text/plain', event.target.id); event.dataTransfer.effectAllowed = 'move'; setTimeout(() => { if (draggedElement && draggedElement.classList) { draggedElement.classList.add('dragging'); } }, 0); }
+    function handleDragEnd(event) { if (draggedElement && draggedElement.classList) { draggedElement.classList.remove('dragging'); } draggedElement = null; lastDragEnd = Date.now(); if (columnsTasksContainers) { columnsTasksContainers.forEach(c => c.classList.remove('drag-over')); } }
+    function handleDragOver(event) { event.preventDefault(); event.dataTransfer.dropEffect = 'move'; const tc = event.target.closest('.tasks-container'); if (tc) { tc.classList.add('drag-over'); } }
+    function handleDragLeave(event) { const tc = event.target.closest('.tasks-container'); if (tc) { const r = tc.getBoundingClientRect(); if (event.clientX < r.left || event.clientX >= r.right || event.clientY < r.top || event.clientY >= r.bottom) { tc.classList.remove('drag-over'); } } }
+
+    async function handleDrop(event) {
+      event.preventDefault();
+      if (columnsTasksContainers) { columnsTasksContainers.forEach(c => c.classList.remove('drag-over')); }
+      const id = event.dataTransfer.getData('text/plain');
+      const draggableElement = document.getElementById(id);
+      const targetDropZone = event.target.closest('.tasks-container');
+
+      if (draggableElement && targetDropZone) {
+        const originalColumnId = draggableElement.getAttribute('data-column');
+        const targetColumnId = targetDropZone.parentElement.id;
+
+        let beforeElement = null;
+        const targetCard = event.target.closest('.task-card');
+        if (targetCard && targetCard.parentElement === targetDropZone) {
+          const r = targetCard.getBoundingClientRect();
+          beforeElement = (event.clientY - r.top < r.height / 2) ? targetCard : targetCard.nextSibling;
+        } else {
+          const dy = event.clientY;
+          const cic = Array.from(targetDropZone.querySelectorAll('.task-card:not(.dragging)'));
+          beforeElement = cic.find(c => { const cr = c.getBoundingClientRect(); return dy < cr.top + cr.height / 2; });
+        }
+        const oldParent = draggableElement.parentElement;
+        targetDropZone.insertBefore(draggableElement, beforeElement);
+        draggableElement.setAttribute('data-column', targetColumnId);
+        
+
+        const tasksToUpdatePayload = [];
+
+        
+        const cardsInTarget = Array.from(targetDropZone.querySelectorAll('.task-card'));
+        cardsInTarget.forEach((card, index) => {
+          tasksToUpdatePayload.push({ id: card.id, column_id: targetColumnId, sort_order: index });
+        });
+
+        
+        if (originalColumnId && originalColumnId !== targetColumnId && oldParent && oldParent.classList.contains('tasks-container')) {
+          Array.from(oldParent.querySelectorAll('.task-card')).forEach((card, index) => {
+            
+            if (!tasksToUpdatePayload.find(t => t.id === card.id)) {
+                tasksToUpdatePayload.push({ id: card.id, column_id: originalColumnId, sort_order: index });
+            }
+          });
+        }
+
+        const uniqueTasksToUpdate = Array.from(new Map(tasksToUpdatePayload.map(task => [task.id, task])).values());
+
+        if (uniqueTasksToUpdate.length > 0) {
+          try {
+            
+            
+            for (const taskData of uniqueTasksToUpdate) {
+              const response = await fetch(`${API_BASE_URL}/tasks_api.php`, {
+                method: 'PUT', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(taskData), credentials: 'include'
+              });
+              const result = await response.json();
+              if (!response.ok || !result.success) {
+                console.error(`Failed to update task ${taskData.id} on drop:`, (result.error || "Server error."));
+                 await loadTasksFromServer(); 
+                return; 
+              }
+            }
+            await loadTasksFromServer(); 
+          } catch (error) {
+            console.error('Error batch updating tasks on drop:', error);
+            await loadTasksFromServer(); 
+          }
+        } else {
+           updateProgressStats(); 
+        }
+      }
+    }
+
+    function updateTaskCountsInHeaders() {
+      if (!todoColumnTasks || !inprogressColumnTasks || !doneColumnTasks) return;
+      const todoCount = todoColumnTasks.children.length;
+      const ipCount = inprogressColumnTasks.children.length;
+      const dCount = doneColumnTasks.children.length;
+      const todoCountEl = document.getElementById('todo-count');
+      const ipCountEl = document.getElementById('inprogress-count');
+      const doneCountEl = document.getElementById('done-count');
+      if (todoCountEl) todoCountEl.textContent = `(${todoCount})`;
+      if (ipCountEl) ipCountEl.textContent = `(${ipCount})`;
+      if (doneCountEl) doneCountEl.textContent = `(${dCount})`;
+    }
+
+    async function loadTasksFromServer() {
+      if (views.kanban.classList.contains('view-hidden') || !todoColumnTasks) { return; }
+      try {
+        const response = await fetch(`${API_BASE_URL}/tasks_api.php`, { credentials: 'include' });
+        if (!response.ok) {
+          if (response.status === 401) { navigateTo('login'); return; }
+           const errorText = await response.text(); 
+          throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
+        }
+        const tasksByColumn = await response.json();
+
+        if (todoColumnTasks) todoColumnTasks.innerHTML = '';
+        if (inprogressColumnTasks) inprogressColumnTasks.innerHTML = '';
+        if (doneColumnTasks) doneColumnTasks.innerHTML = '';
+
+        if (!tasksByColumn || typeof tasksByColumn !== 'object') {
+            console.error("loadTasksFromServer: Invalid tasksByColumn structure received from server.");
+            return;
+        }
+
+        Object.keys(tasksByColumn).forEach(columnKey => {
+          const columnElement = document.getElementById(columnKey)?.querySelector('.tasks-container');
+          if (columnElement && Array.isArray(tasksByColumn[columnKey])) {
+            const sortedTasks = tasksByColumn[columnKey].sort((a, b) => (Number(a.sort_order) || 0) - (Number(b.sort_order) || 0));
+            sortedTasks.forEach(taskDataFromServer => {
+                if (!taskDataFromServer || typeof taskDataFromServer.id === 'undefined' || typeof taskDataFromServer.text === 'undefined') {
+                    console.warn("loadTasksFromServer: Skipping invalid task data object:", taskDataFromServer);
+                    return; 
+                }
+                try {
+                    const taskCard = createTaskCard(taskDataFromServer);
+                    if (taskCard && columnElement) { 
+                        columnElement.appendChild(taskCard);
+                    } else {
+                        console.error("Failed to create task card or columnElement is null for task:", taskDataFromServer);
+                    }
+                } catch (e) {
+                    console.error("Error during createTaskCard or appendChild in loadTasks:", e, "with taskData:", taskDataFromServer);
+                }
+            });
+          }
+        });
+        updateProgressStats();
+      } catch (error) { console.error("Error loading tasks:", error); }
+    }
+
+    function setTheme(theme) { document.body.classList.toggle('dark-mode', theme === 'dark'); sunIcon.classList.toggle('hidden', theme === 'dark'); moonIcon.classList.toggle('hidden', theme === 'light'); localStorage.setItem('strideKanbanTheme', theme); }
+    function loadThemePreference() { const savedTheme = localStorage.getItem('strideKanbanTheme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); setTheme(savedTheme); }
+
+    function updateProgressStats() { if (!todoColumnTasks || !inprogressColumnTasks || !doneColumnTasks || !progressFill || !progressText) return; const todoCount = todoColumnTasks.children.length; const inprogressCount = inprogressColumnTasks.children.length; const doneCount = doneColumnTasks.children.length; const totalTasks = todoCount + inprogressCount + doneCount; updateTaskCountsInHeaders(); let progress = totalTasks > 0 ? (doneCount / totalTasks) * 100 : 0; progressFill.style.width = `${progress}%`; progressText.textContent = `${Math.round(progress)}% Complete`; }
+
+    async function exportBoardAsJson() {
+      try {
+        const response = await fetch(`${API_BASE_URL}/tasks_api.php`, { credentials: 'include' });
+        if (!response.ok) throw new Error('Failed to fetch tasks for export');
+        const dataToExport = await response.json();
+        if (Object.keys(dataToExport).every(col => dataToExport[col].length === 0)) {
+          alert("No tasks to export!"); return;
+        }
+        const blob = new Blob([JSON.stringify(dataToExport, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href = url;
+        a.download = `stride_kanban_export_${formatDate(new Date()).replace(/-/g, '')}.json`;
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      } catch (e) { console.error("Error exporting JSON:", e); alert("Could not export tasks."); }
+    }
+    function printBoard() { window.print(); }
+
+    function initEventListeners() {
+      if(landingLoginBtn) landingLoginBtn.addEventListener('click', () => navigateTo('login'));
+      if(landingRegisterBtn) landingRegisterBtn.addEventListener('click', () => navigateTo('register'));
+      if(gotoRegisterLink) gotoRegisterLink.addEventListener('click', (e) => { e.preventDefault(); navigateTo('register'); });
+      if(gotoLoginLink) gotoLoginLink.addEventListener('click', (e) => { e.preventDefault(); navigateTo('login'); });
+      
+      if (forgotPasswordLink) {
+        forgotPasswordLink.addEventListener('click', (e) => {
+          e.preventDefault();
+          alert("Forgot password functionality is not yet implemented.");
+        });
+      }
+      if (loginForm) loginForm.addEventListener('submit', handleLogin);
+      if (registerForm) registerForm.addEventListener('submit', handleRegister);
+
+      if(logoutBtn) logoutBtn.addEventListener('click', handleLogout);
+      if(themeToggleBtn) themeToggleBtn.addEventListener('click', () => { const newTheme = document.body.classList.contains('dark-mode') ? 'light' : 'dark'; setTheme(newTheme); });
+      
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (event) => { if (!localStorage.getItem('strideKanbanTheme')) setTheme(event.matches ? 'dark' : 'light'); });
+
+      if (passwordToggleButtons) {
+        passwordToggleButtons.forEach(button => {
+          button.addEventListener('click', function () {
+            const targetInputId = this.dataset.target;
+            const targetInput = document.getElementById(targetInputId);
+            const icon = this.querySelector('i');
+            if (targetInput && icon) {
+              if (targetInput.type === 'password') {
+                targetInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+              } else {
+                targetInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+              }
+            }
+          });
+        });
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadThemePreference();
+      initEventListeners();
+      checkLoginStatus();
+    });
+  </script>
+</body>
+</html>
