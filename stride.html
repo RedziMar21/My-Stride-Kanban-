@@ -12,6 +12,9 @@
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/helpers.esm.min.js"></script>
+
 
   <style>
     :root {
@@ -137,7 +140,12 @@
       padding: 1rem;
       margin-top: 1.2rem;
       padding-bottom: 1.5rem;
+      position: relative; 
     }
+    
+    .empty-column-message {
+    }
+
 
     .task-card {
       padding: 1.25rem;
@@ -145,7 +153,7 @@
       position: relative;
       box-shadow: 0 1px 5px var(--color-ui-shadow);
       cursor: pointer;
-      transition: box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out, border-color 0.2s ease-in-out, opacity 0.3s ease-out, max-height 0.3s ease-out; /* Added for filtering */
+      transition: box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out, border-color 0.2s ease-in-out, opacity 0.3s ease-out, max-height 0.3s ease-out; 
       background-color: var(--color-card-bg);
       border: 1px solid var(--color-card-border);
       color: var(--color-text-primary);
@@ -384,14 +392,14 @@
       background-color: var(--color-ui-bg-light);
       border: 1px solid var(--color-ui-border);
       color: var(--color-text-primary);
-      padding: 1rem 1.5rem; /* Default padding */
+      padding: 1rem 1.5rem; 
       box-shadow: inset 0 1px 3px var(--color-ui-shadow);
       font-size: 1.05rem;
       backdrop-filter: blur(6px);
       -webkit-backdrop-filter: blur(6px);
     }
 
-    .input-field-custom.pr-10 { /* Specific for password field */
+    .input-field-custom.pr-10 { 
       padding-right: 2.5rem;
     }
 
@@ -430,44 +438,69 @@
       padding-right: 3rem;
       transition: padding-right 0.2s ease-in-out;
     }
-
+    
     .task-meta {
       font-size: 0.88rem;
       color: var(--color-text-secondary);
       display: flex;
-      flex-wrap: wrap;
-      gap: 0.7rem 1rem;
+      flex-direction: column; 
+      gap: 0.6rem; 
       max-height: 0;
       overflow: hidden;
       opacity: 0;
       margin-top: 0;
       transition: max-height 0.4s ease-out, opacity 0.3s ease-out, margin-top 0.4s ease-out;
       pointer-events: none;
-      align-items: center;
       padding-top: 0.7rem;
       border-top: 1px solid var(--color-ui-border);
     }
 
-    .task-meta span {
+    .task-meta > span { 
       display: flex;
-      align-items: center;
+      align-items: flex-start; 
     }
 
+    .task-meta > span > i, 
+    .task-labels-container > i.fa-tags {
+      color: var(--color-text-muted);
+      margin-right: 0.5rem; 
+      flex-shrink: 0;
+      margin-top: 0.1em; 
+      font-size: 0.9em; 
+    }
+    
+    .task-meta i.fa-exclamation-circle { color: var(--color-priority-high); }
+    .task-meta i.fa-clock { color: var(--color-upcoming-text); }
+
     .task-card.expanded .task-meta {
-      max-height: 300px;
+      max-height: 300px; 
       opacity: 1;
       margin-top: 0.75rem;
       transition: max-height 0.4s ease-in, opacity 0.3s ease-in, margin-top 0.4s ease-in;
       pointer-events: auto;
     }
-
-    .task-meta i {
-      color: var(--color-text-muted);
-      margin-right: 0.3rem;
-      flex-shrink: 0;
+    
+    .task-labels-container { 
+      align-items: flex-start; 
+      flex-wrap: wrap;
+      gap: 0.3rem 0.4rem; 
     }
-    .task-meta i.fa-exclamation-circle { color: var(--color-priority-high); }
-    .task-meta i.fa-clock { color: var(--color-upcoming-text); }
+
+    .task-label-badge {
+      background-color: rgba(var(--color-accent-rgb), 0.12);
+      color: var(--color-accent);
+      padding: 0.2rem 0.6rem;
+      border-radius: 0.85rem; 
+      font-size: 0.78rem; 
+      font-weight: 500;
+      line-height: 1.3; 
+      white-space: nowrap;
+      border: 1px solid rgba(var(--color-accent-rgb), 0.2);
+    }
+    body.dark-mode .task-label-badge {
+      background-color: rgba(var(--color-accent-rgb), 0.2);
+      border-color: rgba(var(--color-accent-rgb), 0.3);
+    }
 
 
     .task-meta .priority-low-text {
@@ -984,32 +1017,28 @@
       color: var(--color-text-primary);
     }
 
-    /* MODIFIED: Search Filter Styling */
     #search-task-container {
-      margin: 1.5rem auto; /* A bit more vertical space */
+      margin: 1.5rem auto; 
       padding: 0 1.5rem;
       width: 100%;
       max-width: 600px;
     }
     .search-input-wrapper {
-        position: relative; /* For absolute positioning the icon */
+        position: relative; 
     }
-    #search-task-input.input-field-custom { /* Be specific to override base .input-field-custom if needed */
+    #search-task-input.input-field-custom { 
       width: 100%;
-      /* Override only padding-left from .input-field-custom for the icon */
-      /* Default .input-field-custom has padding: 1rem 1.5rem; */
-      /* So, we only need to ensure left padding is enough for the icon + space */
-      padding-left: 3rem; /* e.g., 1rem for icon position + 1.2rem for icon width + 0.8rem for space */
+      padding-left: 3rem; 
     }
     .search-input-wrapper .search-icon {
         position: absolute;
-        left: 1rem; /* Position icon where default padding would start */
+        left: 1rem; 
         top: 50%;
         transform: translateY(-50%);
         color: var(--color-text-muted);
         pointer-events: none; 
-        font-size: 1rem; /* Or adjust as needed */
-        z-index: 5; /* Ensure icon is above input background, if needed */
+        font-size: 1rem; 
+        z-index: 5; 
     }
 
 
@@ -1073,17 +1102,21 @@
       .task-actions { top: 0.6rem; right: 0.6rem; gap: 0.4rem; }
       .task-actions button { font-size: 0.9rem; }
       .task-description { padding-right: 2.5rem; }
-      #add-task-section h2 { font-size: 1.1rem; }
+      #add-task-section h2 { font-size: 1.1rem; } 
       .input-field-custom, .btn-primary-accent, .btn-secondary, .btn-neutral { padding: 0.8rem 1.2rem; font-size: 0.95rem; border-radius: 0.6rem; }
-      .task-meta { font-size: 0.8rem; gap: 0.5rem 0.8rem; margin-top: 0.6rem; padding-top: 0.4rem; }
-      .task-meta i { font-size: 0.9em; }
+      .task-meta { font-size: 0.8rem; gap: 0.5rem; margin-top: 0.6rem; padding-top: 0.4rem; } 
+      .task-meta > span > i, .task-labels-container > i.fa-tags { font-size: 0.9em; margin-right: 0.3rem;}
+      .task-label-badge { font-size: 0.7rem; padding: 0.15rem 0.4rem; }
       .progress-container { margin: 1.5rem auto; }
       .export-buttons { flex-direction: column; gap: 0.75rem; padding: 0 1rem; }
       #landing-features { margin-top: 2rem; }
       .feature-item { margin-bottom: 2.5rem; }
-      #search-task-container { max-width: 90%; margin-bottom: 1rem; } /* Adjust search container on mobile */
-      #search-task-input.input-field-custom { padding-left: 2.75rem; /* Slightly less padding on mobile if needed */ }
+      #search-task-container { max-width: 90%; margin-bottom: 1rem; } 
+      #search-task-input.input-field-custom { padding-left: 2.75rem; }
       .search-input-wrapper .search-icon { left: 0.85rem; font-size: 0.9rem; }
+      #charts-section { max-width: 90%; }
+      #charts-section .chart-container {max-height: 300px;}
+
 
     }
 
@@ -1101,11 +1134,15 @@
       .column-header-title .icon { width: 1.5rem; height: 1.5rem; margin-right: 0.6rem; }
       #search-task-input.input-field-custom { padding-left: 2.5rem; }
       .search-input-wrapper .search-icon { left: 0.75rem; }
+      .task-meta { font-size: 0.75rem; }
+      .task-label-badge { font-size: 0.65rem; }
+      #charts-section .chart-container {max-height: 250px;}
+
     }
 
     @media print {
       html, body { width: 100% !important; height: auto !important; overflow: visible !important; background: white !important; color: black !important; margin: 0 !important; padding: 0 !important; font-size: 9pt !important; line-height: 1.2 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-      #landing-view, #login-view, #register-view, .theme-toggle-container, #kanban-view-header, #add-task-section, .progress-container, .export-buttons, #search-task-container, footer.global-footer { display: none !important; }
+      #landing-view, #login-view, #register-view, .theme-toggle-container, #kanban-view-header, #add-task-section, .progress-container, #charts-section, .export-buttons, #search-task-container, footer.global-footer, .empty-column-message { display: none !important; }
       #kanban-view { display: block !important; width: 100% !important; margin: 0 !important; padding: 1cm !important; box-sizing: border-box !important; }
       .kanban-columns-container { display: flex !important; flex-direction: row !important; flex-wrap: wrap !important; justify-content: flex-start !important; gap: 10px !important; margin: 0 !important; padding: 0 !important; width: 100% !important; max-width: 100% !important; overflow: visible !important; }
       .kanban-column-wrapper { border: 1px solid #ccc !important; box-shadow: none !important; background-color: #fff !important; padding: 0.5rem !important; margin: 0 !important; flex: 1 1 200px !important; min-width: 180px !important; max-width: 30% !important; break-inside: avoid !important; page-break-inside: avoid !important; min-height: unset !important; height: auto !important; overflow: visible !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
@@ -1124,9 +1161,11 @@
       .task-actions, .edit-form { display: none !important; }
       .task-content-view { display: block !important; }
       .task-description { padding-right: 0 !important; font-size: 8.5pt !important; line-height: 1.2 !important; color: #333 !important; margin-bottom: 0.25rem !important; word-wrap: break-word; overflow-wrap: break-word; }
-      .task-meta { color: #555 !important; max-height: none !important; opacity: 1 !important; margin-top: 0.25rem !important; padding-top: 0.25rem !important; border-top: 1px dotted #eee !important; font-size: 7.5pt !important; line-height: 1.1 !important; display: block !important; transition: none !important; pointer-events: auto !important; }
-      .task-meta span { display: block !important; margin-bottom: 2px !important; }
-      .task-meta i { color: #666 !important; margin-right: 3px !important; font-size: 0.9em !important; }
+      .task-meta { color: #555 !important; max-height: none !important; opacity: 1 !important; margin-top: 0.25rem !important; padding-top: 0.25rem !important; border-top: 1px dotted #eee !important; font-size: 7.5pt !important; line-height: 1.1 !important; display: flex !important; flex-direction: column !important; gap: 2px !important; transition: none !important; pointer-events: auto !important; }
+      .task-meta > span { display: flex !important; align-items: flex-start !important; margin-bottom: 2px !important; }
+      .task-meta > span > i, .task-labels-container > i.fa-tags { color: #666 !important; margin-right: 3px !important; font-size: 0.9em !important; margin-top: 0.05em !important; }
+      .task-labels-container { flex-wrap: wrap !important; gap: 2px 3px !important; }
+      .task-label-badge { background-color: #eee !important; color: #333 !important; border: 1px solid #ddd !important; padding: 1px 3px !important; font-size: 7pt !important; border-radius: 3px !important;}
       .task-meta .priority-low-text { color: #48BB78 !important; }
       .task-meta .priority-medium-text { color: #ED8936 !important; }
       .task-meta .priority-high-text { color: #E53E3E !important; }
@@ -1289,7 +1328,10 @@
     </div>
     <section id="add-task-section" class="add-task-section my-12 md:my-16 w-full max-w-xl mx-auto">
       <div class="glass p-7 md:p-10 rounded-xl shadow-lg">
-        <h2 class="text-xl font-semibold font-poppins mb-6" style="color: var(--color-text-primary);">Add New Task (Alt+N to focus)</h2>
+        <h2 class="text-xl font-semibold font-poppins mb-6 flex items-center" style="color: var(--color-text-primary);">
+          <i class="fas fa-plus-circle mr-3 text-2xl" style="color: var(--color-accent);"></i>
+          Add New Task (Alt+N to focus)
+        </h2>
         <div class="flex flex-col space-y-5">
           <input type="text" id="taskInput" class="input-field-custom" placeholder="What are you working on? (Ctrl+Enter to add)">
           <button id="addTaskBtn" class="btn-primary-accent flex items-center justify-center">
@@ -1300,7 +1342,6 @@
       </div>
     </section>
 
-    <!-- MODIFIED: Search Filter HTML Structure -->
     <section id="search-task-container">
         <div class="search-input-wrapper"> 
             <i class="fas fa-search search-icon"></i>
@@ -1318,7 +1359,8 @@
                   d="M9 6.75h10.5M9 12h10.5M9 17.25h10.5M3.75 6.75h.007v.008H3.75V6.75zm0 5.25h.007v.008H3.75V12zm0 5.25h.007v.008H3.75V17.25z" />
               </svg> To Do <span class="task-count" id="todo-count">(0)</span> </h3>
           </div>
-          <div class="tasks-container space-y-4 flex-grow max-h-[65vh] md:max-h-[70vh] overflow-y-auto pr-2"></div>
+          <div class="tasks-container space-y-4 flex-grow max-h-[65vh] md:max-h-[70vh] overflow-y-auto pr-2">
+          </div>
         </div>
         <div id="inprogress" class="kanban-column-wrapper">
           <div class="column-header">
@@ -1328,7 +1370,8 @@
                   d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg> In Progress <span class="task-count" id="inprogress-count">(0)</span> </h3>
           </div>
-          <div class="tasks-container space-y-4 flex-grow max-h-[65vh] md:max-h-[70vh] overflow-y-auto pr-2"></div>
+          <div class="tasks-container space-y-4 flex-grow max-h-[65vh] md:max-h-[70vh] overflow-y-auto pr-2">
+          </div>
         </div>
         <div id="done" class="kanban-column-wrapper">
           <div class="column-header">
@@ -1338,7 +1381,8 @@
                   d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
               </svg> Done <span class="task-count" id="done-count">(0)</span> </h3>
           </div>
-          <div class="tasks-container space-y-4 flex-grow max-h-[65vh] md:max-h-[70vh] overflow-y-auto pr-2"></div>
+          <div class="tasks-container space-y-4 flex-grow max-h-[65vh] md:max-h-[70vh] overflow-y-auto pr-2">
+          </div>
         </div>
       </div>
     </main>
@@ -1348,6 +1392,15 @@
           Complete</span>
       </div>
     </section>
+
+    <!-- Chart Section -->
+    <section id="charts-section" class="w-full max-w-2xl mx-auto my-8 p-4 md:p-6 glass">
+      <h3 class="text-lg font-semibold font-poppins mb-4 text-center" style="color: var(--color-text-primary);">Task Insights</h3>
+      <div class="chart-container" style="position: relative; height:auto; max-height:350px; width:100%; max-width:450px; margin: 0 auto;">
+        <canvas id="priorityDistributionChart"></canvas>
+      </div>
+    </section>
+
     <section class="export-buttons"> <button id="export-json" class="btn-secondary"><i
           class="fas fa-file-code mr-2"></i>Export as JSON</button> <button id="print-board" class="btn-secondary"><i
           class="fas fa-print mr-2"></i>Print Board (Save as PDF)</button> </section>
@@ -1393,6 +1446,8 @@
 
     let lastDragEnd = 0;
     const DRAG_CLICK_THRESHOLD = 100;
+    let myPriorityDistributionChart = null;
+
 
     const scrollAnimatedElements = document.querySelectorAll('.scroll-animate');
     const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
@@ -1621,7 +1676,6 @@
         }
     }
 
-
     function createTaskCard({ id, text, priority = 'low', due_date = '', labels = '', column_id = 'todo', sort_order = 0 }) {
       const taskCard = document.createElement('div');
       taskCard.id = String(id);
@@ -1637,23 +1691,38 @@
       const viewContent = document.createElement('div'); viewContent.classList.add('task-content-view');
       const textElement = document.createElement('p'); textElement.classList.add('task-description'); textElement.textContent = text;
       const metaElement = document.createElement('div'); metaElement.classList.add('task-meta');
-      const priorityDisplay = document.createElement('span'); priorityDisplay.innerHTML = `<i class="fas fa-flag"></i> Priority: <strong class="priority-${priority}-text">${priority.charAt(0).toUpperCase() + priority.slice(1)}</strong>`; metaElement.appendChild(priorityDisplay);
+      
+      const priorityDisplay = document.createElement('span'); 
+      priorityDisplay.innerHTML = `<i class="fas fa-flag"></i> Priority: <strong class="priority-${priority}-text">${priority.charAt(0).toUpperCase() + priority.slice(1)}</strong>`; 
+      metaElement.appendChild(priorityDisplay);
       
       const dueDateDisplayElement = document.createElement('span'); 
       const dueDateInfo = getDueDateDisplay(displayDueDate); 
       if (dueDateInfo.text) { 
           let iconHTML = dueDateInfo.iconClass ? `<i class="${dueDateInfo.iconClass} mr-1"></i>` : '';
-          dueDateDisplayElement.innerHTML = `<i class="fas fa-calendar-alt mr-1"></i> ${iconHTML}${dueDateInfo.text}`; 
+          dueDateDisplayElement.innerHTML = `<i class="fas fa-calendar-alt"></i> ${iconHTML}${dueDateInfo.text}`; 
           dueDateDisplayElement.classList.add(dueDateInfo.class); 
       } else { 
-          dueDateDisplayElement.innerHTML = ''; 
-          dueDateDisplayElement.classList.remove('overdue-text', 'upcoming-text', 'normal-date-text'); 
+          dueDateDisplayElement.innerHTML = `<i class="fas fa-calendar-alt"></i> Not set`;
       }
       metaElement.appendChild(dueDateDisplayElement);
 
-      const labelsDisplay = document.createElement('span'); const labelTags = (labels || '').split(',').map(l => l.trim()).filter(l => l);
-      if (labelTags.length > 0) { labelsDisplay.innerHTML = `<i class="fas fa-tags"></i> ${labelTags.join(', ')}`; } else { labelsDisplay.innerHTML = ''; }
-      metaElement.appendChild(labelsDisplay);
+      const labelsContainer = document.createElement('span'); 
+      labelsContainer.classList.add('task-labels-container');
+      const labelTags = (labels || '').split(',').map(l => l.trim()).filter(l => l);
+      if (labelTags.length > 0) { 
+          labelsContainer.innerHTML = `<i class="fas fa-tags"></i>`; 
+          labelTags.forEach(tag => {
+              const tagElement = document.createElement('span');
+              tagElement.classList.add('task-label-badge');
+              tagElement.textContent = tag;
+              labelsContainer.appendChild(tagElement);
+          });
+      } else { 
+          labelsContainer.innerHTML = `<i class="fas fa-tags"></i> No labels`;
+      }
+      metaElement.appendChild(labelsContainer);
+
       viewContent.appendChild(textElement); viewContent.appendChild(metaElement);
 
       const editForm = document.createElement('div'); editForm.classList.add('edit-form');
@@ -1718,21 +1787,33 @@
             dueDateDisplayElement.classList.remove('overdue-text', 'upcoming-text', 'normal-date-text');
             if (updatedDueDateInfo.text) { 
                 let iconHTML = updatedDueDateInfo.iconClass ? `<i class="${updatedDueDateInfo.iconClass} mr-1"></i>` : '';
-                dueDateDisplayElement.innerHTML = `<i class="fas fa-calendar-alt mr-1"></i> ${iconHTML}${updatedDueDateInfo.text}`; 
+                dueDateDisplayElement.innerHTML = `<i class="fas fa-calendar-alt"></i> ${iconHTML}${updatedDueDateInfo.text}`; 
                 dueDateDisplayElement.classList.add(updatedDueDateInfo.class); 
             } else { 
-                dueDateDisplayElement.innerHTML = ''; 
+                dueDateDisplayElement.innerHTML = `<i class="fas fa-calendar-alt"></i> Not set`;
             }
 
             const newLabelTags = newLabels.split(',').map(l => l.trim()).filter(l => l);
-            if (newLabelTags.length > 0) { labelsDisplay.innerHTML = `<i class="fas fa-tags"></i> ${newLabelTags.join(', ')}`; } else { labelsDisplay.innerHTML = ''; }
+            labelsContainer.innerHTML = ''; 
+            if (newLabelTags.length > 0) {
+                labelsContainer.innerHTML = `<i class="fas fa-tags"></i>`;
+                newLabelTags.forEach(tag => {
+                    const tagElement = document.createElement('span');
+                    tagElement.classList.add('task-label-badge');
+                    tagElement.textContent = tag;
+                    labelsContainer.appendChild(tagElement);
+                });
+            } else {
+                 labelsContainer.innerHTML = `<i class="fas fa-tags"></i> No labels`;
+            }
+
             taskCard.setAttribute('data-priority', newPriority);
             taskCard.setAttribute('data-duedate', newDueDateRaw || '');
             taskCard.setAttribute('data-labels', newLabels);
             taskCard.classList.remove('editing');
             if (!taskCard.classList.contains('expanded')) { taskCard.classList.add('expanded'); }
             updateProgressStats();
-            filterTasks(); // Apply filter in case task text/labels changed
+            filterTasks(); 
           } else { alert("Failed to update task: " + (result.error || "Server error.")); }
         } catch (error) { console.error('Error updating task:', error); alert("Error updating task."); }
         finally {
@@ -1892,19 +1973,39 @@
       }
     }
 
-    function updateTaskCountsInHeaders() {
-      if (!todoColumnTasks || !inprogressColumnTasks || !doneColumnTasks) return;
-      const todoCount = Array.from(todoColumnTasks.children).filter(c => !c.classList.contains('hidden-by-filter')).length; 
-      const ipCount = Array.from(inprogressColumnTasks.children).filter(c => !c.classList.contains('hidden-by-filter')).length; 
-      const dCount = Array.from(doneColumnTasks.children).filter(c => !c.classList.contains('hidden-by-filter')).length; 
-      
-      const todoCountEl = document.getElementById('todo-count');
-      const ipCountEl = document.getElementById('inprogress-count');
-      const doneCountEl = document.getElementById('done-count');
-      if (todoCountEl) todoCountEl.textContent = `(${todoCount})`;
-      if (ipCountEl) ipCountEl.textContent = `(${ipCount})`;
-      if (doneCountEl) doneCountEl.textContent = `(${dCount})`;
+    function updateColumnVisuals() {
+        const columns = [
+            { id: 'todo', container: todoColumnTasks, countEl: document.getElementById('todo-count') },
+            { id: 'inprogress', container: inprogressColumnTasks, countEl: document.getElementById('inprogress-count') },
+            { id: 'done', container: doneColumnTasks, countEl: document.getElementById('done-count') }
+        ];
+
+        columns.forEach(col => {
+            if (!col.container || !col.countEl) return;
+
+            const visibleTasks = Array.from(col.container.children).filter(c => !c.classList.contains('hidden-by-filter') && c.classList.contains('task-card'));
+            col.countEl.textContent = `(${visibleTasks.length})`;
+
+            let emptyStateMsg = col.container.querySelector('.empty-column-message');
+            if (visibleTasks.length === 0) {
+                if (!emptyStateMsg) {
+                    emptyStateMsg = document.createElement('div');
+                    emptyStateMsg.classList.add('empty-column-message', 'text-center', 'p-4', 'flex', 'flex-col', 'items-center', 'justify-center', 'absolute', 'inset-0'); 
+                    emptyStateMsg.style.color = 'var(--color-text-muted)';
+                    emptyStateMsg.style.fontStyle = 'italic';
+                    emptyStateMsg.style.minHeight = '150px'; 
+                    emptyStateMsg.innerHTML = '<i class="fas fa-folder-open fa-3x mb-3 opacity-50"></i><p>Nothing to see here!</p>';
+                    col.container.appendChild(emptyStateMsg);
+                }
+                emptyStateMsg.style.display = 'flex'; 
+            } else {
+                if (emptyStateMsg) {
+                    emptyStateMsg.style.display = 'none'; 
+                }
+            }
+        });
     }
+
 
     async function loadTasksFromServer() {
       if (views.kanban.classList.contains('view-hidden') || !todoColumnTasks) { return; }
@@ -1953,22 +2054,168 @@
       } catch (error) { console.error("Error loading tasks:", error); }
     }
 
-    function setTheme(theme) { document.body.classList.toggle('dark-mode', theme === 'dark'); sunIcon.classList.toggle('hidden', theme === 'dark'); moonIcon.classList.toggle('hidden', theme === 'light'); localStorage.setItem('strideKanbanTheme', theme); }
+    function renderOrUpdatePriorityDistributionChart() {
+        const chartCanvas = document.getElementById('priorityDistributionChart');
+        if (!chartCanvas || !todoColumnTasks || !inprogressColumnTasks || !doneColumnTasks) {
+            return;
+        }
+
+        const ctx = chartCanvas.getContext('2d');
+        if (!ctx) return;
+
+        const allVisibleTasks = [
+            ...Array.from(todoColumnTasks.querySelectorAll('.task-card:not(.hidden-by-filter)')),
+            ...Array.from(inprogressColumnTasks.querySelectorAll('.task-card:not(.hidden-by-filter)')),
+            ...Array.from(doneColumnTasks.querySelectorAll('.task-card:not(.hidden-by-filter)')),
+        ];
+
+        const priorityCounts = { low: 0, medium: 0, high: 0 };
+        allVisibleTasks.forEach(taskCard => {
+            const priority = taskCard.getAttribute('data-priority');
+            if (priorityCounts.hasOwnProperty(priority)) {
+                priorityCounts[priority]++;
+            }
+        });
+
+        const chartDataValues = [priorityCounts.low, priorityCounts.medium, priorityCounts.high];
+        const totalTasksForChart = chartDataValues.reduce((a, b) => a + b, 0);
+        
+        const chartSection = document.getElementById('charts-section');
+        if (totalTasksForChart === 0) {
+            if (myPriorityDistributionChart) {
+                myPriorityDistributionChart.destroy();
+                myPriorityDistributionChart = null;
+            }
+            if(chartSection) chartSection.style.display = 'none';
+            return;
+        } else {
+            if(chartSection) chartSection.style.display = 'block';
+        }
+
+        const isDarkMode = document.body.classList.contains('dark-mode');
+        const textColorPrimary = getComputedStyle(document.documentElement).getPropertyValue('--color-text-primary').trim();
+        const textColorSecondary = getComputedStyle(document.documentElement).getPropertyValue('--color-text-secondary').trim();
+        
+        const colorPriorityLow = getComputedStyle(document.documentElement).getPropertyValue('--color-priority-low').trim();
+        const colorPriorityMedium = getComputedStyle(document.documentElement).getPropertyValue('--color-priority-medium').trim();
+        const colorPriorityHigh = getComputedStyle(document.documentElement).getPropertyValue('--color-priority-high').trim();
+
+        const segmentColors = [colorPriorityLow, colorPriorityMedium, colorPriorityHigh];
+        const segmentHoverColors = segmentColors.map(color => Chart.helpers.color(color).darken(0.1).rgbString());
+
+        const chartConfig = {
+            type: 'doughnut',
+            data: {
+                labels: ['Low Priority', 'Medium Priority', 'High Priority'],
+                datasets: [{
+                    label: 'Task Priorities',
+                    data: chartDataValues,
+                    backgroundColor: segmentColors,
+                    hoverBackgroundColor: segmentHoverColors,
+                    borderColor: isDarkMode ? 
+                        getComputedStyle(document.documentElement).getPropertyValue('--color-bg-page-start').trim() : 
+                        getComputedStyle(document.documentElement).getPropertyValue('--color-card-bg').trim(), 
+                    borderWidth: 2,
+                    hoverBorderColor: isDarkMode ? '#FFFFFF' : '#333333'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                cutout: '60%', 
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Task Priority Distribution',
+                        color: textColorPrimary,
+                        font: { size: 16, family: "'Poppins', sans-serif" },
+                        padding: { bottom: 15 }
+                    },
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: textColorSecondary,
+                            font: { family: "'Inter', sans-serif" },
+                            padding: 15
+                        }
+                    },
+                    tooltip: {
+                        titleFont: { family: "'Poppins', sans-serif" },
+                        bodyFont: { family: "'Inter', sans-serif" },
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) { label += ': '; }
+                                if (context.parsed !== null) { label += context.parsed; }
+                                const percentage = (totalTasksForChart > 0 && context.parsed !== null) ? (context.parsed / totalTasksForChart * 100).toFixed(1) : 0;
+                                label += ` (${percentage}%)`;
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        if (myPriorityDistributionChart) {
+            myPriorityDistributionChart.data.datasets[0].data = chartDataValues;
+            myPriorityDistributionChart.data.datasets[0].backgroundColor = segmentColors;
+            myPriorityDistributionChart.data.datasets[0].hoverBackgroundColor = segmentHoverColors;
+            myPriorityDistributionChart.data.datasets[0].borderColor = isDarkMode ? getComputedStyle(document.documentElement).getPropertyValue('--color-bg-page-start').trim() : getComputedStyle(document.documentElement).getPropertyValue('--color-card-bg').trim();
+            myPriorityDistributionChart.options.plugins.title.color = textColorPrimary;
+            myPriorityDistributionChart.options.plugins.title.text = 'Task Priority Distribution';
+            myPriorityDistributionChart.options.plugins.legend.labels.color = textColorSecondary;
+            myPriorityDistributionChart.update();
+        } else {
+            myPriorityDistributionChart = new Chart(ctx, chartConfig);
+        }
+    }
+
+    function setTheme(theme) { 
+        document.body.classList.toggle('dark-mode', theme === 'dark'); 
+        sunIcon.classList.toggle('hidden', theme === 'dark'); 
+        moonIcon.classList.toggle('hidden', theme === 'light'); 
+        localStorage.setItem('strideKanbanTheme', theme); 
+        
+        if (myPriorityDistributionChart && !views.kanban.classList.contains('view-hidden')) {
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            const textColorPrimary = getComputedStyle(document.documentElement).getPropertyValue('--color-text-primary').trim();
+            const textColorSecondary = getComputedStyle(document.documentElement).getPropertyValue('--color-text-secondary').trim();
+            
+            myPriorityDistributionChart.options.plugins.title.color = textColorPrimary;
+            myPriorityDistributionChart.options.plugins.legend.labels.color = textColorSecondary;
+            
+            const colorPriorityLow = getComputedStyle(document.documentElement).getPropertyValue('--color-priority-low').trim();
+            const colorPriorityMedium = getComputedStyle(document.documentElement).getPropertyValue('--color-priority-medium').trim();
+            const colorPriorityHigh = getComputedStyle(document.documentElement).getPropertyValue('--color-priority-high').trim();
+            myPriorityDistributionChart.data.datasets[0].backgroundColor = [colorPriorityLow, colorPriorityMedium, colorPriorityHigh];
+            myPriorityDistributionChart.data.datasets[0].hoverBackgroundColor = [colorPriorityLow, colorPriorityMedium, colorPriorityHigh].map(color => Chart.helpers.color(color).darken(0.1).rgbString());
+
+            myPriorityDistributionChart.data.datasets[0].borderColor = isDarkMode ? getComputedStyle(document.documentElement).getPropertyValue('--color-bg-page-start').trim() : getComputedStyle(document.documentElement).getPropertyValue('--color-card-bg').trim();
+            myPriorityDistributionChart.update();
+        } else if (!views.kanban.classList.contains('view-hidden')) {
+            renderOrUpdatePriorityDistributionChart();
+        }
+    }
+
     function loadThemePreference() { const savedTheme = localStorage.getItem('strideKanbanTheme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); setTheme(savedTheme); }
 
     function updateProgressStats() { 
-        if (!todoColumnTasks || !inprogressColumnTasks || !doneColumnTasks || !progressFill || !progressText) return; 
+        if (!progressFill || !progressText) return; 
+        
+        updateColumnVisuals(); 
         
         const todoCount = Array.from(document.querySelectorAll('#todo .task-card:not(.hidden-by-filter)')).length;
         const inprogressCount = Array.from(document.querySelectorAll('#inprogress .task-card:not(.hidden-by-filter)')).length;
         const doneCount = Array.from(document.querySelectorAll('#done .task-card:not(.hidden-by-filter)')).length;
         
         const totalVisibleTasks = todoCount + inprogressCount + doneCount;
-        updateTaskCountsInHeaders(); 
         
         let progress = totalVisibleTasks > 0 ? (doneCount / totalVisibleTasks) * 100 : 0; 
         progressFill.style.width = `${progress}%`; 
         progressText.textContent = `${Math.round(progress)}% Complete (Visible)`; 
+
+        renderOrUpdatePriorityDistributionChart();
     }
 
 
