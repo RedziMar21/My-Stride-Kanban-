@@ -99,7 +99,7 @@
     #landing-view .landing-header h1,
     #kanban-view-header .app-title,
     #onboarding-view .onboarding-header h2,
-    .auth-top-logo-container { /* Added for auth page logos */
+    .auth-top-logo-container {
         display: flex;
         align-items: baseline; 
     }
@@ -112,11 +112,11 @@
         margin-right: 0.3em; 
         transform: translateY(-0.05em); 
     }
-    .auth-top-logo { /* Styles for top-left logo on auth pages */
+    .auth-top-logo { 
         position: absolute;
         top: 1.5rem;
         left: 1.5rem;
-        height: 32px; /* Fixed size for corner logo */
+        height: 32px;
         width: auto;
         stroke: var(--color-accent);
         fill: none;
@@ -162,6 +162,10 @@
       padding-bottom: 1.5rem;
       position: relative; 
     }
+    
+    .empty-column-message {
+    }
+
 
     .task-card {
       padding: 1.25rem;
@@ -500,20 +504,20 @@
     
     /* AUTH PAGE LAYOUT ADJUSTMENTS */
     #login-view, #register-view {
-        display: flex; /* Changed from w-full for flex centering */
+        display: flex; 
         flex-direction: column;
         align-items: center;
-        justify-content: center; /* Vertically center content */
-        min-height: calc(100vh - 5rem); /* Adjust based on footer height if any */
-        padding-top: 2rem; /* Space from top for the logo */
-        position: relative; /* For positioning the top-left logo */
+        justify-content: center; 
+        min-height: calc(100vh - 5rem); 
+        padding-top: 2rem; 
+        position: relative; 
     }
     #login-view .auth-welcome-header {
         text-align: center;
-        margin-bottom: 2rem; /* Space between welcome and login box */
+        margin-bottom: 2rem; 
     }
     #login-view .auth-welcome-header h1 {
-        font-size: 2.8rem; /* Large font for "Welcome Back!" */
+        font-size: 2.8rem; 
         font-weight: 600;
         color: var(--color-text-primary);
         font-family: 'Poppins', sans-serif;
@@ -525,12 +529,11 @@
 
     .auth-form-container { 
         max-width: 500px; 
-        width: 90%; /* Responsive width */
-        margin: 0 auto; /* Centered, login specific margin removed */
+        width: 90%; 
+        margin: 0 auto; 
     }
-    /* Login specifically doesn't need the margin-top as its handled by flex on #login-view */
     #login-view .auth-form-container {
-       margin-top: 0; /* Override the 4rem auto if it exists*/
+       margin-top: 0; 
     }
 
     .auth-form-container h2 { text-align: center; font-size: 2rem; margin-bottom: 2.5rem; }
@@ -553,7 +556,7 @@
     .auth-switch-link:hover { color: var(--color-accent); text-decoration: underline; }
 
     #landing-view { padding-bottom: 8rem; }
-    #landing-view .landing-header { margin-top: 8rem; margin-bottom: 3rem; justify-content:center; } /* Added justify-center here specifically for landing */
+    #landing-view .landing-header { margin-top: 8rem; margin-bottom: 3rem; justify-content:center; }
     #landing-view .landing-content { max-width: 700px; }
     #landing-view .landing-content h2 { font-size: 1.8rem; margin-bottom: 1rem; }
     #landing-view .landing-content p {
@@ -597,7 +600,7 @@
     }
 
     #kanban-view-header {
-      justify-content: space-between; /* align-items is baseline from general rule */
+      justify-content: space-between; 
       width: 100%; max-width: 1600px; margin: 2rem auto 0 auto;
       padding: 0 1.5rem; box-sizing: border-box;
     }
@@ -607,7 +610,7 @@
     }
 
     #onboarding-view { padding-bottom: 6rem; }
-    #onboarding-view .onboarding-header { margin-top: 4rem; margin-bottom: 2rem; justify-content:center; } /* Center onboarding header title */
+    #onboarding-view .onboarding-header { margin-top: 4rem; margin-bottom: 2rem; justify-content:center; } 
     #onboarding-view .onboarding-content { max-width: 900px; padding-bottom: 3rem; } 
     #onboarding-view .onboarding-content h2 {
       font-size: 2.2rem;
@@ -758,7 +761,7 @@
             Ready to continue your stride?
         </p>
     </div>
-    <div class="auth-form-container"> <!-- This will be centered now due to parent's flex -->
+    <div class="auth-form-container"> 
         <div class="glass p-7 md:p-10 rounded-xl shadow-lg">
             <h2 class="font-poppins font-semibold" style="color: var(--color-text-primary);">Login to Stride</h2>
             <form id="login-form">
@@ -785,7 +788,7 @@
             <path d="M5 35 L15 25 M15 35 L25 25 M25 35 L35 25" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
         </svg>
     </div>
-    <div class="auth-form-container"> <!-- Centered by parent #register-view -->
+    <div class="auth-form-container"> 
         <div class="glass p-7 md:p-10 rounded-xl shadow-lg">
             <h2 class="font-poppins font-semibold" style="color: var(--color-text-primary);">Create Stride Account</h2>
             <form id="register-form">
@@ -1050,7 +1053,7 @@
         window.scrollTo({ top: 0, behavior: 'auto' });
         
         const isUserSessionActiveView = viewName === 'kanban' || viewName === 'onboarding';
-        kanbanViewHeader?.classList.toggle('hidden', !isUserSessionActiveView); // Keep for onboarding too for consistency with logout button
+        kanbanViewHeader?.classList.toggle('hidden', !isUserSessionActiveView); 
         logoutBtn?.classList.toggle('view-hidden', !isUserSessionActiveView); 
 
         if (viewName === 'kanban') {
@@ -1101,7 +1104,7 @@
       try {
         const { data, responseOk } = await fetchAPI('/register.php', 'POST', { email, password });
         if (responseOk && data.success) {
-          localStorage.removeItem(ONBOARDING_FLAG_KEY); // Ensure onboarding shows for new registration
+          localStorage.removeItem(ONBOARDING_FLAG_KEY); 
           navigateTo('onboarding'); 
           registerForm.reset();
         } else { showAuthError(registerErrorMessage, data.error || "Registration failed."); }
@@ -1122,16 +1125,7 @@
       try {
         const { data, responseOk } = await fetchAPI('/login.php', 'POST', { email, password });
         if (responseOk && data.success) {
-          // Check if onboarding was completed for this user. If backend tracks this, use backend data.
-          // For simpler client-side check:
-          if (localStorage.getItem(ONBOARDING_FLAG_KEY) === 'true') {
-            navigateTo('kanban');
-          } else {
-            // This case implies a user logged in who never went through JS onboarding on THIS browser.
-            // Or, you might have backend logic to enforce onboarding for *all* first logins if you stored that flag per user.
-            // For this example, login now always tries to go to kanban, assuming registration takes care of initial onboarding.
-            navigateTo('kanban'); 
-          }
+          navigateTo('kanban'); 
           loginForm.reset();
         } else { showAuthError(loginErrorMessage, data.error || "Login failed."); }
       } catch (error) { showAuthError(loginErrorMessage, error.message || "An error occurred."); }
@@ -1153,10 +1147,8 @@
       try {
         const { data } = await fetchAPI('/check_session.php');
         if (data.loggedIn) {
-            // If onboarding hasn't been completed on this browser, show it.
-            // This path is usually for users returning with an active session.
             if (localStorage.getItem(ONBOARDING_FLAG_KEY) !== 'true') {
-                 navigateTo('onboarding'); // If session exists but onboarding flag missing, show onboarding.
+                 navigateTo('onboarding'); 
             } else {
                  navigateTo('kanban');
             }
