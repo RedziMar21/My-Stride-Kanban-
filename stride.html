@@ -99,7 +99,7 @@
     #landing-view .landing-header h1,
     #kanban-view-header .app-title,
     #onboarding-view .onboarding-header h2,
-    .auth-top-logo-container {
+    .auth-top-logo-container { 
         display: flex;
         align-items: baseline; 
     }
@@ -164,8 +164,21 @@
     }
     
     .empty-column-message {
+      display: flex; 
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      inset: 0;
+      color: var(--color-text-muted);
+      font-style: italic;
+      min-height: 150px;
+      opacity: 0.7; 
+      text-align: center;
     }
-
+    .empty-column-message i.fa-5x { 
+        margin-bottom: 1rem;
+    }
 
     .task-card {
       padding: 1.25rem;
@@ -477,12 +490,78 @@
       color: white; mix-blend-mode: difference;
       text-shadow: 0 1px 1px rgba(0,0,0,0.3), 0 0 3px rgba(0,0,0,0.2);
       font-size: 1rem; pointer-events: none;
+      z-index: 2;
     }
     body.dark-mode .progress-text {
       color: var(--color-text-primary); mix-blend-mode: unset;
       text-shadow: 0 1px 2px rgba(0,0,0,0.3);
     }
     body.dark-mode .progress-fill { background: linear-gradient(to right, var(--color-accent-hover), var(--color-accent)); }
+    
+    .progress-mascot {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%) translateX(-50%); 
+        font-size: 1.5rem; 
+        color: var(--color-accent);
+        transition: left 0.5s ease-in-out;
+        z-index: 1; 
+    }
+
+    .task-card.task-completed-burst {
+        position: relative; 
+    }
+    .task-card.task-completed-burst::before,
+    .task-card.task-completed-burst::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        border-radius: 50%;
+        pointer-events: none; 
+        opacity: 0;
+    }
+    .task-card.task-completed-burst::before {
+        width: 20px;
+        height: 20px;
+        background-color: rgba(var(--color-accent-rgb), 0.7);
+        animation: burstExpand 1.2s ease-out forwards; /* Slower animation */
+    }
+    .task-card.task-completed-burst::after {
+        width: 5px; 
+        height: 5px;
+        background: transparent; 
+        box-shadow: 
+            0 0 0 2px rgba(var(--color-accent-rgb), 0.8),
+            15px -15px 0 -1px rgba(var(--color-accent-rgb), 0.7),
+            -15px 15px 0 -1px rgba(var(--color-accent-rgb), 0.6),
+            15px 15px 0 -1px rgba(var(--color-accent-rgb), 0.7),
+            -15px -15px 0 -1px rgba(var(--color-accent-rgb), 0.8),
+            0px 20px 0 -1px rgba(var(--color-accent-rgb), 0.6),
+            0px -20px 0 -1px rgba(var(--color-accent-rgb), 0.7),
+            20px 0px 0 -1px rgba(var(--color-accent-rgb), 0.8),
+            -20px 0px 0 -1px rgba(var(--color-accent-rgb), 0.7);
+        animation: sparkleEffect 1.2s ease-out forwards; /* Slower animation */
+    }
+
+    @keyframes burstExpand {
+      0% { transform: translate(-50%, -50%) scale(0.1); opacity: 1; }
+      70% { opacity: 0.5; }
+      100% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
+    }
+    @keyframes sparkleEffect {
+      0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
+      100% { transform: translate(-50%, -50%) scale(1.8) rotate(90deg); opacity: 0; }
+    }
+    @keyframes newTaskPop {
+      0% { transform: scale(0.9); opacity: 0.7; }
+      50% { transform: scale(1.05); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .task-card.new-task-pop {
+      animation: newTaskPop 0.4s ease-out;
+    }
+
 
     .export-buttons {
       width: 100%; max-width: 700px; margin: 2rem auto; display: flex;
@@ -502,7 +581,6 @@
       opacity: 1; transform: translateY(0px);
     }
     
-    /* AUTH PAGE LAYOUT ADJUSTMENTS */
     #login-view, #register-view {
         display: flex; 
         flex-direction: column;
@@ -926,7 +1004,9 @@
     </main>
     <section class="progress-container">
       <div class="progress-bar">
-        <div class="progress-fill" id="progress-fill"></div><span class="progress-text" id="progress-text">0% Complete</span>
+        <div class="progress-fill" id="progress-fill"></div>
+        <span id="progress-mascot" class="progress-mascot">👟</span>
+        <span class="progress-text" id="progress-text">0% Complete</span>
       </div>
     </section>
 
@@ -968,7 +1048,7 @@
     const onboardingFinishBtn = document.getElementById('onboarding-finish-btn');
 
     let taskInput, addTaskBtn, todoColumnTasks, inprogressColumnTasks, doneColumnTasks, columnsTasksContainers, 
-        taskErrorMessageElement, progressFill, progressText, exportJsonBtn, printBoardBtn, searchTaskInput;
+        taskErrorMessageElement, progressFill, progressText, exportJsonBtn, printBoardBtn, searchTaskInput, progressMascot;
     
     let loginEmailInput, loginPasswordInput, loginErrorMessage, registerEmailInput, registerPasswordInput, 
         registerConfirmPasswordInput, registerErrorMessage, landingLoginBtn, landingRegisterBtn, 
@@ -1045,6 +1125,13 @@
         }
     }
 
+    function toggleErrorElement(el, show, message = '') {
+        if (!el) return;
+        el.classList.toggle('hidden', !show);
+        if (show && message) {
+            el.textContent = message;
+        }
+    }
 
     function navigateTo(viewName) {
       Object.values(views).forEach(view => view?.classList.add('view-hidden'));
@@ -1091,15 +1178,15 @@
       event.preventDefault();
       const registerButton = registerForm.querySelector('button[type="submit"]');
       setButtonLoadingState(registerButton, true, 'Registering...');
-      registerErrorMessage?.classList.add('hidden');
+      toggleErrorElement(registerErrorMessage, false);
       
       const email = registerEmailInput.value.trim();
       const password = registerPasswordInput.value;
       const confirmPassword = registerConfirmPasswordInput.value;
 
-      if (!email || !password || !confirmPassword) { showAuthError(registerErrorMessage, "All fields are required."); setButtonLoadingState(registerButton, false); return; }
-      if (password !== confirmPassword) { showAuthError(registerErrorMessage, "Passwords do not match."); setButtonLoadingState(registerButton, false); return; }
-      if (password.length < 6) { showAuthError(registerErrorMessage, "Password must be at least 6 characters."); setButtonLoadingState(registerButton, false); return; }
+      if (!email || !password || !confirmPassword) { toggleErrorElement(registerErrorMessage, true, "All fields are required."); setButtonLoadingState(registerButton, false); return; }
+      if (password !== confirmPassword) { toggleErrorElement(registerErrorMessage, true, "Passwords do not match."); setButtonLoadingState(registerButton, false); return; }
+      if (password.length < 6) { toggleErrorElement(registerErrorMessage, true, "Password must be at least 6 characters."); setButtonLoadingState(registerButton, false); return; }
 
       try {
         const { data, responseOk } = await fetchAPI('/register.php', 'POST', { email, password });
@@ -1107,8 +1194,8 @@
           localStorage.removeItem(ONBOARDING_FLAG_KEY); 
           navigateTo('onboarding'); 
           registerForm.reset();
-        } else { showAuthError(registerErrorMessage, data.error || "Registration failed."); }
-      } catch (error) { showAuthError(registerErrorMessage, error.message || "An error occurred."); }
+        } else { toggleErrorElement(registerErrorMessage, true, data.error || "Registration failed."); }
+      } catch (error) { toggleErrorElement(registerErrorMessage, true, error.message || "An error occurred."); }
       finally { setButtonLoadingState(registerButton, false); }
     }
 
@@ -1116,19 +1203,19 @@
       event.preventDefault();
       const loginButton = loginForm.querySelector('button[type="submit"]');
       setButtonLoadingState(loginButton, true, 'Logging in...');
-      loginErrorMessage?.classList.add('hidden');
+      toggleErrorElement(loginErrorMessage, false);
 
       const email = loginEmailInput.value.trim();
       const password = loginPasswordInput.value;
-      if (!email || !password) { showAuthError(loginErrorMessage, "Email and password are required."); setButtonLoadingState(loginButton, false); return; }
+      if (!email || !password) { toggleErrorElement(loginErrorMessage, true, "Email and password are required."); setButtonLoadingState(loginButton, false); return; }
 
       try {
         const { data, responseOk } = await fetchAPI('/login.php', 'POST', { email, password });
         if (responseOk && data.success) {
           navigateTo('kanban'); 
           loginForm.reset();
-        } else { showAuthError(loginErrorMessage, data.error || "Login failed."); }
-      } catch (error) { showAuthError(loginErrorMessage, error.message || "An error occurred."); }
+        } else { toggleErrorElement(loginErrorMessage, true, data.error || "Login failed."); }
+      } catch (error) { toggleErrorElement(loginErrorMessage, true, error.message || "An error occurred."); }
       finally { setButtonLoadingState(loginButton, false); }
     }
 
@@ -1157,8 +1244,7 @@
         }
       } catch (error) { navigateTo('landing'); }
     }
-    function showAuthError(el, msg) { if (el) { el.textContent = msg; el.classList.remove('hidden'); } }
-
+    
     function initializeKanbanDOM() {
       taskInput = document.getElementById('taskInput');
       addTaskBtn = document.getElementById('addTaskBtn');
@@ -1172,6 +1258,8 @@
       exportJsonBtn = document.getElementById('export-json');
       printBoardBtn = document.getElementById('print-board');
       searchTaskInput = document.getElementById('search-task-input'); 
+      progressMascot = document.getElementById('progress-mascot');
+
 
       addTaskBtn?.removeEventListener('click', addTask); addTaskBtn?.addEventListener('click', addTask);
       taskInput?.removeEventListener('keypress', handleTaskInputKeypress); taskInput?.addEventListener('keypress', handleTaskInputKeypress);
@@ -1190,7 +1278,7 @@
     }
     
     function handleTaskInputKeypress(event) { if (event.key === 'Enter' && event.ctrlKey) { event.preventDefault(); addTask(); } }
-    function handleTaskInput() { if (taskInput?.value.trim()) taskErrorMessageElement?.classList.add('hidden'); }
+    function handleTaskInput() { if (taskInput?.value.trim()) toggleErrorElement(taskErrorMessageElement, false); }
 
     function formatDate(date) { if (!date) return ''; if (typeof date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(date)) return date; const d = new Date(date); return isNaN(d.getTime()) ? '' : `${d.getFullYear()}-${('0'+(d.getMonth()+1)).slice(-2)}-${('0'+d.getDate()).slice(-2)}`; }
     function getDaysRemaining(dueDate) { if (!dueDate) return null; const today = new Date(); today.setHours(0,0,0,0); const [y,m,d] = dueDate.split('-').map(Number); const due = new Date(Date.UTC(y,m-1,d)); return Math.ceil((due - today) / (1000*60*60*24)); }
@@ -1339,18 +1427,24 @@
 
     async function addTask() { 
       if (!taskInput?.value.trim()) {
-        taskErrorMessageElement?.classList.remove('hidden');
+        toggleErrorElement(taskErrorMessageElement, true, "Oops! Please add a task description.");
         taskInput?.focus();
         return;
       }
-      taskErrorMessageElement?.classList.add('hidden');
+      toggleErrorElement(taskErrorMessageElement, false);
       setButtonLoadingState(addTaskBtn, true, 'Adding...');
       try {
         const { data, responseOk } = await fetchAPI('/tasks_api.php', 'POST', {
           text: taskInput.value.trim(), priority: 'low', dueDate: null, labels: '', columnId: 'todo'
         });
         if (responseOk && data.success && data.task) {
-          todoColumnTasks?.appendChild(createTaskCard(data.task));
+          const newTaskCard = createTaskCard(data.task);
+          newTaskCard.classList.add('new-task-pop');
+          newTaskCard.addEventListener('animationend', () => {
+              newTaskCard.classList.remove('new-task-pop');
+          }, { once: true });
+
+          todoColumnTasks?.appendChild(newTaskCard);
           taskInput.value = '';
           updateProgressStats(); filterTasks();
         } else alert("Failed to add task: " + (data.error || "Server error"));
@@ -1375,14 +1469,25 @@
         const originalColumnId = draggableEl.dataset.column;
         const targetColumnId = targetDropZone.parentElement.id;
         let beforeElement = Array.from(targetDropZone.querySelectorAll('.task-card:not(.dragging)')).find(c => event.clientY < c.getBoundingClientRect().top + c.offsetHeight / 2);
+        
+        const oldParent = draggableEl.parentElement;
         targetDropZone.insertBefore(draggableEl, beforeElement);
         draggableEl.dataset.column = targetColumnId;
         
+        if (targetColumnId === 'done' && originalColumnId !== 'done') {
+            draggableEl.classList.add('task-completed-burst'); 
+            draggableEl.addEventListener('animationend', () => {
+                draggableEl.classList.remove('task-completed-burst');
+            }, { once: true });
+        }
+        
         const tasksToUpdatePayload = [];
         Array.from(targetDropZone.querySelectorAll('.task-card')).forEach((c,i) => tasksToUpdatePayload.push({id:c.id, column_id:targetColumnId, sort_order:i}));
-        if(originalColumnId && originalColumnId !== targetColumnId && draggableEl.parentElement.previousSibling?.classList.contains('tasks-container')){ 
-            Array.from(draggableEl.parentElement.previousSibling.querySelectorAll('.task-card')).forEach((c,i) => {
-                if(!tasksToUpdatePayload.find(t => t.id === c.id)) tasksToUpdatePayload.push({id:c.id, column_id:originalColumnId, sort_order:i});
+        if(originalColumnId && originalColumnId !== targetColumnId && oldParent && oldParent.classList.contains('tasks-container')){ 
+            Array.from(oldParent.querySelectorAll('.task-card')).forEach((c,i) => { 
+                if(!tasksToUpdatePayload.find(t => t.id === c.id)) {
+                    tasksToUpdatePayload.push({id:c.id, column_id:originalColumnId, sort_order:i});
+                }
             });
         }
         
@@ -1404,11 +1509,11 @@
 
     function updateColumnVisuals() {
         const columnsMeta = [
-            { id: 'todo', container: todoColumnTasks, countEl: document.getElementById('todo-count') },
-            { id: 'inprogress', container: inprogressColumnTasks, countEl: document.getElementById('inprogress-count') },
-            { id: 'done', container: doneColumnTasks, countEl: document.getElementById('done-count') }
+            { id: 'todo', container: todoColumnTasks, countEl: document.getElementById('todo-count'), emptyIcon: 'fas fa-seedling fa-5x', emptyText: "Ready for new ideas!" },
+            { id: 'inprogress', container: inprogressColumnTasks, countEl: document.getElementById('inprogress-count'), emptyIcon: 'fas fa-person-running fa-5x', emptyText: "Making progress!" },
+            { id: 'done', container: doneColumnTasks, countEl: document.getElementById('done-count'), emptyIcon: 'fas fa-trophy fa-5x', emptyText: "All done here!" }
         ];
-        columnsMeta.forEach(({ container, countEl }) => {
+        columnsMeta.forEach(({ container, countEl, emptyIcon, emptyText }) => {
             if (!container || !countEl) return;
             const visibleTasks = Array.from(container.children).filter(c => c.classList.contains('task-card') && !c.classList.contains('hidden-by-filter'));
             countEl.textContent = `(${visibleTasks.length})`;
@@ -1416,11 +1521,10 @@
             if (visibleTasks.length === 0) {
                 if (!msgEl) {
                     msgEl = document.createElement('div');
-                    msgEl.className = 'empty-column-message text-center p-4 flex flex-col items-center justify-center absolute inset-0';
-                    msgEl.style.cssText = 'color: var(--color-text-muted); font-style: italic; min-height: 150px;';
-                    msgEl.innerHTML = '<i class="fas fa-folder-open fa-3x mb-3 opacity-50"></i><p>Nothing to see here!</p>';
+                    msgEl.className = 'empty-column-message';
                     container.appendChild(msgEl);
                 }
+                msgEl.innerHTML = `<i class="${emptyIcon} mb-3 opacity-60"></i><p>${emptyText}</p>`;
                 msgEl.style.display = 'flex';
             } else if (msgEl) msgEl.style.display = 'none';
         });
@@ -1519,20 +1623,25 @@
     function loadThemePreference() { const savedTheme = localStorage.getItem('strideKanbanTheme') || (window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); setTheme(savedTheme); }
 
     function updateProgressStats() { 
-        if (!progressFill || !progressText) return; 
+        if (!progressFill || !progressText || !progressMascot) return; 
         updateColumnVisuals(); 
         const counts = ['todo', 'inprogress', 'done'].map(id => document.querySelectorAll(`#${id} .task-card:not(.hidden-by-filter)`).length);
         const totalVisible = counts.reduce((a,b) => a+b, 0);
         const progress = totalVisible > 0 ? (counts[2] / totalVisible) * 100 : 0; 
         progressFill.style.width = `${progress}%`; 
         progressText.textContent = `${Math.round(progress)}% Complete (Visible)`; 
+        
+        const mascotOffset = progress > 5 && progress < 95 ? -5 : 5; 
+        progressMascot.style.left = `calc(${progress}% + ${mascotOffset}px)`; 
+        progressMascot.style.display = (progress > 0 && progress < 100) ? 'block' : 'none'; 
+        
         renderOrUpdatePriorityDistributionChart();
     }
 
     async function exportBoardAsJson() {
       try {
         const { data: dataToExport, responseOk } = await fetchAPI('/tasks_api.php');
-        if (!responseOk || Object.values(dataToExport).every(col => col.length === 0)) { alert("No tasks to export!"); return; }
+        if (!responseOk || Object.values(dataToExport).every(col => col.length === 0)) { toggleErrorElement(document.body.querySelector('#export-json'), true, "No tasks to export!"); return; } // Better feedback
         const blob = new Blob([JSON.stringify(dataToExport, null, 2)], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const a = Object.assign(document.createElement('a'), { href:url, download:`stride_kanban_export_${formatDate(new Date()).replace(/-/g,'')}.json`});
@@ -1589,8 +1698,8 @@
         });
       });
 
-      [loginEmailInput, loginPasswordInput].forEach(el => el?.addEventListener('input', () => loginErrorMessage?.classList.add('hidden')));
-      [registerEmailInput, registerPasswordInput, registerConfirmPasswordInput].forEach(el => el?.addEventListener('input', () => registerErrorMessage?.classList.add('hidden')));
+      [loginEmailInput, loginPasswordInput].forEach(el => el?.addEventListener('input', () => toggleErrorElement(loginErrorMessage, false)));
+      [registerEmailInput, registerPasswordInput, registerConfirmPasswordInput].forEach(el => el?.addEventListener('input', () => toggleErrorElement(registerErrorMessage, false)));
 
       document.addEventListener('keydown', (event) => {
         if (event.altKey && (event.key === 'n' || event.key === 'N') && !views.kanban.classList.contains('view-hidden')) { 
