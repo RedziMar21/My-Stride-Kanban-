@@ -1,65 +1,63 @@
 <?php
-// Start error reporting for debugging (remove or comment out for production)
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+// api/tasks_api.php
 
-session_start();
+// error_reporting(E_ALL); // Uncomment for debugging
+// ini_set('display_errors', 1); // Uncomment for debugging
 
-// --- CORS Headers - Sent for all responses, including OPTIONS preflight ---
-// It's crucial these are sent before any output.
+session_start(); // MUST be at the very top before any output
+
+// --- CORS Headers ---
 header("Access-Control-Allow-Origin: http://127.0.0.1:5500");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With"); // Keep it simple and correct
+header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, Origin");
 header("Access-Control-Allow-Credentials: true");
 
 // --- Handle OPTIONS preflight request ---
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-    http_response_code(204); // 204 No Content is often preferred for OPTIONS
-    // Headers above are already set globally, but being explicit here can sometimes help ensure they are part of THIS response.
-    // Some servers/configurations might clear headers before script execution for OPTIONS if not handled this way.
-    exit();
+    http_response_code(204); // No Content for preflight
+    exit(); // Crucial: Stop script for OPTIONS
 }
 
-// --- Actual API Logic (POST, GET, PUT, DELETE) ---
+// --- Set Content-Type for all subsequent JSON responses ---
+header("Content-Type: application/json");
 
-// Set Content-Type for actual data responses AFTER preflight is handled
-// and only if not an error that might output HTML.
-// We will set it specifically before each json_encode.
+// --- Database Connection ---
+require 'db_connect.php'; // This file MUST define $mysqli
 
-require 'db_connect.php'; // Ensure this file has NO whitespace before <?php and NO output/errors
-
-if ($conn->connect_error) {
-    // If db_connect.php fails, it might have already outputted an error,
-    // preventing subsequent headers. We try to send a JSON error here.
-    http_response_code(503); // Service Unavailable
-    // Try to set JSON content type, though it might fail if db_connect.php already outputted something
-    if (!headers_sent()) {
-        header("Content-Type: application/json");
-    }
-    echo json_encode(["error" => "Database connection failed: " . $conn->connect_error]);
+if (!$mysqli || $mysqli->connect_error) {
+    http_response_code(503);
+    error_log("tasks_api.php - DB connection failed: " . ($mysqli ? $mysqli->connect_error : "mysqli object not initialized"));
+    echo json_encode(["success" => false, "error" => "Database connection unavailable. Please try again later."]);
     exit;
 }
 
-
+// --- Authentication Check ---
 if (!isset($_SESSION['user_id'])) {
     http_response_code(401);
-    if (!headers_sent()) { header("Content-Type: application/json"); }
-    echo json_encode(["error" => "User not authenticated. Please login."]);
+    echo json_encode(["success" => false, "error" => "User not authenticated. Please login."]);
     exit;
 }
+
 $user_id = $_SESSION['user_id'];
 $method = $_SERVER['REQUEST_METHOD'];
-$input_data = json_decode(file_get_contents("php://input"), true);
+$input_data = null;
 
-// --- Set Content-Type for all successful data responses ---
-// Do this once here if all subsequent valid paths echo JSON.
-// If some paths might output different content types, set it individually.
-if (!headers_sent()) {
-    header("Content-Type: application/json");
+// Read input data for methods that can have a body
+if ($method === 'POST' || $method === 'PUT' || ($method === 'DELETE' && ($_SERVER['CONTENT_TYPE'] ?? '') === 'application/json')) {
+    $raw_input = file_get_contents("php://input");
+    if (!empty($raw_input)) {
+        $input_data = json_decode($raw_input, true);
+        if ($input_data === null && json_last_error() !== JSON_ERROR_NONE) { // Check for actual JSON error if input wasn't empty
+            http_response_code(400);
+            error_log("tasks_api.php - Invalid JSON input: " . json_last_error_msg() . " | Raw input: " . substr($raw_input, 0, 200));
+            echo json_encode(["success" => false, "error" => "Invalid JSON input provided."]);
+            exit;
+        }
+    }
 }
 
 
+// --- Main Switch for HTTP Methods ---
 switch ($method) {
     case 'GET':
         $archived_filter = isset($_GET['archived']) && $_GET['archived'] === 'true';
@@ -68,11 +66,11 @@ switch ($method) {
         $sql = "SELECT id, text, priority, due_date, labels, column_id, sort_order, is_archived, created_at, updated_at FROM tasks WHERE user_id = ? AND is_archived = ?";
         $sql .= ($archived_filter) ? " ORDER BY updated_at DESC" : " ORDER BY column_id ASC, sort_order ASC, created_at ASC";
         
-        $stmt = $conn->prepare($sql);
+        $stmt = $mysqli->prepare($sql);
         if (!$stmt) { 
             http_response_code(500); 
-            error_log("DB Prepare Failed (GET): " . $conn->error . " | SQL: " . $sql);
-            echo json_encode(["error" => "DB Prepare Failed (GET): " . $conn->error]); 
+            error_log("DB Prepare Failed (GET): " . $mysqli->error . " | SQL: " . $sql);
+            echo json_encode(["success" => false, "error" => "Server error (DBP_GET)."]); 
             exit; 
         }
         $stmt->bind_param("ii", $user_id, $is_archived_val);
@@ -80,8 +78,8 @@ switch ($method) {
         if(!$stmt->execute()){
             http_response_code(500); 
             error_log("DB Execute Failed (GET): " . $stmt->error . " | SQL: " . $sql);
-            echo json_encode(["error" => "DB Execute Failed (GET): " . $stmt->error]); 
-            $stmt->close(); exit; 
+            echo json_encode(["success" => false, "error" => "Server error (DBE_GET)."]); 
+            $stmt->close(); $mysqli->close(); exit; 
         }
         $result = $stmt->get_result();
         
@@ -89,192 +87,339 @@ switch ($method) {
             $archived_tasks = [];
             while ($row = $result->fetch_assoc()) {
                 $row['due_date'] = $row['due_date'] ? date('Y-m-d', strtotime($row['due_date'])) : null;
+                $row['is_archived'] = (bool)$row['is_archived'];
                 $archived_tasks[] = $row;
             }
-            echo json_encode(["archived" => $archived_tasks]);
+            echo json_encode(["success" => true, "archived" => $archived_tasks]);
         } else {
             $tasks_by_column = ["todo" => [], "inprogress" => [], "done" => []];
             while ($row = $result->fetch_assoc()) {
                 $row['due_date'] = $row['due_date'] ? date('Y-m-d', strtotime($row['due_date'])) : null;
-                if ($row['is_archived'] == 0) { 
-                    if (array_key_exists($row['column_id'], $tasks_by_column)) {
-                        $tasks_by_column[$row['column_id']][] = $row;
-                    } else {
-                        $tasks_by_column['todo'][] = $row; 
-                    }
+                $row['is_archived'] = (bool)$row['is_archived'];
+                if (isset($row['column_id']) && array_key_exists($row['column_id'], $tasks_by_column)) {
+                    $tasks_by_column[$row['column_id']][] = $row;
+                } elseif ($row['column_id'] === null && $row['is_archived'] == 0) { // Should not happen for active tasks but good fallback
+                    error_log("Task ID {$row['id']} (User ID: {$user_id}) is active but has NULL column_id. Defaulting to 'todo'.");
+                    $tasks_by_column['todo'][] = $row; 
+                } else if ($row['column_id'] !== null) { // Unknown column_id for an active task
+                     error_log("Task ID {$row['id']} (User ID: {$user_id}) has unknown column_id '{$row['column_id']}'. Defaulting to 'todo'.");
+                     $tasks_by_column['todo'][] = $row;
                 }
             }
-            echo json_encode($tasks_by_column);
+            echo json_encode($tasks_by_column); // JS expects direct object for active tasks
         }
         $stmt->close();
         break;
 
     case 'POST': 
-        if (empty($input_data['text'])) { http_response_code(400); echo json_encode(["error" => "Task text is required."]); exit; }
+        if (!isset($input_data['text']) || empty(trim($input_data['text']))) {
+             http_response_code(400); echo json_encode(["success" => false, "error" => "Task text is required."]); exit;
+        }
         
         $text = trim($input_data['text']);
         $priority = $input_data['priority'] ?? 'low';
-        $dueDate = (!empty($input_data['dueDate']) && $input_data['dueDate'] !== 'null' && $input_data['dueDate'] !== '') ? $input_data['dueDate'] : null;
+        $dueDate = (!empty($input_data['dueDate']) && strtolower($input_data['dueDate']) !== 'null') ? $input_data['dueDate'] : null;
         $labels = $input_data['labels'] ?? '';
         $columnId = $input_data['columnId'] ?? 'todo';
         $is_archived_val = 0; 
 
-        $sort_stmt = $conn->prepare("SELECT MAX(sort_order) as max_sort FROM tasks WHERE user_id = ? AND column_id = ? AND is_archived = 0");
-        if (!$sort_stmt) { http_response_code(500); echo json_encode(["error" => "DB Prepare Failed (sort_order): " . $conn->error]); exit; }
+        $sort_order = 0;
+        $sort_stmt = $mysqli->prepare("SELECT MAX(sort_order) as max_sort FROM tasks WHERE user_id = ? AND column_id = ? AND is_archived = 0");
+        if (!$sort_stmt) { 
+            error_log("DB Prepare Failed (POST sort_order): " . $mysqli->error);
+            http_response_code(500); echo json_encode(["success" => false, "error" => "Server error (DBPS_POST)."]); exit;
+        }
         $sort_stmt->bind_param("is", $user_id, $columnId);
-        $sort_stmt->execute();
+        if(!$sort_stmt->execute()){
+            error_log("DB Execute Failed (POST sort_order): " . $sort_stmt->error);
+            http_response_code(500); echo json_encode(["success" => false, "error" => "Server error (DBES_POST)."]); $sort_stmt->close(); $mysqli->close(); exit;
+        }
         $sort_result = $sort_stmt->get_result()->fetch_assoc();
         $sort_order = ($sort_result && isset($sort_result['max_sort']) && is_numeric($sort_result['max_sort'])) ? intval($sort_result['max_sort']) + 1 : 0;
         $sort_stmt->close();
 
-        $stmt = $conn->prepare("INSERT INTO tasks (user_id, text, priority, due_date, labels, column_id, sort_order, is_archived) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-        if (!$stmt) { http_response_code(500); echo json_encode(["error" => "DB Prepare Failed (POST): " . $conn->error]); exit; }
+        $stmt = $mysqli->prepare("INSERT INTO tasks (user_id, text, priority, due_date, labels, column_id, sort_order, is_archived) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        if (!$stmt) { 
+            error_log("DB Prepare Failed (POST insert): " . $mysqli->error);
+            http_response_code(500); echo json_encode(["success" => false, "error" => "Server error (DBPI_POST)."]); exit;
+        }
         $stmt->bind_param("isssssii", $user_id, $text, $priority, $dueDate, $labels, $columnId, $sort_order, $is_archived_val);
         
         if ($stmt->execute()) {
-            $new_task_id = $stmt->insert_id;
-            $select_new_stmt = $conn->prepare("SELECT id, text, priority, due_date, labels, column_id, sort_order, is_archived, created_at, updated_at FROM tasks WHERE id = ?");
+            $new_task_id = $mysqli->insert_id;
+            $select_new_stmt = $mysqli->prepare("SELECT id, text, priority, due_date, labels, column_id, sort_order, is_archived, created_at, updated_at FROM tasks WHERE id = ? AND user_id = ?");
             if($select_new_stmt){
-                $select_new_stmt->bind_param("i", $new_task_id);
-                $select_new_stmt->execute();
-                $new_task_data = $select_new_stmt->get_result()->fetch_assoc();
-                if ($new_task_data && $new_task_data['due_date']) {
-                    $new_task_data['due_date'] = date('Y-m-d', strtotime($new_task_data['due_date']));
+                $select_new_stmt->bind_param("ii", $new_task_id, $user_id);
+                if ($select_new_stmt->execute()) {
+                    $new_task_data = $select_new_stmt->get_result()->fetch_assoc();
+                    if ($new_task_data) {
+                        $new_task_data['due_date'] = $new_task_data['due_date'] ? date('Y-m-d', strtotime($new_task_data['due_date'])) : null;
+                        $new_task_data['is_archived'] = (bool)$new_task_data['is_archived']; 
+                        echo json_encode([ "success" => true, "message" => "Task added successfully.", "task" => $new_task_data ]);
+                    } else {
+                         error_log("Failed to fetch newly inserted task ID: $new_task_id for user: $user_id");
+                         echo json_encode(["success" => false, "error" => "Task added, but failed to retrieve its details."]); 
+                    }
+                } else {
+                    error_log("Execute failed for selecting back new task (POST): " . $select_new_stmt->error);
+                    echo json_encode(["success" => false, "error" => "Task added, but select back execute failed."]);
                 }
-                echo json_encode([ "success" => true, "message" => "Task added.", "task" => $new_task_data ]);
                 $select_new_stmt->close();
             } else {
-                 echo json_encode(["success" => true, "message" => "Task added (select back failed).", "task" => [ "id" => $new_task_id, "text" => $text, "priority" => $priority, "due_date" => $dueDate, "labels" => $labels, "column_id" => $columnId, "sort_order" => $sort_order, "is_archived" => $is_archived_val ]]);
+                 error_log("Prepare failed for selecting back new task (POST): " . $mysqli->error);
+                 echo json_encode(["success" => false, "error" => "Task added, but select back prepare failed."]);
             }
-        } else { http_response_code(500); echo json_encode(["error" => "Failed to add task: " . $stmt->error]); }
+        } else { 
+            error_log("DB Execute Failed (POST insert): " . $stmt->error . " (Errno: " . $mysqli->errno . ")");
+             if ($mysqli->errno == 1062) { 
+                 http_response_code(409); 
+                 echo json_encode(["success" => false, "error" => "Duplicate task data or constraint violation."]);
+             } else {
+                 http_response_code(500); echo json_encode(["success" => false, "error" => "Failed to add task (DBE_POST)."]);
+             }
+        }
         $stmt->close();
         break;
 
     case 'PUT':
+        if (!isset($input_data) || (!isset($input_data['id']) && !(isset($input_data['batch']) && $input_data['batch'] === true && isset($input_data['ids'])))) {
+            http_response_code(400); echo json_encode(["success" => false, "error" => "Task ID or batch data required for update."]); exit;
+        }
+
         if (isset($input_data['batch']) && $input_data['batch'] === true && isset($input_data['ids']) && is_array($input_data['ids'])) {
             if (isset($input_data['is_archived'])) { 
                 $task_ids = $input_data['ids'];
-                $is_archived_val = $input_data['is_archived'] ? 1 : 0;
-                $conn->begin_transaction();
+                $is_archived_target_val = $input_data['is_archived'] ? 1 : 0;
+                
+                if (empty($task_ids)) { http_response_code(400); echo json_encode(["success" => false, "error" => "No task IDs for batch operation."]); exit; }
+
+                $mysqli->begin_transaction();
                 try {
                     foreach ($task_ids as $task_id_raw) {
                         $task_id = intval($task_id_raw);
-                        $update_fields = ["is_archived = ?", "updated_at = NOW()"];
-                        $update_types = "i";
-                        $update_params = [$is_archived_val];
+                        if ($task_id <= 0) continue; // Skip invalid IDs
 
-                        if ($is_archived_val === 0) { 
-                            $update_fields[] = "column_id = 'todo'";
-                            $sort_stmt = $conn->prepare("SELECT MAX(sort_order) as max_sort FROM tasks WHERE user_id = ? AND column_id = 'todo' AND is_archived = 0");
-                            if ($sort_stmt) {
-                                $sort_stmt->bind_param("i", $user_id);
-                                $sort_stmt->execute();
-                                $sort_result = $sort_stmt->get_result()->fetch_assoc();
-                                $new_sort_order = ($sort_result && isset($sort_result['max_sort'])) ? intval($sort_result['max_sort']) + 1 : 0;
-                                $sort_stmt->close();
-                                $update_fields[] = "sort_order = ?";
-                                $update_params[] = $new_sort_order;
-                                $update_types .= "i";
-                            }
+                        if ($is_archived_target_val === 0) { 
+                            $target_column_id_batch = $input_data['column_id'] ?? 'todo'; // Allow specifying target column or default
+                            $target_sort_order_batch = 0;
+                            $sort_stmt_unarchive = $mysqli->prepare("SELECT MAX(sort_order) as max_sort FROM tasks WHERE user_id = ? AND column_id = ? AND is_archived = 0");
+                            if(!$sort_stmt_unarchive){ throw new Exception("DB Prepare Failed (unarchive sort): " . $mysqli->error); }
+                            $sort_stmt_unarchive->bind_param("is", $user_id, $target_column_id_batch); 
+                            $sort_stmt_unarchive->execute();
+                            $sort_result = $sort_stmt_unarchive->get_result()->fetch_assoc();
+                            $target_sort_order_batch = ($sort_result && $sort_result['max_sort'] !== null) ? intval($sort_result['max_sort']) + 1 : 0;
+                            $sort_stmt_unarchive->close();
+                            
+                            $stmt_batch = $mysqli->prepare("UPDATE tasks SET is_archived = ?, column_id = ?, sort_order = ?, updated_at = NOW() WHERE id = ? AND user_id = ?");
+                            if(!$stmt_batch){ throw new Exception("DB Prepare Failed (batch unarchive): " . $mysqli->error); }
+                            $stmt_batch->bind_param("isiii", $is_archived_target_val, $target_column_id_batch, $target_sort_order_batch, $task_id, $user_id);
+                        } else { 
+                            $stmt_batch = $mysqli->prepare("UPDATE tasks SET is_archived = ?, column_id = NULL, sort_order = NULL, updated_at = NOW() WHERE id = ? AND user_id = ?");
+                            if(!$stmt_batch){ throw new Exception("DB Prepare Failed (batch archive): " . $mysqli->error); }
+                            $stmt_batch->bind_param("iii", $is_archived_target_val, $task_id, $user_id);
                         }
                         
-                        $update_params[] = $task_id;
-                        $update_params[] = $user_id;
-                        $update_types .= "ii";
-
-                        $stmt_batch = $conn->prepare("UPDATE tasks SET " . implode(", ", $update_fields) . " WHERE id = ? AND user_id = ?");
-                        if (!$stmt_batch) { throw new Exception("DB Prepare Failed (batch PUT): " . $conn->error); }
-                        $stmt_batch->bind_param($update_types, ...$update_params);
-                        if (!$stmt_batch->execute()) { throw new Exception("DB Execute Failed (batch PUT for task $task_id): " . $stmt_batch->error); }
+                        if (!$stmt_batch->execute()) { throw new Exception("DB Execute Failed (batch for task $task_id): " . $stmt_batch->error); }
                         $stmt_batch->close();
                     }
-                    $conn->commit();
-                    echo json_encode(["success" => true, "message" => count($task_ids) . " tasks updated."]);
+                    $mysqli->commit();
+                    echo json_encode(["success" => true, "message" => count($task_ids) . " task(s) updated."]);
                 } catch (Exception $e) {
-                    $conn->rollback();
+                    $mysqli->rollback();
                     http_response_code(500);
                     error_log("Batch PUT Error: " . $e->getMessage());
-                    echo json_encode(["error" => "Batch update failed: " . $e->getMessage()]);
+                    echo json_encode(["success" => false, "error" => "Batch update failed: " . $e->getMessage()]);
+                }
+            } elseif (isset($input_data['tasks_order']) && is_array($input_data['tasks_order'])) { 
+                $mysqli->begin_transaction();
+                try {
+                    foreach($input_data['tasks_order'] as $task_update_data) {
+                        if (!isset($task_update_data['id'], $task_update_data['column_id'], $task_update_data['sort_order'])) {
+                            throw new Exception("Invalid data in tasks_order array.");
+                        }
+                        $task_id_reorder = intval($task_update_data['id']);
+                        $new_column_id = $task_update_data['column_id'];
+                        $new_sort_order = intval($task_update_data['sort_order']);
+
+                        if ($task_id_reorder <= 0) continue; // Skip invalid IDs
+
+                        $stmt_reorder = $mysqli->prepare("UPDATE tasks SET column_id = ?, sort_order = ?, updated_at = NOW() WHERE id = ? AND user_id = ?");
+                        if(!$stmt_reorder) { throw new Exception("Reorder prepare failed: " . $mysqli->error); }
+                        $stmt_reorder->bind_param("siii", $new_column_id, $new_sort_order, $task_id_reorder, $user_id);
+                        if(!$stmt_reorder->execute()) { throw new Exception("Reorder execute failed for task $task_id_reorder: " . $stmt_reorder->error); }
+                        $stmt_reorder->close();
+                    }
+                    $mysqli->commit();
+                    echo json_encode(["success" => true, "message" => "Tasks reordered."]);
+                } catch (Exception $e) {
+                    $mysqli->rollback();
+                    http_response_code(500); error_log("Task Reorder Error: " . $e->getMessage());
+                    echo json_encode(["success" => false, "error" => "Task reorder failed: " . $e->getMessage()]);
                 }
             } else {
-                http_response_code(400); echo json_encode(["error" => "Batch update type not specified or invalid."]);
+                 http_response_code(400); echo json_encode(["success" => false, "error" => "Invalid batch PUT operation type."]);
             }
-        } else { 
-            if (empty($input_data['id'])) { http_response_code(400); echo json_encode(["error" => "Task ID required."]); exit; }
+        } else if (isset($input_data['id'])) { 
             $task_id = intval($input_data['id']);
-            $fields_to_update = []; $params_for_bind = []; $types_for_bind = "";
-            if (isset($input_data['text'])) { $fields_to_update[] = "text = ?"; $params_for_bind[] = $input_data['text']; $types_for_bind .= "s"; }
-            if (isset($input_data['priority'])) { $fields_to_update[] = "priority = ?"; $params_for_bind[] = $input_data['priority']; $types_for_bind .= "s"; }
-            if (array_key_exists('dueDate', $input_data)) { $fields_to_update[] = "due_date = ?"; $params_for_bind[] = ($input_data['dueDate'] === '' || $input_data['dueDate'] === null) ? null : $input_data['dueDate']; $types_for_bind .= "s"; }
-            if (isset($input_data['labels'])) { $fields_to_update[] = "labels = ?"; $params_for_bind[] = $input_data['labels']; $types_for_bind .= "s"; }
-            $columnIdKey = isset($input_data['column_id']) ? 'column_id' : (isset($input_data['columnId']) ? 'columnId' : null);
-            if ($columnIdKey !== null && isset($input_data[$columnIdKey])) { $fields_to_update[] = "column_id = ?"; $params_for_bind[] = $input_data[$columnIdKey]; $types_for_bind .= "s"; }
-            if (isset($input_data['sort_order'])) { $fields_to_update[] = "sort_order = ?"; $params_for_bind[] = intval($input_data['sort_order']); $types_for_bind .= "i"; }
-            if (isset($input_data['is_archived'])) {
-                $fields_to_update[] = "is_archived = ?"; $params_for_bind[] = $input_data['is_archived'] ? 1 : 0; $types_for_bind .= "i";
-                if ($input_data['is_archived'] === false) {
-                    $unarchive_target_column = 'todo';
-                    if ($columnIdKey !== null && isset($input_data[$columnIdKey])) { $unarchive_target_column = $input_data[$columnIdKey]; }
-                    else { $colFieldFound = false; foreach($fields_to_update as $f) if(strpos($f, "column_id = ?") !== false) $colFieldFound = true; if(!$colFieldFound){ $fields_to_update[] = "column_id = ?"; $params_for_bind[] = $unarchive_target_column; $types_for_bind .= "s"; }}
-                     $sort_stmt = $conn->prepare("SELECT MAX(sort_order) as max_sort FROM tasks WHERE user_id = ? AND column_id = ? AND is_archived = 0");
-                     if ($sort_stmt) {
-                        $sort_stmt->bind_param("is", $user_id, $unarchive_target_column); $sort_stmt->execute(); $sort_result = $sort_stmt->get_result()->fetch_assoc();
-                        $new_sort_order = ($sort_result && isset($sort_result['max_sort'])) ? intval($sort_result['max_sort']) + 1 : 0; $sort_stmt->close();
-                        $sortOrderFieldExists = false; $sortOrderIndex = -1; for($i=0; $i < count($fields_to_update); $i++) if(strpos($fields_to_update[$i], "sort_order = ?") !== false) {$sortOrderFieldExists = true; $sortOrderIndex = $i; break;}
-                        if (!$sortOrderFieldExists) { $fields_to_update[] = "sort_order = ?"; $params_for_bind[] = $new_sort_order; $types_for_bind .= "i"; }
-                        else if ($sortOrderIndex !== -1) { $params_for_bind[$sortOrderIndex] = $new_sort_order; }
-                     }
+            if ($task_id <= 0) { http_response_code(400); echo json_encode(["success" => false, "error" => "Invalid Task ID for update."]); exit; }
+
+            $fields_to_update_sql = [];
+            $bind_types = "";
+            $bind_params_array = []; // Use an array for params
+
+            if (array_key_exists('text', $input_data)) { $fields_to_update_sql[] = "text = ?"; $bind_types .= "s"; $bind_params_array[] = $input_data['text']; }
+            if (array_key_exists('priority', $input_data)) { $fields_to_update_sql[] = "priority = ?"; $bind_types .= "s"; $bind_params_array[] = $input_data['priority']; }
+            if (array_key_exists('dueDate', $input_data)) { 
+                $fields_to_update_sql[] = "due_date = ?"; $bind_types .= "s";
+                $bind_params_array[] = (empty($input_data['dueDate']) || strtolower($input_data['dueDate']) === 'null') ? null : $input_data['dueDate'];
+            }
+            if (array_key_exists('labels', $input_data)) { $fields_to_update_sql[] = "labels = ?"; $bind_types .= "s"; $bind_params_array[] = $input_data['labels']; }
+            
+            $target_column_for_unarchive = $input_data['column_id'] ?? 'todo'; // Default for unarchiving logic
+
+            if (array_key_exists('column_id', $input_data)) { 
+                $fields_to_update_sql[] = "column_id = ?"; $bind_types .= "s"; $bind_params_array[] = $input_data['column_id']; 
+                $target_column_for_unarchive = $input_data['column_id']; // Update if explicitly set
+            }
+            if (array_key_exists('sort_order', $input_data)) { $fields_to_update_sql[] = "sort_order = ?"; $bind_types .= "i"; $bind_params_array[] = intval($input_data['sort_order']); }
+            
+            if (array_key_exists('is_archived', $input_data)) {
+                $is_archiving_val = (bool)$input_data['is_archived'];
+                $fields_to_update_sql[] = "is_archived = ?"; $bind_types .= "i"; $bind_params_array[] = $is_archiving_val ? 1 : 0;
+                if ($is_archiving_val) { 
+                    $fields_to_update_sql[] = "column_id = NULL";
+                    $fields_to_update_sql[] = "sort_order = NULL";
+                } else { 
+                    // If column_id wasn't part of the original payload for unarchiving, add it
+                    if (!in_array("column_id = ?", array_map(function($f){ return explode(" ", $f)[0]." = ?"; }, $fields_to_update_sql)) && !array_key_exists('column_id', $input_data) ) {
+                        $fields_to_update_sql[] = "column_id = ?"; $bind_types .= "s"; $bind_params_array[] = $target_column_for_unarchive;
+                    }
+                    // If sort_order wasn't part of the original payload for unarchiving, add it
+                    if (!in_array("sort_order = ?", array_map(function($f){ return explode(" ", $f)[0]." = ?"; }, $fields_to_update_sql)) && !array_key_exists('sort_order', $input_data)) {
+                        $sort_stmt_unarchive_single = $mysqli->prepare("SELECT MAX(sort_order) as max_sort FROM tasks WHERE user_id = ? AND column_id = ? AND is_archived = 0");
+                        if($sort_stmt_unarchive_single){
+                             $sort_stmt_unarchive_single->bind_param("is", $user_id, $target_column_for_unarchive);
+                             $sort_stmt_unarchive_single->execute();
+                             $res_sort_unarc = $sort_stmt_unarchive_single->get_result()->fetch_assoc();
+                             $new_sort_unarc = ($res_sort_unarc && $res_sort_unarc['max_sort'] !== null) ? $res_sort_unarc['max_sort'] + 1 : 0;
+                             $sort_stmt_unarchive_single->close();
+                             $fields_to_update_sql[] = "sort_order = ?"; $bind_types .= "i"; $bind_params_array[] = $new_sort_unarc;
+                        }
+                    }
                 }
             }
-            if (count($fields_to_update) === 0) { http_response_code(400); echo json_encode(["error" => "No fields provided for update."]); exit; }
-            $fields_to_update[] = "updated_at = NOW()"; $sql_query_string = "UPDATE tasks SET " . implode(", ", $fields_to_update) . " WHERE id = ? AND user_id = ?";
-            $types_for_bind .= "ii"; $params_for_bind[] = $task_id; $params_for_bind[] = $user_id;
-            $stmt = $conn->prepare($sql_query_string);
-            if (!$stmt) { http_response_code(500); error_log("DB Prepare Failed (PUT single): " . $conn->error); echo json_encode(["error" => "DB Prepare Failed (PUT single): " . $conn->error]); exit; }
-            if (count($params_for_bind) > 0 && strlen($types_for_bind) !== count($params_for_bind)) { http_response_code(500); echo json_encode(["error" => "Internal server error (param mismatch)."]); exit; }
-            if (count($params_for_bind) > 0) { $stmt->bind_param($types_for_bind, ...$params_for_bind); }
-            if ($stmt->execute()) { if ($stmt->affected_rows > 0) { echo json_encode(["success" => true, "message" => "Task updated."]); } else { $check_stmt = $conn->prepare("SELECT id FROM tasks WHERE id = ? AND user_id = ?"); if (!$check_stmt) { echo json_encode(["success" => false, "message" => "Task data possibly unchanged (db check error)." ,"error_detail"=>"DB check failed"]); exit; } $check_stmt->bind_param("ii", $task_id, $user_id); $check_stmt->execute(); $check_stmt->store_result(); if($check_stmt->num_rows > 0) { echo json_encode(["success" => true, "message" => "Task data unchanged."]); } else { http_response_code(404); echo json_encode(["error" => "Task not found or not owned by user."]); } $check_stmt->close(); }
-            } else { http_response_code(500); error_log("DB Execute Failed (PUT single): " . $stmt->error); echo json_encode(["error" => "Update execution failed: " . $stmt->error]); }
-            $stmt->close();
+
+            if (empty($fields_to_update_sql)) { http_response_code(400); echo json_encode(["success" => false, "error" => "No fields to update."]); exit; }
+
+            $fields_to_update_sql[] = "updated_at = NOW()"; 
+            $sql_update_single = "UPDATE tasks SET " . implode(", ", $fields_to_update_sql) . " WHERE id = ? AND user_id = ?";
+            $bind_types .= "ii"; 
+            $bind_params_array[] = $task_id;
+            $bind_params_array[] = $user_id;
+
+            $stmt_update_single = $mysqli->prepare($sql_update_single);
+            if (!$stmt_update_single) {
+                error_log("DB Prepare Failed (PUT single): " . $mysqli->error . " SQL: " . $sql_update_single);
+                http_response_code(500); echo json_encode(["success" => false, "error" => "Server error (DBPU_S_P)."]); exit;
+            }
+            
+            if (version_compare(PHP_VERSION, '8.1.0', '>=')) {
+                $stmt_update_single->bind_param($bind_types, ...$bind_params_array);
+            } else {
+                $ref_params_single = [];
+                $ref_params_single[] = $bind_types;
+                foreach($bind_params_array as $key => $value){ $ref_params_single[] = &$bind_params_array[$key]; }
+                call_user_func_array([$stmt_update_single, 'bind_param'], $ref_params_single);
+            }
+
+            if ($stmt_update_single->execute()) {
+                if ($stmt_update_single->affected_rows > 0) {
+                    echo json_encode(["success" => true, "message" => "Task updated successfully."]);
+                } else {
+                    $check_stmt = $mysqli->prepare("SELECT id FROM tasks WHERE id = ? AND user_id = ?");
+                    $check_stmt->bind_param("ii", $task_id, $user_id); $check_stmt->execute(); $check_stmt->store_result();
+                    if($check_stmt->num_rows > 0) {
+                        echo json_encode(["success" => true, "message" => "Task data was already up to date."]);
+                    } else {
+                         http_response_code(404); echo json_encode(["success" => false, "error" => "Task not found or not owned by user."]);
+                    }
+                    $check_stmt->close();
+                }
+            } else {
+                error_log("DB Execute Failed (PUT single): " . $stmt_update_single->error);
+                http_response_code(500); echo json_encode(["success" => false, "error" => "Failed to update task (DBPU_S_E)."]);
+            }
+            $stmt_update_single->close();
+        } else {
+             http_response_code(400); echo json_encode(["success" => false, "error" => "Invalid PUT request data."]);
         }
         break;
 
     case 'DELETE':
         if (isset($input_data['batch']) && $input_data['batch'] === true && isset($input_data['ids']) && is_array($input_data['ids'])) {
             $task_ids = $input_data['ids'];
-            if (empty($task_ids)) { http_response_code(400); echo json_encode(["error" => "No task IDs provided for batch delete."]); exit;}
+            if (empty($task_ids)) { http_response_code(400); echo json_encode(["success" => false, "error" => "No task IDs for batch delete."]); exit; }
             
-            $placeholders = implode(',', array_fill(0, count($task_ids), '?'));
-            $types = str_repeat('i', count($task_ids)) . 'i'; 
-            $params = $task_ids;
-            $params[] = $user_id;
+            $sanitized_task_ids_del = array_map('intval', $task_ids);
+            $sanitized_task_ids_del = array_filter($sanitized_task_ids_del, function($id){ return $id > 0; });
+            if(empty($sanitized_task_ids_del)){ http_response_code(400); echo json_encode(["success" => false, "error" => "Invalid task IDs for batch delete."]); exit; }
 
-            $stmt = $conn->prepare("DELETE FROM tasks WHERE id IN ($placeholders) AND user_id = ?");
-            if (!$stmt) { http_response_code(500); echo json_encode(["error" => "DB Prepare Failed (batch DELETE): " . $conn->error]); exit; }
-            $stmt->bind_param($types, ...$params);
-            
-            if ($stmt->execute()) {
-                echo json_encode(["success" => true, "message" => $stmt->affected_rows . " task(s) deleted."]);
-            } else {
-                http_response_code(500); echo json_encode(["error" => "Batch delete failed: " . $stmt->error]);
+            $placeholders = rtrim(str_repeat('?,', count($sanitized_task_ids_del)), ','); 
+            $types = str_repeat('i', count($sanitized_task_ids_del)) . 'i'; 
+            $params_for_delete = $sanitized_task_ids_del;
+            $params_for_delete[] = $user_id; 
+
+            $stmt_batch_del = $mysqli->prepare("DELETE FROM tasks WHERE id IN ($placeholders) AND user_id = ?");
+            if (!$stmt_batch_del) { 
+                error_log("DB Prepare Failed (batch DELETE): " . $mysqli->error);
+                http_response_code(500); echo json_encode(["success" => false, "error" => "Server error (DBPD_B_P)."]); exit;
             }
-            $stmt->close();
+            
+            if (version_compare(PHP_VERSION, '8.1.0', '>=')) {
+                $stmt_batch_del->bind_param($types, ...$params_for_delete);
+            } else {
+                $ref_params_del_batch = []; $ref_params_del_batch[] = $types;
+                foreach($params_for_delete as $key => $value){ $ref_params_del_batch[] = &$params_for_delete[$key]; }
+                call_user_func_array([$stmt_batch_del, 'bind_param'], $ref_params_del_batch);
+            }
+            
+            if ($stmt_batch_del->execute()) {
+                echo json_encode(["success" => true, "message" => $stmt_batch_del->affected_rows . " task(s) deleted."]);
+            } else {
+                error_log("DB Execute Failed (batch DELETE): " . $stmt_batch_del->error);
+                http_response_code(500); echo json_encode(["success" => false, "error" => "Batch delete failed (DBPD_B_E)."]);
+            }
+            $stmt_batch_del->close();
         } else { 
-            if (empty($_GET['id'])) { http_response_code(400); echo json_encode(["error" => "Task ID required in query string for single delete."]); exit; }
-            $task_id = intval($_GET['id']);
-            $stmt = $conn->prepare("DELETE FROM tasks WHERE id = ? AND user_id = ?");
-            if (!$stmt) { http_response_code(500); echo json_encode(["error" => "DB Prepare Failed (DELETE): " . $conn->error]); exit; }
-            $stmt->bind_param("ii", $task_id, $user_id);
-            if ($stmt->execute()) { if ($stmt->affected_rows > 0) { echo json_encode(["success" => true, "message" => "Task deleted."]); } else { http_response_code(404); echo json_encode(["error" => "Task not found or not owned by user."]); }
-            } else { http_response_code(500); echo json_encode(["error" => "Delete failed: " . $stmt->error]); }
-            $stmt->close();
+            if (empty($_GET['id'])) { http_response_code(400); echo json_encode(["success" => false, "error" => "Task ID required for single delete (or invalid batch payload)."]); exit; } // Clarified error
+            $task_id_del = intval($_GET['id']);
+             if ($task_id_del <= 0) { http_response_code(400); echo json_encode(["success" => false, "error" => "Invalid Task ID for single delete."]); exit; }
+
+            $stmt_del_single = $mysqli->prepare("DELETE FROM tasks WHERE id = ? AND user_id = ?");
+            if (!$stmt_del_single) { 
+                error_log("DB Prepare Failed (single DELETE): " . $mysqli->error);
+                http_response_code(500); echo json_encode(["success" => false, "error" => "Server error (DBPD_S_P)."]); exit;
+            }
+            $stmt_del_single->bind_param("ii", $task_id_del, $user_id);
+            if ($stmt_del_single->execute()) { 
+                if ($stmt_del_single->affected_rows > 0) { 
+                    echo json_encode(["success" => true, "message" => "Task deleted successfully."]); 
+                } else { 
+                    http_response_code(404); echo json_encode(["success" => false, "error" => "Task not found or not owned by user."]); 
+                }
+            } else { 
+                error_log("DB Execute Failed (single DELETE): " . $stmt_del_single->error);
+                http_response_code(500); echo json_encode(["success" => false, "error" => "Delete failed (DBPD_S_E)."]); 
+            }
+            $stmt_del_single->close();
         }
         break;
 
     default:
         http_response_code(405); 
-        echo json_encode(["error" => "Method not allowed."]);
+        echo json_encode(["success" => false, "error" => "Method not allowed on this endpoint."]);
         break;
 }
-$conn->close();
+
+$mysqli->close();
 ?>
