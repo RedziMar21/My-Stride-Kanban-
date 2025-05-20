@@ -22,7 +22,7 @@
             font-family: 'Inter', sans-serif; color: var(--color-text-primary); display: flex; flex-direction: column; min-height: 100vh; padding-bottom: 5rem; box-sizing: border-box; background-image: linear-gradient(to bottom right, rgba(var(--color-bg-page-start-rgb), 0.85), rgba(var(--color-bg-page-end-rgb), 0.95)), var(--bg-image-url); background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed; overflow-x: hidden;
         }
         h1, h2, h3, h4, h5, h6, .font-poppins { font-family: 'Poppins', sans-serif; }
-        #landing-view .landing-header h1, #kanban-view-header .app-title, #onboarding-view .onboarding-header h2, .auth-top-logo-container, .auth-page-header .auth-logo-text, #sidebar .auth-logo-text { display: flex; align-items: baseline; }
+        #landing-view .landing-header h1, #kanban-view-header .app-title, #onboarding-view .onboarding-header h2, .auth-top-logo-container, .auth-page-header .auth-logo-text, #sidebar .auth-logo-text, #admin-dashboard-header h1 { display: flex; align-items: baseline; }
         .auth-page-header .auth-logo-text, #sidebar .auth-logo-text { justify-content: center; }
         #sidebar .auth-logo-text { justify-content: flex-start;}
         .inline-logo-img { height: 1.0em; width: auto; stroke: var(--color-accent); fill: none; margin-right: 0.3em; transform: translateY(-0.05em); }
@@ -137,8 +137,8 @@
         .export-buttons {width: 100%; max-width: 700px; margin: 2rem auto; display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap;}
         .export-buttons .btn-secondary {padding: .9rem 2rem}
         .view-hidden {display: none!important}
-        #landing-view, #login-view, #register-view, #kanban-view, #onboarding-view, #forgot-password-view, #reset-password-view, #archive-view {opacity: 0; transform: translateY(20px); transition: opacity .4s ease-out,transform .4s ease-out; will-change: opacity,transform}
-        #landing-view:not(.view-hidden), #login-view:not(.view-hidden), #register-view:not(.view-hidden), #kanban-view:not(.view-hidden), #onboarding-view:not(.view-hidden), #forgot-password-view:not(.view-hidden), #reset-password-view:not(.view-hidden), #archive-view:not(.view-hidden) {opacity: 1; transform: translateY(0)}
+        #landing-view, #login-view, #register-view, #kanban-view, #onboarding-view, #forgot-password-view, #reset-password-view, #archive-view, #admin-dashboard-view {opacity: 0; transform: translateY(20px); transition: opacity .4s ease-out,transform .4s ease-out; will-change: opacity,transform}
+        #landing-view:not(.view-hidden), #login-view:not(.view-hidden), #register-view:not(.view-hidden), #kanban-view:not(.view-hidden), #onboarding-view:not(.view-hidden), #forgot-password-view:not(.view-hidden), #reset-password-view:not(.view-hidden), #archive-view:not(.view-hidden), #admin-dashboard-view:not(.view-hidden) {opacity: 1; transform: translateY(0)}
         #login-view, #register-view, #forgot-password-view, #reset-password-view {display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding-top: 0; position: relative}
         .auth-form-container {max-width: 500px; width: 90%; margin: 1rem auto 0 auto;}
         .auth-form-container h2 {text-align: center; font-size: 2rem; margin-bottom: 2.5rem}
@@ -213,7 +213,9 @@
         @media (max-width:1024px) {.kanban-columns-container {flex-wrap: nowrap; justify-content: flex-start; padding: 0 1.5rem 2rem} .kanban-column-wrapper {min-width: 320px; margin: 0 .75rem; flex-basis: 320px} .column-header-title {font-size: 1.45rem} .column-header-title .icon {width: 1.8rem; height: 1.8rem; margin-right: 1rem} .tasks-container {padding: .75rem} .task-card {padding: 1.1rem} .task-description {padding-right: 2.8rem} #onboarding-view .onboarding-content h2 {font-size: 1.8rem} #onboarding-view .tutorial-grid {grid-template-columns: 1fr}}
         @media (max-width:768px) {body {padding-bottom: 5rem} .kanban-columns-container {flex-direction: column; align-items: center; margin: 2rem auto; overflow-x: hidden; gap: 2rem; padding: 0 0 1.5rem} .kanban-column-wrapper {margin: 0; width: 90%; max-width: 500px; min-width: unset; padding: 1.5rem; border-radius: 1.2rem} .landing-header h1 {font-size: 2.5rem} .auth-page-header .auth-logo-text {font-size: 2rem} .auth-page-header .auth-tagline {font-size: .9rem} .landing-header p {font-size: .9rem} .glass {border-radius: 1.2rem; padding: 1.5rem; margin-bottom: 2rem} .column-header {margin-bottom: 1rem} .column-header-title {font-size: 1.3rem} .column-header-title .icon {width: 1.6rem; height: 1.6rem; margin-right: .8rem} .tasks-container {padding: .5rem; margin-top: .75rem} .task-card {padding: 1rem; border-radius: .75rem; font-size: .9rem; margin-bottom: .8rem; border-left-width: 5px} .task-actions {top: .6rem; right: .6rem; gap: .4rem} .task-actions button {font-size: .9rem} .task-description {padding-right: 2.5rem} #add-task-section h2 {font-size: 1.1rem} .input-field-custom,.btn {padding: .8rem 1.2rem; font-size: .95rem; border-radius: .6rem} .task-meta {font-size: .8rem; gap: .5rem; margin-top: .6rem; padding-top: .4rem} .task-meta>span>i,.task-labels-container>i.fa-tags {font-size: .9em; margin-right: .3rem} .task-label-badge {font-size: .7rem; padding: .15rem .4rem} .progress-container {margin: 1.5rem auto} .export-buttons {flex-direction: column; gap: .75rem; padding: 0 1rem} #landing-features {margin-top: 2rem} .feature-item {margin-bottom: 2.5rem} #search-task-container {max-width: 90%; margin-bottom: 1rem} #search-task-input.input-field-custom {padding-left: 2.75rem} .search-input-wrapper .search-icon {left: .85rem; font-size: .9rem} #charts-section {max-width: 90%} #charts-section .chart-container {max-height: 300px} #onboarding-view .onboarding-content h2 {font-size: 1.6rem} #onboarding-view .onboarding-header {margin-top: 3rem} .tutorial-step {padding: 1.5rem}}
         @media (max-width:480px) {.kanban-column-wrapper {width: 95%; max-width: 350px; padding: 1.2rem} .landing-header h1 {font-size: 2rem} .auth-page-header .auth-logo-text {font-size: 1.8rem} .auth-page-header .auth-tagline {font-size: .85rem} .landing-header p {font-size: .8rem} .glass {padding: 1.2rem; margin-bottom: 1.5rem} .task-card {padding: .9rem; border-radius: .7rem; font-size: .85rem; margin-bottom: .7rem; border-left-width: 4px} .task-description {padding-right: 2.2rem} .task-actions {top: .5rem; right: .5rem; gap: .3rem} .task-actions button {font-size: .85rem} .input-field-custom,.btn {padding: .7rem 1rem; font-size: .9rem} .column-header-title {font-size: 1.2rem} .column-header-title .icon {width: 1.5rem; height: 1.5rem; margin-right: .6rem} #search-task-input.input-field-custom {padding-left: 2.5rem} .search-input-wrapper .search-icon {left: .75rem} .task-meta {font-size: .75rem} .task-label-badge {font-size: .65rem} #charts-section .chart-container {max-height: 250px} #onboarding-view .onboarding-content h2 {font-size: 1.4rem} .tutorial-step .feature-icon {font-size: 1.8rem; padding: .8rem} .tutorial-step h3 {font-size: 1.1rem} .tutorial-step p {font-size: .9rem}}
-        @media print {html,body {width: 100%!important; height: auto!important; overflow: visible!important; background: #fff!important; color: #000!important; margin: 0!important; padding: 0!important; font-size: 9pt!important; line-height: 1.2!important; -webkit-print-color-adjust: exact!important; print-color-adjust: exact!important} #landing-view,#login-view,#register-view,#onboarding-view,#forgot-password-view,#reset-password-view,.theme-toggle-container,#kanban-view-header .app-title>svg,#add-task-section,.progress-container,#charts-section,.export-buttons,#search-task-container,footer.global-footer,.empty-column-message,#kanban-view-header>button,.auth-page-header,#custom-confirm-modal,#sidebar,#sidebar-overlay, #batch-action-bar, #batch-action-bar-archive {display: none!important} #kanban-view-header {display: block!important; text-align: center!important; font-size: 14pt!important; margin-bottom: 1cm!important; padding: 0!important} #kanban-view-header .app-title {font-size: 14pt!important; font-weight: 700!important} #kanban-view {display: block!important; width: 100%!important; margin: 0!important; padding: 1cm!important; box-sizing: border-box!important} .kanban-columns-container {display: flex!important; flex-direction: row!important; flex-wrap: wrap!important; justify-content: flex-start!important; gap: 10px!important; margin: 0!important; padding: 0!important; width: 100%!important; max-width: 100%!important; overflow: visible!important} .kanban-column-wrapper {border: 1px solid #ccc!important; box-shadow: none!important; background-color: #fff!important; padding: .5rem!important; margin: 0!important; flex: 1 1 200px!important; min-width: 180px!important; max-width: 30%!important; break-inside: avoid!important; page-break-inside: avoid!important; min-height: unset!important; height: auto!important; overflow: visible!important; backdrop-filter: none!important; -webkit-backdrop-filter: none!important} .kanban-column-wrapper:hover {transform: none!important} .column-header {margin-bottom: .5rem!important} .column-header-title {border-bottom: 1px solid #ccc!important; padding-bottom: .25rem!important; margin-bottom: .5rem!important; color: #333!important; font-size: 11pt!important} .column-header-title .icon {display: none!important} .column-header-title span.task-count {font-size: 9pt!important; color: #555!important} .tasks-container {overflow: visible!important; max-height: none!important; min-height: unset!important; padding: .25rem!important; margin-top: .25rem!important; padding-bottom: 0!important} .tasks-container>.task-card {margin-bottom: .3rem!important} .task-card {box-shadow: none!important; border: 1px solid #e0e0e0!important; background-color: #fff!important; padding: .4rem!important; break-inside: avoid!important; page-break-inside: avoid!important; cursor: auto!important; backdrop-filter: none!important; -webkit-backdrop-filter: none!important; opacity: 1!important; max-height: none!important} .task-card.priority-low {border-left: 4px solid #48BB78!important} .task-card.priority-medium {border-left: 4px solid #ED8936!important} .task-card.priority-high {border-left: 4px solid #E53E3E!important} .task-card:hover {transform: none!important} .task-actions,.edit-form,.task-selection-checkbox-wrapper {display: none!important} .task-content-view {display: block!important} .task-description {padding-right: 0!important; font-size: 8.5pt!important; line-height: 1.2!important; color: #333!important; margin-bottom: .25rem!important; word-wrap: break-word; overflow-wrap: break-word} .task-meta {color: #555!important; max-height: none!important; opacity: 1!important; margin-top: .25rem!important; padding-top: .25rem!important; border-top: 1px dotted #eee!important; font-size: 7.5pt!important; line-height: 1.1!important; display: flex!important; flex-direction: column!important; gap: 2px!important; transition: none!important; pointer-events: auto!important} .task-meta>span {display: flex!important; align-items: flex-start!important; margin-bottom: 2px!important} .task-meta>span>i,.task-labels-container>i.fa-tags {color: #666!important; margin-right: 3px!important; font-size: .9em!important; margin-top: .05em!important} .task-labels-container {flex-wrap: wrap!important; gap: 2px 3px!important} .task-label-badge {background-color: #eee!important; color: #333!important; border: 1px solid #ddd!important; padding: 1px 3px!important; font-size: 7pt!important; border-radius: 3px!important} .task-meta .priority-low-text {color: #48BB78!important} .task-meta .priority-medium-text {color: #ED8936!important} .task-meta .priority-high-text {color: #E53E3E!important} .task-meta .overdue-text {color: #E53E3E!important} .task-meta .upcoming-text {color: #D69E2E!important} .task-meta .normal-date-text {color: #718096!important}}
+        /* Print Styles - START */
+        @media print {html,body {width: 100%!important; height: auto!important; overflow: visible!important; background: #fff!important; color: #000!important; margin: 0!important; padding: 0!important; font-size: 9pt!important; line-height: 1.2!important; -webkit-print-color-adjust: exact!important; print-color-adjust: exact!important} #landing-view,#login-view,#register-view,#onboarding-view,#forgot-password-view,#reset-password-view,.theme-toggle-container,#kanban-view-header .app-title>svg,#add-task-section,.progress-container,#charts-section,.export-buttons,#search-task-container,footer.global-footer,.empty-column-message,#kanban-view-header>button,.auth-page-header,#custom-confirm-modal,#sidebar,#sidebar-overlay, #batch-action-bar, #batch-action-bar-archive, #admin-dashboard-view /* Hide admin dashboard when printing board */ {display: none!important} #kanban-view-header {display: block!important; text-align: center!important; font-size: 14pt!important; margin-bottom: 1cm!important; padding: 0!important} #kanban-view-header .app-title {font-size: 14pt!important; font-weight: 700!important} #kanban-view {display: block!important; width: 100%!important; margin: 0!important; padding: 1cm!important; box-sizing: border-box!important} .kanban-columns-container {display: flex!important; flex-direction: row!important; flex-wrap: wrap!important; justify-content: flex-start!important; gap: 10px!important; margin: 0!important; padding: 0!important; width: 100%!important; max-width: 100%!important; overflow: visible!important} .kanban-column-wrapper {border: 1px solid #ccc!important; box-shadow: none!important; background-color: #fff!important; padding: .5rem!important; margin: 0!important; flex: 1 1 200px!important; min-width: 180px!important; max-width: 30%!important; break-inside: avoid!important; page-break-inside: avoid!important; min-height: unset!important; height: auto!important; overflow: visible!important; backdrop-filter: none!important; -webkit-backdrop-filter: none!important} .kanban-column-wrapper:hover {transform: none!important} .column-header {margin-bottom: .5rem!important} .column-header-title {border-bottom: 1px solid #ccc!important; padding-bottom: .25rem!important; margin-bottom: .5rem!important; color: #333!important; font-size: 11pt!important} .column-header-title .icon {display: none!important} .column-header-title span.task-count {font-size: 9pt!important; color: #555!important} .tasks-container {overflow: visible!important; max-height: none!important; min-height: unset!important; padding: .25rem!important; margin-top: .25rem!important; padding-bottom: 0!important} .tasks-container>.task-card {margin-bottom: .3rem!important} .task-card {box-shadow: none!important; border: 1px solid #e0e0e0!important; background-color: #fff!important; padding: .4rem!important; break-inside: avoid!important; page-break-inside: avoid!important; cursor: auto!important; backdrop-filter: none!important; -webkit-backdrop-filter: none!important; opacity: 1!important; max-height: none!important} .task-card.priority-low {border-left: 4px solid #48BB78!important} .task-card.priority-medium {border-left: 4px solid #ED8936!important} .task-card.priority-high {border-left: 4px solid #E53E3E!important} .task-card:hover {transform: none!important} .task-actions,.edit-form,.task-selection-checkbox-wrapper {display: none!important} .task-content-view {display: block!important} .task-description {padding-right: 0!important; font-size: 8.5pt!important; line-height: 1.2!important; color: #333!important; margin-bottom: .25rem!important; word-wrap: break-word; overflow-wrap: break-word} .task-meta {color: #555!important; max-height: none!important; opacity: 1!important; margin-top: .25rem!important; padding-top: .25rem!important; border-top: 1px dotted #eee!important; font-size: 7.5pt!important; line-height: 1.1!important; display: flex!important; flex-direction: column!important; gap: 2px!important; transition: none!important; pointer-events: auto!important} .task-meta>span {display: flex!important; align-items: flex-start!important; margin-bottom: 2px!important} .task-meta>span>i,.task-labels-container>i.fa-tags {color: #666!important; margin-right: 3px!important; font-size: .9em!important; margin-top: .05em!important} .task-labels-container {flex-wrap: wrap!important; gap: 2px 3px!important} .task-label-badge {background-color: #eee!important; color: #333!important; border: 1px solid #ddd!important; padding: 1px 3px!important; font-size: 7pt!important; border-radius: 3px!important} .task-meta .priority-low-text {color: #48BB78!important} .task-meta .priority-medium-text {color: #ED8936!important} .task-meta .priority-high-text {color: #E53E3E!important} .task-meta .overdue-text {color: #E53E3E!important} .task-meta .upcoming-text {color: #D69E2E!important} .task-meta .normal-date-text {color: #718096!important}}
+        /* Print Styles - END */
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center px-4 sm:px-6 lg:px-8">
@@ -257,6 +259,9 @@
             </a>
             <a href="#" id="sidebar-link-archive" class="sidebar-link group">
                 <i class="fas fa-archive mr-3 w-5 text-center"></i> Archived Tasks
+            </a>
+            <a href="#" id="sidebar-link-admin" class="sidebar-link group hidden"> <!-- Admin link, hidden by default -->
+                <i class="fas fa-user-shield mr-3 w-5 text-center"></i> Admin Dashboard
             </a>
         </nav>
         <div class="p-4 mt-auto border-t border-[var(--color-ui-border)]">
@@ -358,6 +363,10 @@
                     <div class="password-wrapper">
                         <input type="password" id="login-password" class="input-field-custom pr-10" placeholder="Password" required>
                         <button type="button" class="toggle-password-visibility" data-target="login-password" title="Toggle password visibility"><i class="fas fa-eye"></i></button>
+                    </div>
+                    <div class="my-4 flex items-center">
+                        <input id="login-admin-checkbox" type="checkbox" class="h-4 w-4 text-[var(--color-accent)] border-gray-300 rounded focus:ring-[var(--color-accent)] dark:border-gray-600 dark:bg-gray-700 dark:focus:ring-offset-gray-800">
+                        <label for="login-admin-checkbox" class="ml-2 block text-sm text-[var(--color-text-secondary)]">Login as Administrator</label>
                     </div>
                     <button type="submit" class="btn btn-primary-accent w-full">
                         <i class="fas fa-sign-in-alt mr-2"></i> Login
@@ -654,15 +663,63 @@
         </div>
     </section>
 
+    <!-- NEW ADMIN DASHBOARD VIEW -->
+    <section id="admin-dashboard-view" class="w-full view-hidden">
+        <div id="admin-dashboard-header" class="w-full max-w-5xl mx-auto my-8 px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between mb-6">
+                <h1 class="text-3xl font-semibold font-poppins flex items-center" style="color: var(--color-text-primary);">
+                    <i class="fas fa-user-shield mr-4 text-[var(--color-accent)]"></i>
+                    Admin Dashboard
+                </h1>
+                <button id="admin-back-to-kanban-btn" class="btn btn-secondary btn-sm">
+                    <i class="fas fa-columns mr-2"></i>Back to Kanban
+                </button>
+            </div>
+        </div>
+
+        <div class="w-full max-w-5xl mx-auto p-4">
+            <div class="glass p-6 md:p-8 rounded-xl shadow-lg">
+                <h2 class="text-xl font-semibold font-poppins mb-6" style="color: var(--color-text-primary);">User Management</h2>
+                <div id="admin-user-list-container" class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-[var(--color-ui-border)]">
+                        <thead class="bg-[var(--color-ui-bg-medium)]">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[var(--color-text-secondary)] uppercase tracking-wider">Email</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[var(--color-text-secondary)] uppercase tracking-wider">Is Admin?</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[var(--color-text-secondary)] uppercase tracking-wider">Registered</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[var(--color-text-secondary)] uppercase tracking-wider">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-user-list-tbody" class="divide-y divide-[var(--color-ui-border)]">
+                            <!-- User rows will be inserted here by JavaScript -->
+                             <tr><td colspan="4" class="text-center p-4 text-[var(--color-text-muted)]">Loading users...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                 <p id="admin-users-error-message" class="error-message hidden mt-4"></p>
+            </div>
+        </div>
+    </section>
+    <!-- END ADMIN DASHBOARD VIEW -->
+
+
     <footer class="global-footer">
         <p>© 2025 Stride Kanban by Redzi Mar Yambao. All rights reserved.</p>
     </footer>
 
     <script>
-        const API_BASE_URL = 'http://127.0.0.1/stride_project/api';
+        const API_BASE_URL = 'http://127.0.0.1/stride_project/api'; // Make sure this is your correct API path
         const ONBOARDING_FLAG_KEY = 'stride_onboarding_completed_v1';
         const views = {
-            landing: document.getElementById('landing-view'), login: document.getElementById('login-view'), register: document.getElementById('register-view'), onboarding: document.getElementById('onboarding-view'), kanban: document.getElementById('kanban-view'), forgotPassword: document.getElementById('forgot-password-view'), resetPassword: document.getElementById('reset-password-view'), archive: document.getElementById('archive-view')
+            landing: document.getElementById('landing-view'),
+            login: document.getElementById('login-view'),
+            register: document.getElementById('register-view'),
+            onboarding: document.getElementById('onboarding-view'),
+            kanban: document.getElementById('kanban-view'),
+            forgotPassword: document.getElementById('forgot-password-view'),
+            resetPassword: document.getElementById('reset-password-view'),
+            archive: document.getElementById('archive-view'),
+            adminDashboard: document.getElementById('admin-dashboard-view') // Added Admin Dashboard View
         };
         const kanbanViewHeader = document.getElementById('kanban-view-header');
         const logoutBtn = document.getElementById('logout-btn');
@@ -672,145 +729,517 @@
         const sunIcon = document.getElementById('sun-icon');
         const moonIcon = document.getElementById('moon-icon');
         const onboardingFinishBtn = document.getElementById('onboarding-finish-btn');
-        let taskInput, addTaskBtn, todoColumnTasks, inprogressColumnTasks, doneColumnTasks, columnsTasksContainers, taskErrorMessageElement, progressFill, progressText, exportJsonBtn, printBoardBtn, searchTaskInput, progressMascot, exportErrorMessageElement, sidebar, sidebarOverlay, appTitleClickable, sidebarLinkDashboard, sidebarLinkArchive, archivedTasksContainer, archiveEmptyMessage, backToDashboardFromArchiveBtn, sidebarLogoutBtn, toggleSelectModeBtnKanban, batchActionBar, selectedTasksCountElement, batchArchiveBtn, batchDeleteBtn, exitSelectModeBtn;
+
+        // Kanban specific DOM elements
+        let taskInput, addTaskBtn, todoColumnTasks, inprogressColumnTasks, doneColumnTasks, columnsTasksContainers, taskErrorMessageElement, progressFill, progressText, exportJsonBtn, printBoardBtn, searchTaskInput, progressMascot, exportErrorMessageElement, toggleSelectModeBtnKanban, batchActionBar, selectedTasksCountElement, batchArchiveBtn, batchDeleteBtn, exitSelectModeBtn;
+
+        // Auth specific DOM elements
         let loginEmailInput, loginPasswordInput, loginErrorMessage, registerEmailInput, registerPasswordInput, registerConfirmPasswordInput, registerErrorMessage, landingLoginBtn, landingRegisterBtn, gotoRegisterLink, gotoLoginLink, forgotPasswordLink, passwordToggleButtons, forgotPasswordForm, forgotEmailInput, forgotMessageElement, backToLoginFromForgotLink, resetPasswordForm, resetTokenInput, resetNewPasswordInput, resetConfirmPasswordInput, resetMessageElement, backToLoginFromResetLink;
+
+        // Shared/Sidebar/Archive DOM elements
+        let sidebar, sidebarOverlay, appTitleClickable, sidebarLinkDashboard, sidebarLinkArchive, archivedTasksContainer, archiveEmptyMessage, backToDashboardFromArchiveBtn, sidebarLogoutBtn;
+
+        // Admin Dashboard specific DOM elements
+        let adminUserListTbody, adminUsersErrorMessageElement, adminBackToKanbanBtn, sidebarLinkAdmin;
+
+
         let lastDragEnd = 0;
         const DRAG_CLICK_THRESHOLD = 100;
         let myPriorityDistributionChart = null;
         let currentEscapeKeyListener = null;
         let isSelectionModeActive = false;
         let selectedTaskIds = new Set();
+
         const scrollAnimatedElements = document.querySelectorAll('.scroll-animate');
         const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
         const scrollObserver = new IntersectionObserver((entries, observerInstance) => {
             entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('active'); observerInstance.unobserve(entry.target); } });
         }, observerOptions);
         if (scrollAnimatedElements?.length) { scrollAnimatedElements.forEach(el => scrollObserver.observe(el)); }
+
         function triggerScrollAnimations(viewElement) {
             if (!viewElement) return;
             const elementsToAnimate = viewElement.querySelectorAll('.scroll-animate');
             elementsToAnimate.forEach(el => { el.classList.remove('active'); setTimeout(() => el.classList.add('active'), 50); });
         }
+
         function setButtonLoadingState(button, isLoading, loadingText = 'Processing...') {
             if (!button) return;
             if (isLoading) {
                 button.disabled = true; if (!button.dataset.originalInnerHTML) button.dataset.originalInnerHTML = button.innerHTML; button.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i> ${loadingText}`;
             } else {
-                button.disabled = false; if (button.dataset.originalInnerHTML) { button.innerHTML = button.dataset.originalInnerHTML; delete button.dataset.originalInnerHTML; } else { if (button.id === 'logout-btn' || button.id === 'sidebar-logout-btn') button.innerHTML = '<i class="fas fa-sign-out-alt mr-1"></i>Logout'; else if (button.id === 'addTaskBtn') button.innerHTML = '<i class="fas fa-plus mr-2"></i><span class="font-poppins">Add Task</span>'; }
+                button.disabled = false;
+                if (button.dataset.originalInnerHTML) {
+                    button.innerHTML = button.dataset.originalInnerHTML;
+                    delete button.dataset.originalInnerHTML;
+                } else {
+                    // Add more specific button original texts if needed, example for logout and add task:
+                    if (button.id === 'logout-btn' || button.id === 'sidebar-logout-btn') button.innerHTML = '<i class="fas fa-sign-out-alt mr-1"></i>Logout';
+                    else if (button.id === 'addTaskBtn') button.innerHTML = '<i class="fas fa-plus mr-2"></i><span class="font-poppins">Add Task</span>';
+                    // For admin buttons, they are dynamically created, their text will be reset in handleAdminUserAction
+                }
             }
         }
+
         async function fetchAPI(endpoint, method = 'GET', body = null) {
-            const options = { method, credentials: 'include' };
+            const options = { method, credentials: 'include' }; // 'include' is important for session cookies
             if (body) { options.headers = { 'Content-Type': 'application/json' }; options.body = JSON.stringify(body); }
             try {
                 const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
-                const contentType = response.headers.get("content-type"); let data;
-                if (contentType && contentType.includes("application/json")) { data = await response.json(); } else { data = await response.text(); }
-                if (!response.ok) { const errorMessage = (typeof data === 'object' && data.error) ? data.error : (data || `HTTP error! Status: ${response.status}`); console.error(`API Error (${response.status}) for ${method} ${endpoint}:`, errorMessage, data); throw { status: response.status, message: errorMessage, data: data }; }
+                const contentType = response.headers.get("content-type");
+                let data;
+                if (contentType && contentType.includes("application/json")) {
+                    data = await response.json();
+                } else {
+                    data = await response.text(); // Handle cases where response might not be JSON (e.g., unexpected error)
+                }
+
+                if (!response.ok) {
+                    const errorMessage = (typeof data === 'object' && data.error) ? data.error : (typeof data === 'string' && data.length < 200 ? data : `HTTP error! Status: ${response.status}`);
+                    console.error(`API Error (${response.status}) for ${method} ${endpoint}:`, errorMessage, data);
+                    throw { status: response.status, message: errorMessage, data: data };
+                }
                 return { data, responseOk: response.ok, status: response.status };
-            } catch (error) { console.error(`Network or Fetch Error for ${method} ${endpoint}:`, error); const message = error.message || "A network error occurred. Please try again."; throw { ...error, message }; }
+            } catch (error) {
+                console.error(`Network or Fetch Error for ${method} ${endpoint}:`, error);
+                const message = error.message || "A network error occurred. Please try again.";
+                // If the error object already has a status (from a !response.ok throw), keep it
+                throw { status: error.status || 503, message, data: error.data || null };
+            }
         }
+
         function toggleErrorElement(el, show, message = '') {
-            if (!el) return; el.classList.toggle('hidden', !show); if (show && message) { el.textContent = message; }
+            if (!el) return;
+            el.classList.toggle('hidden', !show);
+            if (show && message) {
+                el.textContent = message;
+            }
         }
+
         function showCustomConfirm(title, message, onOkCallback, onCancelCallback) {
-            const modal = document.getElementById('custom-confirm-modal'); const modalTitle = document.getElementById('custom-confirm-title'); const modalMessage = document.getElementById('custom-confirm-message'); const okBtn = document.getElementById('custom-confirm-ok-btn'); const cancelBtn = document.getElementById('custom-confirm-cancel-btn'); const innerPanel = modal?.querySelector('.glass');
-            if (!modal || !modalTitle || !modalMessage || !okBtn || !cancelBtn || !innerPanel) { if (confirm(message.replace(/<[^>]*>?/gm, ''))) { if (onOkCallback) onOkCallback(); } else { if (onCancelCallback) onCancelCallback(); } return; }
-            modalTitle.textContent = title; modalMessage.innerHTML = message;
-            if (currentEscapeKeyListener) { document.removeEventListener('keydown', currentEscapeKeyListener); }
-            const hideModal = () => { innerPanel.style.opacity = '0'; innerPanel.style.transform = 'translateY(1rem) scale(0.95)'; setTimeout(() => { modal.classList.add('view-hidden'); }, 200); if (currentEscapeKeyListener) { document.removeEventListener('keydown', currentEscapeKeyListener); currentEscapeKeyListener = null; } };
-            innerPanel.style.opacity = '0'; innerPanel.style.transform = 'translateY(1rem) scale(0.95)'; modal.classList.remove('view-hidden'); requestAnimationFrame(() => { requestAnimationFrame(() => { innerPanel.style.opacity = '1'; innerPanel.style.transform = 'translateY(0) scale(1)'; }); });
-            const newOkBtn = okBtn.cloneNode(true); okBtn.parentNode.replaceChild(newOkBtn, okBtn); const newCancelBtn = cancelBtn.cloneNode(true); cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
-            newOkBtn.addEventListener('click', () => { hideModal(); if (onOkCallback) onOkCallback(); }, { once: true });
-            newCancelBtn.addEventListener('click', () => { hideModal(); if (onCancelCallback) onCancelCallback(); }, { once: true });
-            currentEscapeKeyListener = (event) => { if (event.key === 'Escape') { newCancelBtn.click(); } }; document.addEventListener('keydown', currentEscapeKeyListener);
+            const modal = document.getElementById('custom-confirm-modal');
+            const modalTitle = document.getElementById('custom-confirm-title');
+            const modalMessage = document.getElementById('custom-confirm-message');
+            const okBtn = document.getElementById('custom-confirm-ok-btn');
+            const cancelBtn = document.getElementById('custom-confirm-cancel-btn');
+            const innerPanel = modal?.querySelector('.glass');
+
+            if (!modal || !modalTitle || !modalMessage || !okBtn || !cancelBtn || !innerPanel) {
+                if (confirm(message.replace(/<[^>]*>?/gm, ''))) { // Basic fallback
+                    if (onOkCallback) onOkCallback();
+                } else {
+                    if (onCancelCallback) onCancelCallback();
+                }
+                return;
+            }
+
+            modalTitle.textContent = title;
+            modalMessage.innerHTML = message; // Use innerHTML to allow for bolding etc.
+
+            if (currentEscapeKeyListener) {
+                document.removeEventListener('keydown', currentEscapeKeyListener);
+            }
+
+            const hideModal = () => {
+                innerPanel.style.opacity = '0';
+                innerPanel.style.transform = 'translateY(1rem) scale(0.95)';
+                setTimeout(() => {
+                    modal.classList.add('view-hidden');
+                }, 200); // Match CSS transition
+                if (currentEscapeKeyListener) {
+                    document.removeEventListener('keydown', currentEscapeKeyListener);
+                    currentEscapeKeyListener = null;
+                }
+            };
+
+            innerPanel.style.opacity = '0';
+            innerPanel.style.transform = 'translateY(1rem) scale(0.95)';
+            modal.classList.remove('view-hidden');
+            requestAnimationFrame(() => { // Ensure class is removed before triggering transition
+                requestAnimationFrame(() => { // Next frame for transition start
+                    innerPanel.style.opacity = '1';
+                    innerPanel.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+
+            // Clone and replace buttons to remove old event listeners
+            const newOkBtn = okBtn.cloneNode(true);
+            okBtn.parentNode.replaceChild(newOkBtn, okBtn);
+            const newCancelBtn = cancelBtn.cloneNode(true);
+            cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
+
+            newOkBtn.addEventListener('click', () => {
+                hideModal();
+                if (onOkCallback) onOkCallback();
+            }, { once: true });
+
+            newCancelBtn.addEventListener('click', () => {
+                hideModal();
+                if (onCancelCallback) onCancelCallback();
+            }, { once: true });
+
+            currentEscapeKeyListener = (event) => {
+                if (event.key === 'Escape') {
+                    newCancelBtn.click();
+                }
+            };
+            document.addEventListener('keydown', currentEscapeKeyListener);
         }
+
         function navigateTo(viewName) {
             Object.values(views).forEach(view => view?.classList.add('view-hidden'));
             if (views[viewName]) {
-                views[viewName].classList.remove('view-hidden'); window.scrollTo({ top: 0, behavior: 'auto' });
-                const isUserSessionActiveView = ['kanban', 'onboarding', 'archive'].includes(viewName);
-                kanbanViewHeader?.classList.toggle('hidden', !(viewName === 'kanban')); logoutBtn?.classList.toggle('view-hidden', !isUserSessionActiveView || viewName === 'onboarding'); sidebar?.classList.toggle('hidden', !isUserSessionActiveView || viewName === 'onboarding');
+                views[viewName].classList.remove('view-hidden');
+                window.scrollTo({ top: 0, behavior: 'auto' }); // 'auto' for instant scroll on view change
+
+                const isUserSessionActiveView = ['kanban', 'onboarding', 'archive', 'adminDashboard'].includes(viewName);
+                kanbanViewHeader?.classList.toggle('hidden', !(viewName === 'kanban')); // Header specific to Kanban
+                logoutBtn?.classList.toggle('view-hidden', !isUserSessionActiveView || viewName === 'onboarding');
+                sidebar?.classList.toggle('hidden', !isUserSessionActiveView || viewName === 'onboarding');
+
                 if(isSelectionModeActive && viewName !== 'kanban'){ toggleSelectionMode(); }
+
                 const authPageHeaderViews = ['login', 'register', 'forgotPassword', 'resetPassword'];
-                document.querySelectorAll('.auth-page-header').forEach(header => { header.style.display = authPageHeaderViews.includes(viewName) ? 'block' : 'none'; });
-                document.querySelectorAll('.auth-top-logo').forEach(logo => { logo.style.display = (authPageHeaderViews.includes(viewName) || viewName === 'landing') ? 'none' : 'block'; });
-                if (viewName === 'kanban') { initializeKanbanDOM(); loadTasksFromServer(); updateActiveSidebarLink('kanban'); }
-                else if (viewName === 'archive') { initializeSharedDOM(); loadArchivedTasks(); updateActiveSidebarLink('archive'); }
-                else if (viewName === 'landing' && views.landing) { triggerScrollAnimations(views.landing); updateActiveSidebarLink(''); }
-                else if (viewName === 'onboarding' && views.onboarding) { triggerScrollAnimations(views.onboarding); updateActiveSidebarLink(''); }
-                else if (viewName === 'resetPassword') { const urlParams = new URLSearchParams(window.location.hash.split('?')[1]); const token = urlParams.get('token'); if (token && resetTokenInput) { resetTokenInput.value = token; } else if (token) { console.warn("Reset token input field not found, but token is in URL."); } if (resetMessageElement) resetMessageElement.textContent = ''; updateActiveSidebarLink(''); }
-                else if (['login', 'register', 'forgotPassword'].includes(viewName)) { if(forgotMessageElement && viewName === 'forgotPassword') forgotMessageElement.textContent = ''; if(loginErrorMessage && viewName === 'login') loginErrorMessage.classList.add('hidden'); updateActiveSidebarLink(''); }
-            } else { views.landing?.classList.remove('view-hidden'); console.error("View not found: ", viewName); }
+                document.querySelectorAll('.auth-page-header').forEach(header => {
+                    header.style.display = authPageHeaderViews.includes(viewName) ? 'block' : 'none';
+                });
+                document.querySelectorAll('.auth-top-logo').forEach(logo => { // Stride logo at top left
+                    logo.style.display = (authPageHeaderViews.includes(viewName) || viewName === 'landing') ? 'none' : 'block';
+                });
+
+                // Specific view initializations
+                if (viewName === 'kanban') {
+                    initializeKanbanDOM(); // Ensure DOM elements are ready
+                    loadTasksFromServer();
+                    updateActiveSidebarLink('kanban');
+                } else if (viewName === 'archive') {
+                    initializeSharedDOM(); // Ensure archive DOM elements are ready
+                    loadArchivedTasks();
+                    updateActiveSidebarLink('archive');
+                } else if (viewName === 'adminDashboard') {
+                    initializeAdminDashboardDOM(); // Ensure admin DOM elements are ready
+                    loadAdminUsers();
+                    updateActiveSidebarLink('admin');
+                } else if (viewName === 'landing' && views.landing) {
+                    triggerScrollAnimations(views.landing);
+                    updateActiveSidebarLink('');
+                } else if (viewName === 'onboarding' && views.onboarding) {
+                    triggerScrollAnimations(views.onboarding);
+                    updateActiveSidebarLink('');
+                } else if (viewName === 'resetPassword') {
+                    const urlParams = new URLSearchParams(window.location.hash.split('?')[1]);
+                    const token = urlParams.get('token');
+                    if (token && resetTokenInput) { resetTokenInput.value = token; }
+                    else if (token) { console.warn("Reset token input field not found, but token is in URL.");}
+                    if (resetMessageElement) resetMessageElement.textContent = ''; // Clear previous messages
+                    updateActiveSidebarLink('');
+                } else if (['login', 'register', 'forgotPassword'].includes(viewName)) {
+                    if(forgotMessageElement && viewName === 'forgotPassword') forgotMessageElement.textContent = '';
+                    if(loginErrorMessage && viewName === 'login') loginErrorMessage.classList.add('hidden');
+                    updateActiveSidebarLink('');
+                }
+                 // Update window hash for bookmarking/linking (optional)
+                // window.location.hash = viewName;
+
+
+            } else {
+                views.landing?.classList.remove('view-hidden'); // Fallback to landing if view not found
+                console.error("View not found: ", viewName);
+            }
         }
+
         function initializeAuthDOM() {
-            loginEmailInput = document.getElementById('login-email'); loginPasswordInput = document.getElementById('login-password'); loginErrorMessage = document.getElementById('login-error-message'); registerEmailInput = document.getElementById('register-email'); registerPasswordInput = document.getElementById('register-password'); registerConfirmPasswordInput = document.getElementById('register-confirm-password'); registerErrorMessage = document.getElementById('register-error-message'); landingLoginBtn = document.getElementById('landing-login-btn'); landingRegisterBtn = document.getElementById('landing-register-btn'); gotoRegisterLink = document.getElementById('goto-register-link'); gotoLoginLink = document.getElementById('goto-login-link'); forgotPasswordLink = document.getElementById('forgot-password-link'); passwordToggleButtons = document.querySelectorAll('.toggle-password-visibility'); forgotPasswordForm = document.getElementById('forgot-password-form'); forgotEmailInput = document.getElementById('forgot-email'); forgotMessageElement = document.getElementById('forgot-message'); backToLoginFromForgotLink = document.getElementById('back-to-login-from-forgot'); resetPasswordForm = document.getElementById('reset-password-form'); resetTokenInput = document.getElementById('reset-token'); resetNewPasswordInput = document.getElementById('reset-new-password'); resetConfirmPasswordInput = document.getElementById('reset-confirm-password'); resetMessageElement = document.getElementById('reset-message'); backToLoginFromResetLink = document.getElementById('back-to-login-from-reset');
+            loginEmailInput = document.getElementById('login-email');
+            loginPasswordInput = document.getElementById('login-password');
+            loginErrorMessage = document.getElementById('login-error-message');
+            registerEmailInput = document.getElementById('register-email');
+            registerPasswordInput = document.getElementById('register-password');
+            registerConfirmPasswordInput = document.getElementById('register-confirm-password');
+            registerErrorMessage = document.getElementById('register-error-message');
+            landingLoginBtn = document.getElementById('landing-login-btn');
+            landingRegisterBtn = document.getElementById('landing-register-btn');
+            gotoRegisterLink = document.getElementById('goto-register-link');
+            gotoLoginLink = document.getElementById('goto-login-link');
+            forgotPasswordLink = document.getElementById('forgot-password-link');
+            passwordToggleButtons = document.querySelectorAll('.toggle-password-visibility');
+            forgotPasswordForm = document.getElementById('forgot-password-form');
+            forgotEmailInput = document.getElementById('forgot-email');
+            forgotMessageElement = document.getElementById('forgot-message');
+            backToLoginFromForgotLink = document.getElementById('back-to-login-from-forgot');
+            resetPasswordForm = document.getElementById('reset-password-form');
+            resetTokenInput = document.getElementById('reset-token');
+            resetNewPasswordInput = document.getElementById('reset-new-password');
+            resetConfirmPasswordInput = document.getElementById('reset-confirm-password');
+            resetMessageElement = document.getElementById('reset-message');
+            backToLoginFromResetLink = document.getElementById('back-to-login-from-reset');
         }
-        function initializeSharedDOM() {
-            sidebar = document.getElementById('sidebar'); sidebarOverlay = document.getElementById('sidebar-overlay'); appTitleClickable = document.getElementById('app-title-clickable'); sidebarLinkDashboard = document.getElementById('sidebar-link-dashboard'); sidebarLinkArchive = document.getElementById('sidebar-link-archive'); archivedTasksContainer = document.getElementById('archived-tasks-container'); archiveEmptyMessage = document.getElementById('archive-empty-message'); backToDashboardFromArchiveBtn = document.getElementById('back-to-dashboard-from-archive'); sidebarLogoutBtn = document.getElementById('sidebar-logout-btn');
+
+        function initializeSharedDOM() { // For elements used across multiple authenticated views
+            sidebar = document.getElementById('sidebar');
+            sidebarOverlay = document.getElementById('sidebar-overlay');
+            appTitleClickable = document.getElementById('app-title-clickable'); // For sidebar toggle
+            sidebarLinkDashboard = document.getElementById('sidebar-link-dashboard');
+            sidebarLinkArchive = document.getElementById('sidebar-link-archive');
+            sidebarLinkAdmin = document.getElementById('sidebar-link-admin'); // Get admin link
+            archivedTasksContainer = document.getElementById('archived-tasks-container');
+            archiveEmptyMessage = document.getElementById('archive-empty-message');
+            backToDashboardFromArchiveBtn = document.getElementById('back-to-dashboard-from-archive');
+            sidebarLogoutBtn = document.getElementById('sidebar-logout-btn');
         }
+
         function initializeBatchActionDOM(){
-            toggleSelectModeBtnKanban = document.getElementById('toggle-select-mode-btn-kanban'); batchActionBar = document.getElementById('batch-action-bar'); selectedTasksCountElement = document.getElementById('selected-tasks-count'); batchArchiveBtn = document.getElementById('batch-archive-btn'); batchDeleteBtn = document.getElementById('batch-delete-btn'); exitSelectModeBtn = document.getElementById('exit-select-mode-btn');
+            toggleSelectModeBtnKanban = document.getElementById('toggle-select-mode-btn-kanban');
+            batchActionBar = document.getElementById('batch-action-bar');
+            selectedTasksCountElement = document.getElementById('selected-tasks-count');
+            batchArchiveBtn = document.getElementById('batch-archive-btn');
+            batchDeleteBtn = document.getElementById('batch-delete-btn');
+            exitSelectModeBtn = document.getElementById('exit-select-mode-btn');
         }
+
         async function handleRegister(event) {
-            event.preventDefault(); const registerButton = registerForm.querySelector('button[type="submit"]'); setButtonLoadingState(registerButton, true, 'Registering...'); toggleErrorElement(registerErrorMessage, false);
-            const email = registerEmailInput.value.trim(); const password = registerPasswordInput.value; const confirmPassword = registerConfirmPasswordInput.value;
-            if (!email || !password || !confirmPassword) { toggleErrorElement(registerErrorMessage, true, "All fields are required."); setButtonLoadingState(registerButton, false); return; }
-            if (password !== confirmPassword) { toggleErrorElement(registerErrorMessage, true, "Passwords do not match."); setButtonLoadingState(registerButton, false); return; }
-            if (password.length < 6) { toggleErrorElement(registerErrorMessage, true, "Password must be at least 6 characters."); setButtonLoadingState(registerButton, false); return; }
-            try { const { data, responseOk } = await fetchAPI('/register.php', 'POST', { email, password }); if (responseOk && data.success) { localStorage.removeItem(ONBOARDING_FLAG_KEY); navigateTo('onboarding'); registerForm.reset(); } else { toggleErrorElement(registerErrorMessage, true, data.error || "Registration failed."); }
-            } catch (error) { toggleErrorElement(registerErrorMessage, true, error.message || "An error occurred."); } finally { setButtonLoadingState(registerButton, false); }
+            event.preventDefault();
+            const registerButton = registerForm.querySelector('button[type="submit"]');
+            setButtonLoadingState(registerButton, true, 'Registering...');
+            toggleErrorElement(registerErrorMessage, false);
+
+            const email = registerEmailInput.value.trim();
+            const password = registerPasswordInput.value; // No trim on password
+            const confirmPassword = registerConfirmPasswordInput.value;
+
+            if (!email || !password || !confirmPassword) {
+                toggleErrorElement(registerErrorMessage, true, "All fields are required.");
+                setButtonLoadingState(registerButton, false); return;
+            }
+            if (password !== confirmPassword) {
+                toggleErrorElement(registerErrorMessage, true, "Passwords do not match.");
+                setButtonLoadingState(registerButton, false); return;
+            }
+            if (password.length < 6) {
+                toggleErrorElement(registerErrorMessage, true, "Password must be at least 6 characters.");
+                setButtonLoadingState(registerButton, false); return;
+            }
+
+            try {
+                const { data, responseOk } = await fetchAPI('/register.php', 'POST', { email, password }); // Assuming register.php handles this
+                if (responseOk && data.success) {
+                    localStorage.removeItem(ONBOARDING_FLAG_KEY); // New users get onboarding
+                    navigateTo('onboarding'); // Or directly to login if you prefer
+                    registerForm.reset();
+                } else {
+                    toggleErrorElement(registerErrorMessage, true, data.error || "Registration failed. Please try again.");
+                }
+            } catch (error) {
+                toggleErrorElement(registerErrorMessage, true, error.message || "An error occurred during registration.");
+            } finally {
+                setButtonLoadingState(registerButton, false);
+            }
         }
+
         async function handleLogin(event) {
-            event.preventDefault(); const loginButton = loginForm.querySelector('button[type="submit"]'); setButtonLoadingState(loginButton, true, 'Logging in...'); toggleErrorElement(loginErrorMessage, false);
-            const email = loginEmailInput.value.trim(); const password = loginPasswordInput.value;
-            if (!email || !password) { toggleErrorElement(loginErrorMessage, true, "Email and password are required."); setButtonLoadingState(loginButton, false); return; }
-            try { const { data, responseOk } = await fetchAPI('/login.php', 'POST', { email, password }); if (responseOk && data.success) { navigateTo('kanban'); loginForm.reset(); } else { toggleErrorElement(loginErrorMessage, true, data.error || "Login failed."); }
-            } catch (error) { toggleErrorElement(loginErrorMessage, true, error.message || "An error occurred."); } finally { setButtonLoadingState(loginButton, false); }
+            event.preventDefault();
+            const loginButton = loginForm.querySelector('button[type="submit"]');
+            setButtonLoadingState(loginButton, true, 'Logging in...');
+            toggleErrorElement(loginErrorMessage, false);
+
+            const email = loginEmailInput.value.trim();
+            const password = loginPasswordInput.value; // No trim
+            const isAdminLogin = document.getElementById('login-admin-checkbox').checked;
+
+            if (!email || !password) {
+                toggleErrorElement(loginErrorMessage, true, "Email and password are required.");
+                setButtonLoadingState(loginButton, false); return;
+            }
+            try {
+                const { data, responseOk } = await fetchAPI('/login.php', 'POST', { email, password, isAdminLogin });
+                if (responseOk && data.success) {
+                    sessionStorage.setItem('current_user_id_from_session', data.userId); // Store for client-side checks if needed
+
+                    if (isAdminLogin && data.isAdmin) {
+                        navigateTo('adminDashboard');
+                    } else if (data.isAdmin && !isAdminLogin) { // Admin user regular login
+                        // Decide where admins go on regular login. Kanban is a good default.
+                        navigateTo('kanban');
+                    } else if (!data.isAdmin) { // Regular user login
+                         if (localStorage.getItem(ONBOARDING_FLAG_KEY) !== 'true') {
+                            navigateTo('onboarding');
+                        } else {
+                            navigateTo('kanban');
+                        }
+                    }
+                    loginForm.reset();
+                    document.getElementById('login-admin-checkbox').checked = false; // Reset checkbox
+                } else {
+                    toggleErrorElement(loginErrorMessage, true, data.error || "Login failed. Please try again.");
+                }
+            } catch (error) {
+                toggleErrorElement(loginErrorMessage, true, error.message || "An error occurred during login.");
+            } finally {
+                setButtonLoadingState(loginButton, false);
+            }
         }
+
         async function handleLogout() {
-            const activeLogoutBtn = document.activeElement.id === 'sidebar-logout-btn' ? sidebarLogoutBtn : logoutBtn; if (!activeLogoutBtn) return;
-            showCustomConfirm( 'Logout', 'Are you sure you want to logout?', async () => { setButtonLoadingState(activeLogoutBtn, true, 'Logging out...'); try { const { data, responseOk } = await fetchAPI('/logout.php', 'POST'); if (responseOk && data.success) { navigateTo('landing'); } else { alert("Logout failed: " + (data.error || "Please try again.")); } } catch (error) { alert("An error occurred during logout: " + error.message); } finally { setButtonLoadingState(activeLogoutBtn, false); } });
+            const activeLogoutBtn = document.activeElement.id === 'sidebar-logout-btn' ? sidebarLogoutBtn : logoutBtn;
+            if (!activeLogoutBtn) return;
+
+            showCustomConfirm('Logout', 'Are you sure you want to logout?', async () => {
+                setButtonLoadingState(activeLogoutBtn, true, 'Logging out...');
+                try {
+                    const { data, responseOk } = await fetchAPI('/logout.php', 'POST'); // Assuming logout.php handles session destruction
+                    if (responseOk && data.success) {
+                        sessionStorage.removeItem('current_user_id_from_session'); // Clear stored user ID
+                        navigateTo('landing');
+                    } else {
+                        alert("Logout failed: " + (data.error || "Please try again."));
+                    }
+                } catch (error) {
+                    alert("An error occurred during logout: " + error.message);
+                } finally {
+                    setButtonLoadingState(activeLogoutBtn, false);
+                }
+            });
         }
+
+
         async function handleForgotPasswordRequest(event) {
-            event.preventDefault(); if (!forgotPasswordForm || !forgotEmailInput || !forgotMessageElement) return;
-            const forgotButton = forgotPasswordForm.querySelector('button[type="submit"]'); setButtonLoadingState(forgotButton, true, 'Sending...'); forgotMessageElement.textContent = ''; forgotMessageElement.className = 'text-sm mt-4 text-center';
-            const email = forgotEmailInput.value.trim(); if (!email) { forgotMessageElement.textContent = "Please enter your email address."; forgotMessageElement.classList.add('text-[var(--color-warning-text)]'); setButtonLoadingState(forgotButton, false); return; }
-            try { const { data, responseOk } = await fetchAPI('/forgot_password_request.php', 'POST', { email }); if (responseOk && data.success) { forgotMessageElement.textContent = data.message || "If an account with that email exists, a password reset link has been sent (check console/logs for simulation)."; forgotMessageElement.classList.add('text-green-500'); forgotPasswordForm.reset(); } else { forgotMessageElement.textContent = data.error || "Failed to send reset link. Please try again."; forgotMessageElement.classList.add('text-[var(--color-warning-text)]'); }
-            } catch (error) { forgotMessageElement.textContent = error.message || "An error occurred. Please try again."; forgotMessageElement.classList.add('text-[var(--color-warning-text)]'); } finally { setButtonLoadingState(forgotButton, false); }
+            event.preventDefault();
+            if (!forgotPasswordForm || !forgotEmailInput || !forgotMessageElement) return;
+            const forgotButton = forgotPasswordForm.querySelector('button[type="submit"]');
+            setButtonLoadingState(forgotButton, true, 'Sending...');
+            forgotMessageElement.textContent = ''; forgotMessageElement.className = 'text-sm mt-4 text-center'; // Reset classes
+
+            const email = forgotEmailInput.value.trim();
+            if (!email) {
+                forgotMessageElement.textContent = "Please enter your email address.";
+                forgotMessageElement.classList.add('text-[var(--color-warning-text)]');
+                setButtonLoadingState(forgotButton, false); return;
+            }
+            try {
+                const { data, responseOk } = await fetchAPI('/forgot_password_request.php', 'POST', { email });
+                if (responseOk && data.success) {
+                    forgotMessageElement.textContent = data.message || "If an account with that email exists, a password reset link has been sent (check console/logs for simulation).";
+                    forgotMessageElement.classList.add('text-green-500', 'dark:text-green-400');
+                    forgotPasswordForm.reset();
+                } else {
+                    forgotMessageElement.textContent = data.error || "Failed to send reset link. Please try again.";
+                    forgotMessageElement.classList.add('text-[var(--color-warning-text)]');
+                }
+            } catch (error) {
+                forgotMessageElement.textContent = error.message || "An error occurred. Please try again.";
+                forgotMessageElement.classList.add('text-[var(--color-warning-text)]');
+            } finally {
+                setButtonLoadingState(forgotButton, false);
+            }
         }
+
         async function handleResetPassword(event) {
-            event.preventDefault(); if (!resetPasswordForm || !resetTokenInput || !resetNewPasswordInput || !resetConfirmPasswordInput || !resetMessageElement) return;
-            const resetButton = resetPasswordForm.querySelector('button[type="submit"]'); setButtonLoadingState(resetButton, true, 'Resetting...'); resetMessageElement.textContent = ''; resetMessageElement.className = 'text-sm mt-4 text-center';
-            const token = resetTokenInput.value; const newPassword = resetNewPasswordInput.value; const confirmPassword = resetConfirmPasswordInput.value;
-            if (!token) { resetMessageElement.textContent = "Invalid or missing reset token."; resetMessageElement.classList.add('text-[var(--color-warning-text)]'); setButtonLoadingState(resetButton, false); return; }
-            if (newPassword.length < 6) { resetMessageElement.textContent = "Password must be at least 6 characters."; resetMessageElement.classList.add('text-[var(--color-warning-text)]'); setButtonLoadingState(resetButton, false); return; }
-            if (newPassword !== confirmPassword) { resetMessageElement.textContent = "Passwords do not match."; resetMessageElement.classList.add('text-[var(--color-warning-text)]'); setButtonLoadingState(resetButton, false); return; }
-            try { const { data, responseOk } = await fetchAPI('/reset_password.php', 'POST', { token, password: newPassword }); if (responseOk && data.success) { resetMessageElement.textContent = data.message || "Password has been reset successfully! You can now login."; resetMessageElement.classList.add('text-green-500'); resetPasswordForm.reset(); setTimeout(() => navigateTo('login'), 3000); } else { resetMessageElement.textContent = data.error || "Failed to reset password. The link may be invalid or expired."; resetMessageElement.classList.add('text-[var(--color-warning-text)]'); }
-            } catch (error) { resetMessageElement.textContent = error.message || "An error occurred. Please try again."; resetMessageElement.classList.add('text-[var(--color-warning-text)]'); } finally { setButtonLoadingState(resetButton, false); }
+            event.preventDefault();
+            if (!resetPasswordForm || !resetTokenInput || !resetNewPasswordInput || !resetConfirmPasswordInput || !resetMessageElement) return;
+            const resetButton = resetPasswordForm.querySelector('button[type="submit"]');
+            setButtonLoadingState(resetButton, true, 'Resetting...');
+            resetMessageElement.textContent = ''; resetMessageElement.className = 'text-sm mt-4 text-center';
+
+            const token = resetTokenInput.value;
+            const newPassword = resetNewPasswordInput.value;
+            const confirmPassword = resetConfirmPasswordInput.value;
+
+            if (!token) {
+                resetMessageElement.textContent = "Invalid or missing reset token.";
+                resetMessageElement.classList.add('text-[var(--color-warning-text)]');
+                setButtonLoadingState(resetButton, false); return;
+            }
+            if (newPassword.length < 6) {
+                resetMessageElement.textContent = "Password must be at least 6 characters.";
+                resetMessageElement.classList.add('text-[var(--color-warning-text)]');
+                setButtonLoadingState(resetButton, false); return;
+            }
+            if (newPassword !== confirmPassword) {
+                resetMessageElement.textContent = "Passwords do not match.";
+                resetMessageElement.classList.add('text-[var(--color-warning-text)]');
+                setButtonLoadingState(resetButton, false); return;
+            }
+            try {
+                const { data, responseOk } = await fetchAPI('/reset_password.php', 'POST', { token, password: newPassword });
+                if (responseOk && data.success) {
+                    resetMessageElement.textContent = data.message || "Password has been reset successfully! You can now login.";
+                    resetMessageElement.classList.add('text-green-500', 'dark:text-green-400');
+                    resetPasswordForm.reset();
+                    setTimeout(() => navigateTo('login'), 3000);
+                } else {
+                    resetMessageElement.textContent = data.error || "Failed to reset password. The link may be invalid or expired.";
+                    resetMessageElement.classList.add('text-[var(--color-warning-text)]');
+                }
+            } catch (error) {
+                resetMessageElement.textContent = error.message || "An error occurred. Please try again.";
+                resetMessageElement.classList.add('text-[var(--color-warning-text)]');
+            } finally {
+                setButtonLoadingState(resetButton, false);
+            }
         }
+
         function toggleSidebar() {
-            if (!sidebar || !sidebarOverlay) return; const isOpen = !sidebar.classList.contains('-translate-x-full'); sidebar.classList.toggle('-translate-x-full', isOpen); sidebar.classList.toggle('translate-x-0', !isOpen); sidebarOverlay.classList.toggle('view-hidden', isOpen); sidebarOverlay.classList.toggle('opacity-0', isOpen); sidebarOverlay.classList.toggle('opacity-100', !isOpen);
+            if (!sidebar || !sidebarOverlay) return;
+            const isOpen = !sidebar.classList.contains('-translate-x-full');
+            sidebar.classList.toggle('-translate-x-full', isOpen);
+            sidebar.classList.toggle('translate-x-0', !isOpen);
+            sidebarOverlay.classList.toggle('view-hidden', isOpen);
+            sidebarOverlay.classList.toggle('opacity-0', isOpen);
+            sidebarOverlay.classList.toggle('opacity-100', !isOpen); // For transition
         }
+
         function updateActiveSidebarLink(activeView) {
-            if (!sidebarLinkDashboard || !sidebarLinkArchive) { initializeSharedDOM(); if (!sidebarLinkDashboard || !sidebarLinkArchive) return; }
+            if (!sidebarLinkDashboard || !sidebarLinkArchive || !sidebarLinkAdmin) {
+                initializeSharedDOM(); // Try to get them if not already available
+                if (!sidebarLinkDashboard || !sidebarLinkArchive || !sidebarLinkAdmin) return; // Still not found, exit
+            }
             document.querySelectorAll('.sidebar-link').forEach(link => link.classList.remove('active'));
-            if (activeView === 'kanban' && sidebarLinkDashboard) { sidebarLinkDashboard.classList.add('active'); } else if (activeView === 'archive' && sidebarLinkArchive) { sidebarLinkArchive.classList.add('active'); }
+
+            if (activeView === 'kanban' && sidebarLinkDashboard) {
+                sidebarLinkDashboard.classList.add('active');
+            } else if (activeView === 'archive' && sidebarLinkArchive) {
+                sidebarLinkArchive.classList.add('active');
+            } else if (activeView === 'admin' && sidebarLinkAdmin) {
+                sidebarLinkAdmin.classList.add('active');
+            }
         }
+
         async function loadArchivedTasks() {
-            if (!archivedTasksContainer || !archiveEmptyMessage) { initializeSharedDOM(); if (!archivedTasksContainer || !archiveEmptyMessage) return; }
-            archivedTasksContainer.innerHTML = '';
+            if (!archivedTasksContainer || !archiveEmptyMessage) {
+                initializeSharedDOM();
+                if (!archivedTasksContainer || !archiveEmptyMessage) return;
+            }
+            archivedTasksContainer.innerHTML = ''; // Clear previous
             try {
                 const { data, responseOk } = await fetchAPI('/tasks_api.php?archived=true');
                 if (responseOk && Array.isArray(data.archived)) {
-                    if (data.archived.length === 0) { archiveEmptyMessage.classList.remove('hidden'); } else { archiveEmptyMessage.classList.add('hidden'); data.archived.sort((a,b) => new Date(b.updated_at) - new Date(a.updated_at)).forEach(task => archivedTasksContainer.appendChild(createArchivedTaskCard(task))); }
-                } else { console.error("Failed to load archived tasks or invalid format:", data); archiveEmptyMessage.classList.remove('hidden'); archiveEmptyMessage.textContent = "Could not load archived tasks."; }
-            } catch (error) { console.error("Error loading archived tasks:", error); archiveEmptyMessage.classList.remove('hidden'); archiveEmptyMessage.textContent = "An error occurred while loading archived tasks."; }
+                    if (data.archived.length === 0) {
+                        archiveEmptyMessage.classList.remove('hidden');
+                    } else {
+                        archiveEmptyMessage.classList.add('hidden');
+                        data.archived
+                            .sort((a,b) => new Date(b.updated_at) - new Date(a.updated_at)) // Sort by most recently archived
+                            .forEach(task => archivedTasksContainer.appendChild(createArchivedTaskCard(task)));
+                    }
+                } else {
+                    console.error("Failed to load archived tasks or invalid format:", data);
+                    archiveEmptyMessage.classList.remove('hidden');
+                    archiveEmptyMessage.textContent = "Could not load archived tasks.";
+                }
+            } catch (error) {
+                console.error("Error loading archived tasks:", error);
+                archiveEmptyMessage.classList.remove('hidden');
+                archiveEmptyMessage.textContent = "An error occurred while loading archived tasks.";
+            }
         }
+
         function createArchivedTaskCard({ id, text, priority, due_date, labels, updated_at }) {
-            const card = document.createElement('div'); card.className = 'archived-task-card'; card.dataset.id = id;
+            const card = document.createElement('div');
+            card.className = 'archived-task-card';
+            card.dataset.id = id;
+
             const formattedDueDate = due_date ? `Due: ${formatDate(new Date(due_date))}` : 'No due date';
             const archivedAt = `Archived: ${new Date(updated_at).toLocaleDateString([], { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}`;
+
             card.innerHTML = `
                 <p class="archived-task-text">${text}</p>
                 <div class="archived-task-meta">
@@ -828,95 +1257,333 @@
             card.querySelector('.delete-archived-btn').addEventListener('click', () => handleDeleteArchivedTask(id, text));
             return card;
         }
+
         async function handleUnarchiveTask(taskId) {
              showCustomConfirm('Unarchive Task', 'Are you sure you want to restore this task to your board? It will be moved to the "To Do" column.', async () => {
-                try { const payload = { id: taskId, is_archived: false, column_id: 'todo' }; const { data, responseOk } = await fetchAPI('/tasks_api.php', 'PUT', payload);
-                    if (responseOk && data.success) { loadArchivedTasks(); const archiveHeader = document.getElementById('archive-view-header'); if(archiveHeader){ let successMsg = archiveHeader.querySelector('.unarchive-success-msg'); if(!successMsg){ successMsg = document.createElement('p'); successMsg.className = 'unarchive-success-msg text-sm text-green-500 dark:text-green-400 mt-2 text-center'; archiveHeader.appendChild(successMsg); } successMsg.textContent = "Task unarchived and moved to 'To Do' on your dashboard."; setTimeout(() => { if(successMsg) successMsg.remove(); }, 4000);}}
-                    else { alert("Failed to unarchive task: " + (data.error || "Server error.")); }
-                } catch (error) { alert("Error unarchiving task: " + error.message); }
+                try {
+                    const payload = { id: taskId, is_archived: false, column_id: 'todo' }; // Explicitly set column
+                    const { data, responseOk } = await fetchAPI('/tasks_api.php', 'PUT', payload);
+                    if (responseOk && data.success) {
+                        loadArchivedTasks(); // Refresh archive view
+                        // Optional: Show a success message on the archive page
+                        const archiveHeader = document.getElementById('archive-view-header');
+                        if(archiveHeader){
+                            let successMsg = archiveHeader.querySelector('.unarchive-success-msg');
+                            if(!successMsg){
+                                successMsg = document.createElement('p');
+                                successMsg.className = 'unarchive-success-msg text-sm text-green-500 dark:text-green-400 mt-2 text-center';
+                                archiveHeader.appendChild(successMsg);
+                            }
+                            successMsg.textContent = "Task unarchived and moved to 'To Do' on your dashboard.";
+                            setTimeout(() => { if(successMsg) successMsg.remove(); }, 4000);
+                        }
+                    } else {
+                        alert("Failed to unarchive task: " + (data.error || "Server error."));
+                    }
+                } catch (error) {
+                    alert("Error unarchiving task: " + error.message);
+                }
             });
         }
+
         async function handleDeleteArchivedTask(taskId, taskText) {
             const taskTextPreview = taskText.substring(0,50) + (taskText.length > 50 ? "..." : "");
             showCustomConfirm('Delete Permanently', `This action cannot be undone. Are you sure you want to permanently delete task: "<strong>${taskTextPreview.replace(/"/g, '&quot;')}</strong>"?`, async () => {
-                try { const { data, responseOk } = await fetchAPI(`/tasks_api.php?id=${taskId}`, 'DELETE');
-                    if (responseOk && data.success) { loadArchivedTasks(); } else { alert("Failed to delete task: " + (data.error || "Server error.")); }
-                } catch (error) { alert("Error deleting task: " + error.message); }
+                try {
+                    const { data, responseOk } = await fetchAPI(`/tasks_api.php?id=${taskId}`, 'DELETE'); // Assuming your tasks_api handles deletion this way
+                    if (responseOk && data.success) {
+                        loadArchivedTasks(); // Refresh archive view
+                    } else {
+                        alert("Failed to delete task: " + (data.error || "Server error."));
+                    }
+                } catch (error) {
+                    alert("Error deleting task: " + error.message);
+                }
             });
         }
+
         function toggleSelectionMode() {
             isSelectionModeActive = !isSelectionModeActive;
             document.body.classList.toggle('selection-mode', isSelectionModeActive);
             batchActionBar?.classList.toggle('hidden', !isSelectionModeActive || selectedTaskIds.size === 0);
-            if (toggleSelectModeBtnKanban) { toggleSelectModeBtnKanban.innerHTML = isSelectionModeActive ? `<i class="fas fa-times mr-2"></i> Cancel` : `<i class="fas fa-check-square mr-2"></i> Select Tasks`; }
-            if (!isSelectionModeActive) { selectedTaskIds.clear(); document.querySelectorAll('#kanban-view .task-card .task-select-checkbox').forEach(cb => cb.checked = false); }
-            updateSelectedTasksCount();
-            document.querySelectorAll('#kanban-view .task-card .task-actions').forEach(actions => { actions.style.display = isSelectionModeActive ? 'none' : ''; });
-            document.querySelectorAll('#kanban-view .task-card .task-selection-checkbox-wrapper').forEach(wrapper => { wrapper.classList.toggle('hidden', !isSelectionModeActive); });
-        }
-        function updateSelectedTasksCount() {
-            if (selectedTasksCountElement) { selectedTasksCountElement.textContent = selectedTaskIds.size; }
-            const hasSelection = selectedTaskIds.size > 0;
-            if(batchActionBar) { batchActionBar.classList.toggle('hidden', !isSelectionModeActive || !hasSelection); }
-            if (batchArchiveBtn && batchDeleteBtn) {
-                [batchArchiveBtn, batchDeleteBtn].forEach(btn => { if(btn) { btn.disabled = !hasSelection; btn.classList.toggle('opacity-50', !hasSelection); btn.classList.toggle('cursor-not-allowed', !hasSelection); } });
+
+            if (toggleSelectModeBtnKanban) {
+                toggleSelectModeBtnKanban.innerHTML = isSelectionModeActive
+                    ? `<i class="fas fa-times mr-2"></i> Cancel`
+                    : `<i class="fas fa-check-square mr-2"></i> Select Tasks`;
             }
-        }
-        function handleTaskCheckboxChange(event, taskId) {
-            if (event.target.checked) { selectedTaskIds.add(taskId); } else { selectedTaskIds.delete(taskId); }
+
+            if (!isSelectionModeActive) { // Exiting selection mode
+                selectedTaskIds.clear();
+                document.querySelectorAll('#kanban-view .task-card .task-select-checkbox').forEach(cb => cb.checked = false);
+            }
             updateSelectedTasksCount();
-        }
-        async function handleBatchAction(actionType) {
-            if (selectedTaskIds.size === 0) { alert("No tasks selected."); return; }
-            const taskIdsArray = Array.from(selectedTaskIds);
-            const confirmMessage = `Are you sure you want to ${actionType} ${taskIdsArray.length} selected task(s)? ${actionType === 'delete' ? ' This action cannot be undone.' : ''}`;
-            showCustomConfirm(`Batch ${actionType.charAt(0).toUpperCase() + actionType.slice(1)}`, confirmMessage, async () => {
-                try {
-                    let responseOkOverall = true; let errorMessages = [];
-                    let payload = { ids: taskIdsArray, batch: true }; let method = 'PUT';
-                    if (actionType === 'archive') { payload.is_archived = true; } else if (actionType === 'delete') { method = 'DELETE'; }
-                    const { data, responseOk } = await fetchAPI('/tasks_api.php', method, payload);
-                    if (!responseOk || !data.success) { responseOkOverall = false; errorMessages.push(data?.error || `Failed to ${actionType} some tasks.`); }
-                    if (responseOkOverall) {
-                        await loadTasksFromServer(); selectedTaskIds.clear(); updateSelectedTasksCount(); toggleSelectionMode();
-                        const successAlert = document.createElement('div'); successAlert.className = 'fixed top-5 right-5 bg-green-100 border border-green-400 text-green-700 dark:bg-green-700 dark:text-green-100 dark:border-green-600 px-4 py-3 rounded shadow-md z-[2000]'; successAlert.textContent = `${taskIdsArray.length} task(s) ${actionType}d successfully.`; document.body.appendChild(successAlert); setTimeout(() => successAlert.remove(), 3000);
-                    } else { alert("Some errors occurred: " + errorMessages.join("\n")); }
-                } catch (error) { alert(`An error occurred during batch ${actionType}: ` + error.message); }
+            // Toggle visibility of regular task actions vs selection checkbox
+            document.querySelectorAll('#kanban-view .task-card .task-actions').forEach(actions => {
+                actions.style.display = isSelectionModeActive ? 'none' : '';
+            });
+            document.querySelectorAll('#kanban-view .task-card .task-selection-checkbox-wrapper').forEach(wrapper => {
+                wrapper.classList.toggle('hidden', !isSelectionModeActive);
             });
         }
+
+        function updateSelectedTasksCount() {
+            if (selectedTasksCountElement) {
+                selectedTasksCountElement.textContent = selectedTaskIds.size;
+            }
+            const hasSelection = selectedTaskIds.size > 0;
+            if(batchActionBar) {
+                batchActionBar.classList.toggle('hidden', !isSelectionModeActive || !hasSelection);
+            }
+            // Enable/disable batch action buttons
+            if (batchArchiveBtn && batchDeleteBtn) {
+                [batchArchiveBtn, batchDeleteBtn].forEach(btn => {
+                    if(btn) {
+                        btn.disabled = !hasSelection;
+                        btn.classList.toggle('opacity-50', !hasSelection);
+                        btn.classList.toggle('cursor-not-allowed', !hasSelection);
+                    }
+                });
+            }
+        }
+
+        function handleTaskCheckboxChange(event, taskId) {
+            if (event.target.checked) {
+                selectedTaskIds.add(taskId);
+            } else {
+                selectedTaskIds.delete(taskId);
+            }
+            updateSelectedTasksCount();
+        }
+
+        async function handleBatchAction(actionType) {
+            if (selectedTaskIds.size === 0) {
+                alert("No tasks selected."); return;
+            }
+            const taskIdsArray = Array.from(selectedTaskIds);
+            const confirmMessage = `Are you sure you want to ${actionType} ${taskIdsArray.length} selected task(s)? ${actionType === 'delete' ? ' This action cannot be undone.' : ''}`;
+
+            showCustomConfirm(`Batch ${actionType.charAt(0).toUpperCase() + actionType.slice(1)}`, confirmMessage, async () => {
+                try {
+                    let responseOkOverall = true;
+                    let errorMessages = [];
+                    let payload = { ids: taskIdsArray, batch: true }; // Common payload parts
+                    let method = 'PUT'; // Default for archive
+
+                    if (actionType === 'archive') {
+                        payload.is_archived = true;
+                    } else if (actionType === 'delete') {
+                        method = 'DELETE'; // tasks_api.php must handle batch delete with IDs in body
+                    }
+                    // Make sure your tasks_api.php can handle a payload like { ids: [...], is_archived: true } for PUT
+                    // and { ids: [...] } for DELETE if method is DELETE.
+                    const { data, responseOk } = await fetchAPI('/tasks_api.php', method, payload);
+
+                    if (!responseOk || !data.success) {
+                        responseOkOverall = false;
+                        errorMessages.push(data?.error || `Failed to ${actionType} some tasks.`);
+                    }
+
+                    if (responseOkOverall) {
+                        await loadTasksFromServer(); // Refresh the board
+                        selectedTaskIds.clear();
+                        updateSelectedTasksCount();
+                        toggleSelectionMode(); // Exit selection mode after successful action
+                        // Show a temporary success message
+                        const successAlert = document.createElement('div');
+                        successAlert.className = 'fixed top-5 right-5 bg-green-100 border border-green-400 text-green-700 dark:bg-green-700 dark:text-green-100 dark:border-green-600 px-4 py-3 rounded shadow-md z-[2000]';
+                        successAlert.textContent = `${taskIdsArray.length} task(s) ${actionType}d successfully.`;
+                        document.body.appendChild(successAlert);
+                        setTimeout(() => successAlert.remove(), 3000);
+                    } else {
+                        alert("Some errors occurred: " + errorMessages.join("\n"));
+                    }
+                } catch (error) {
+                    alert(`An error occurred during batch ${actionType}: ` + error.message);
+                }
+            });
+        }
+
+
         async function checkLoginStatus() {
-            const hash = window.location.hash; initializeAuthDOM();
-            if (hash.startsWith('#resetPassword?token=')) { const token = new URLSearchParams(hash.split('?')[1]).get('token'); if (token) { navigateTo('resetPassword'); if (resetTokenInput) resetTokenInput.value = token; return; } }
-            try { const { data } = await fetchAPI('/check_session.php'); if (data.loggedIn) { if (localStorage.getItem(ONBOARDING_FLAG_KEY) !== 'true') { navigateTo('onboarding'); } else { navigateTo('kanban'); } } else { navigateTo('landing'); }
-            } catch (error) { navigateTo('landing'); }
+            const hash = window.location.hash.substring(1); // Get hash without #
+            initializeAuthDOM(); // Ensure auth DOM elements are ready
+            initializeSharedDOM(); // Ensure shared DOM elements are ready (for sidebar link check)
+
+            if (hash.startsWith('resetPassword?token=')) {
+                const token = new URLSearchParams(hash.split('?')[1]).get('token');
+                if (token) {
+                    navigateTo('resetPassword');
+                    if (resetTokenInput) resetTokenInput.value = token;
+                    return;
+                }
+            }
+
+            try {
+                const { data } = await fetchAPI('/check_session.php');
+                if (data.loggedIn) {
+                    sessionStorage.setItem('current_user_id_from_session', data.userId); // Store for client use
+                    // Show/hide admin dashboard link in sidebar based on session
+                    if(sidebarLinkAdmin) sidebarLinkAdmin.classList.toggle('hidden', !data.isAdmin);
+
+                    if (hash === 'adminDashboard' && data.isAdmin) { // If directly trying to access admin and is admin
+                        navigateTo('adminDashboard');
+                    } else if (localStorage.getItem(ONBOARDING_FLAG_KEY) !== 'true' && !data.isAdmin) { // Onboarding for non-admins only
+                        navigateTo('onboarding');
+                    } else {
+                        navigateTo('kanban'); // Default for logged-in users or admins not going to admin dashboard
+                    }
+                } else {
+                    sessionStorage.removeItem('current_user_id_from_session');
+                    if(sidebarLinkAdmin) sidebarLinkAdmin.classList.add('hidden'); // Hide admin link if not logged in
+                    navigateTo('landing');
+                }
+            } catch (error) {
+                // Handle fetch error for check_session - assume not logged in
+                sessionStorage.removeItem('current_user_id_from_session');
+                if(sidebarLinkAdmin) sidebarLinkAdmin.classList.add('hidden');
+                navigateTo('landing');
+            }
         }
+
+
         function initializeKanbanDOM() {
-            taskInput = document.getElementById('taskInput'); addTaskBtn = document.getElementById('addTaskBtn'); todoColumnTasks = document.getElementById('todo')?.querySelector('.tasks-container'); inprogressColumnTasks = document.getElementById('inprogress')?.querySelector('.tasks-container'); doneColumnTasks = document.getElementById('done')?.querySelector('.tasks-container'); columnsTasksContainers = document.querySelectorAll('#kanban-view .tasks-container'); taskErrorMessageElement = document.getElementById('task-error-message'); progressFill = document.getElementById('progress-fill'); progressText = document.getElementById('progress-text'); exportJsonBtn = document.getElementById('export-json'); printBoardBtn = document.getElementById('print-board'); searchTaskInput = document.getElementById('search-task-input'); progressMascot = document.getElementById('progress-mascot'); exportErrorMessageElement = document.getElementById('export-error-message');
-            initializeBatchActionDOM();
-            addTaskBtn?.removeEventListener('click', addTask); addTaskBtn?.addEventListener('click', addTask);
-            taskInput?.removeEventListener('keypress', handleTaskInputKeypress); taskInput?.addEventListener('keypress', handleTaskInputKeypress); taskInput?.removeEventListener('input', handleTaskInput); taskInput?.addEventListener('input', handleTaskInput);
-            columnsTasksContainers?.forEach(container => { container.removeEventListener('dragover', handleDragOver); container.addEventListener('dragover', handleDragOver); container.removeEventListener('dragleave', handleDragLeave); container.addEventListener('dragleave', handleDragLeave); container.removeEventListener('drop', handleDrop); container.addEventListener('drop', handleDrop); container.removeEventListener('click', handleTaskActionDelegation); container.addEventListener('click', handleTaskActionDelegation); });
-            exportJsonBtn?.removeEventListener('click', exportBoardAsJson); exportJsonBtn?.addEventListener('click', exportBoardAsJson); printBoardBtn?.removeEventListener('click', printBoard); printBoardBtn?.addEventListener('click', printBoard); searchTaskInput?.removeEventListener('input', filterTasks); searchTaskInput?.addEventListener('input', filterTasks);
-            toggleSelectModeBtnKanban?.removeEventListener('click', toggleSelectionMode); toggleSelectModeBtnKanban?.addEventListener('click', toggleSelectionMode); exitSelectModeBtn?.removeEventListener('click', toggleSelectionMode); exitSelectModeBtn?.addEventListener('click', toggleSelectionMode); batchArchiveBtn?.removeEventListener('click', () => handleBatchAction('archive')); batchArchiveBtn?.addEventListener('click', () => handleBatchAction('archive')); batchDeleteBtn?.removeEventListener('click', () => handleBatchAction('delete')); batchDeleteBtn?.addEventListener('click', () => handleBatchAction('delete'));
+            taskInput = document.getElementById('taskInput');
+            addTaskBtn = document.getElementById('addTaskBtn');
+            todoColumnTasks = document.getElementById('todo')?.querySelector('.tasks-container');
+            inprogressColumnTasks = document.getElementById('inprogress')?.querySelector('.tasks-container');
+            doneColumnTasks = document.getElementById('done')?.querySelector('.tasks-container');
+            columnsTasksContainers = document.querySelectorAll('#kanban-view .tasks-container');
+            taskErrorMessageElement = document.getElementById('task-error-message');
+            progressFill = document.getElementById('progress-fill');
+            progressText = document.getElementById('progress-text');
+            exportJsonBtn = document.getElementById('export-json');
+            printBoardBtn = document.getElementById('print-board');
+            searchTaskInput = document.getElementById('search-task-input');
+            progressMascot = document.getElementById('progress-mascot');
+            exportErrorMessageElement = document.getElementById('export-error-message');
+
+            initializeBatchActionDOM(); // Initialize batch action buttons
+
+            // Add event listeners only if elements exist and listeners haven't been added
+            // (Simple check: if element exists, assume listeners need to be (re)added for safety on view switch)
+            addTaskBtn?.removeEventListener('click', addTask); // Remove first to prevent duplicates
+            addTaskBtn?.addEventListener('click', addTask);
+
+            taskInput?.removeEventListener('keypress', handleTaskInputKeypress);
+            taskInput?.addEventListener('keypress', handleTaskInputKeypress);
+            taskInput?.removeEventListener('input', handleTaskInput);
+            taskInput?.addEventListener('input', handleTaskInput);
+
+            columnsTasksContainers?.forEach(container => {
+                container.removeEventListener('dragover', handleDragOver);
+                container.addEventListener('dragover', handleDragOver);
+                container.removeEventListener('dragleave', handleDragLeave);
+                container.addEventListener('dragleave', handleDragLeave);
+                container.removeEventListener('drop', handleDrop);
+                container.addEventListener('drop', handleDrop);
+                container.removeEventListener('click', handleTaskActionDelegation); // For edit/delete/expand
+                container.addEventListener('click', handleTaskActionDelegation);
+            });
+
+            exportJsonBtn?.removeEventListener('click', exportBoardAsJson);
+            exportJsonBtn?.addEventListener('click', exportBoardAsJson);
+            printBoardBtn?.removeEventListener('click', printBoard);
+            printBoardBtn?.addEventListener('click', printBoard);
+            searchTaskInput?.removeEventListener('input', filterTasks);
+            searchTaskInput?.addEventListener('input', filterTasks);
+
+            toggleSelectModeBtnKanban?.removeEventListener('click', toggleSelectionMode);
+            toggleSelectModeBtnKanban?.addEventListener('click', toggleSelectionMode);
+            exitSelectModeBtn?.removeEventListener('click', toggleSelectionMode);
+            exitSelectModeBtn?.addEventListener('click', toggleSelectionMode);
+            batchArchiveBtn?.removeEventListener('click', () => handleBatchAction('archive'));
+            batchArchiveBtn?.addEventListener('click', () => handleBatchAction('archive'));
+            batchDeleteBtn?.removeEventListener('click', () => handleBatchAction('delete'));
+            batchDeleteBtn?.addEventListener('click', () => handleBatchAction('delete'));
         }
+
         function handleTaskInputKeypress(event) { if (event.key === 'Enter' && event.ctrlKey) { event.preventDefault(); addTask(); } }
         function handleTaskInput() { if (taskInput?.value.trim()) toggleErrorElement(taskErrorMessageElement, false); }
-        function formatDate(date) { if (!date) return ''; if (typeof date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(date)) return date; const d = new Date(date); return isNaN(d.getTime()) ? '' : `${d.getFullYear()}-${('0' + (d.getMonth() + 1)).slice(-2)}-${('0' + d.getDate()).slice(-2)}`; }
+
+        function formatDate(date) {
+            if (!date) return '';
+            // Check if date is already YYYY-MM-DD string
+            if (typeof date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(date)) {
+                return date;
+            }
+            const d = new Date(date);
+            return isNaN(d.getTime()) ? '' : `${d.getFullYear()}-${('0' + (d.getMonth() + 1)).slice(-2)}-${('0' + d.getDate()).slice(-2)}`;
+        }
+
         function getDaysRemaining(dueDateYYYYMMDD) {
-            if (!dueDateYYYYMMDD) return null; const today = new Date(); today.setHours(0, 0, 0, 0); const parts = dueDateYYYYMMDD.split('-'); if (parts.length !== 3) return null;
-            const year = parseInt(parts[0], 10); const month = parseInt(parts[1], 10) - 1; const day = parseInt(parts[2], 10); if (isNaN(year) || isNaN(month) || isNaN(day)) return null;
-            const due = new Date(year, month, day); due.setHours(0,0,0,0); if (isNaN(due.getTime())) return null; return Math.ceil((due.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+            if (!dueDateYYYYMMDD) return null;
+            const today = new Date();
+            today.setHours(0, 0, 0, 0); // Normalize today to start of day
+
+            const parts = dueDateYYYYMMDD.split('-');
+            if (parts.length !== 3) return null; // Invalid format
+
+            const year = parseInt(parts[0], 10);
+            const month = parseInt(parts[1], 10) - 1; // JS months are 0-indexed
+            const day = parseInt(parts[2], 10);
+
+            if (isNaN(year) || isNaN(month) || isNaN(day)) return null;
+
+            const due = new Date(year, month, day);
+            due.setHours(0,0,0,0); // Normalize due date to start of day
+
+            if (isNaN(due.getTime())) return null; // Invalid date object
+
+            return Math.ceil((due.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
         }
-        function getDueDateDisplay(dueDate) {
-            if (!dueDate) return { text: '', class: '', iconClass: '' }; const days = getDaysRemaining(dueDate);
-            if (days === null) return { text: 'Invalid date', class: 'overdue-text', iconClass: 'fas fa-exclamation-triangle' }; if (days < 0) return { text: `Overdue by ${Math.abs(days)} day${Math.abs(days) > 1 ? 's' : ''}`, class: 'overdue-text', iconClass: 'fas fa-exclamation-circle' }; if (days === 0) return { text: 'Due Today', class: 'upcoming-text', iconClass: 'fas fa-clock' }; if (days === 1) return { text: 'Due Tomorrow', class: 'upcoming-text', iconClass: 'fas fa-clock' }; if (days <= 7) return { text: `Due in ${days} days`, class: 'upcoming-text', iconClass: '' };
-            const parts = dueDate.split('-'); const year = parseInt(parts[0],10); const month = parseInt(parts[1],10) -1; const day = parseInt(parts[2],10); return { text: `Due ${new Date(year,month,day).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}`, class: 'normal-date-text', iconClass: '' };
+
+
+        function getDueDateDisplay(dueDate) { // dueDate should be YYYY-MM-DD string
+            if (!dueDate) return { text: '', class: '', iconClass: '' };
+            const days = getDaysRemaining(dueDate);
+
+            if (days === null) return { text: 'Invalid date', class: 'overdue-text', iconClass: 'fas fa-exclamation-triangle' };
+            if (days < 0) return { text: `Overdue by ${Math.abs(days)} day${Math.abs(days) > 1 ? 's' : ''}`, class: 'overdue-text', iconClass: 'fas fa-exclamation-circle' };
+            if (days === 0) return { text: 'Due Today', class: 'upcoming-text', iconClass: 'fas fa-clock' };
+            if (days === 1) return { text: 'Due Tomorrow', class: 'upcoming-text', iconClass: 'fas fa-clock' };
+            if (days <= 7) return { text: `Due in ${days} days`, class: 'upcoming-text', iconClass: '' }; // No specific icon for 2-7 days out
+
+            // For dates further out, format them nicely
+            const parts = dueDate.split('-');
+            const year = parseInt(parts[0],10);
+            const month = parseInt(parts[1],10) -1; // JS month index
+            const day = parseInt(parts[2],10);
+            return { text: `Due ${new Date(year,month,day).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}`, class: 'normal-date-text', iconClass: '' };
         }
+
+
         function createTaskCard({ id, text, priority = 'low', due_date = '', labels = '', column_id = 'todo', sort_order = 0 }) {
-            const taskCard = document.createElement('div'); taskCard.id = String(id); taskCard.className = `task-card priority-${priority}`; taskCard.draggable = true; taskCard.dataset.column = column_id; taskCard.dataset.priority = priority;
-            let displayDueDate = ''; if (due_date && /^\d{4}-\d{2}-\d{2}$/.test(due_date)) { displayDueDate = due_date; } else if (due_date) { displayDueDate = formatDate(new Date(due_date)); }
-            taskCard.dataset.duedate = displayDueDate; taskCard.dataset.labels = labels || ''; taskCard.dataset.sortOrder = sort_order;
-            const dueDateInfo = getDueDateDisplay(displayDueDate); const labelTagsHtml = (labels || '').split(',').map(l => l.trim()).filter(l => l).map(tag => `<span class="task-label-badge">${tag}</span>`).join('') || 'No labels';
+            const taskCard = document.createElement('div');
+            taskCard.id = String(id); // Ensure ID is a string for getElementById
+            taskCard.className = `task-card priority-${priority}`;
+            taskCard.draggable = true;
+            taskCard.dataset.column = column_id;
+            taskCard.dataset.priority = priority;
+
+            let displayDueDate = ''; // Ensure it's YYYY-MM-DD or empty
+            if (due_date && /^\d{4}-\d{2}-\d{2}$/.test(due_date)) {
+                displayDueDate = due_date;
+            } else if (due_date) { // Attempt to format if not already correct
+                displayDueDate = formatDate(new Date(due_date));
+            }
+            taskCard.dataset.duedate = displayDueDate; // Store consistently formatted date or empty string
+            taskCard.dataset.labels = labels || ''; // Store labels or empty string
+            taskCard.dataset.sortOrder = sort_order;
+
+
+            const dueDateInfo = getDueDateDisplay(displayDueDate);
+            const labelTagsHtml = (labels || '').split(',')
+                .map(l => l.trim())
+                .filter(l => l) // Remove empty labels
+                .map(tag => `<span class="task-label-badge">${tag}</span>`)
+                .join('') || 'No labels';
+
             taskCard.innerHTML = `
                 <div class="task-selection-checkbox-wrapper absolute top-2 left-2 z-20 hidden">
                     <input type="checkbox" class="task-select-checkbox h-5 w-5 text-[var(--color-accent)] border-[var(--color-ui-border)] rounded focus:ring-[var(--color-accent)] focus:ring-offset-0">
@@ -931,148 +1598,907 @@
                 </div>
                 <div class="edit-form">
                     <textarea class="edit-text">${text}</textarea>
-                    <div><label for="edit-priority-${id}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Priority:</label> <select class="edit-priority input-field-custom" id="edit-priority-${id}"> <option value="low" ${priority === 'low' ? 'selected' : ''}>Low</option> <option value="medium" ${priority === 'medium' ? 'selected' : ''}>Medium</option> <option value="high" ${priority === 'high' ? 'selected' : ''}>High</option> </select> </div>
-                    <div><label for="edit-duedate-${id}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Due Date:</label> <input type="date" class="edit-duedate input-field-custom" id="edit-duedate-${id}" value="${displayDueDate}"> </div>
-                    <div><label for="edit-labels-${id}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Labels (comma-sep):</label> <input type="text" class="edit-labels input-field-custom" placeholder="e.g., Bug, Feature" id="edit-labels-${id}" value="${labels || ''}"> </div>
-                    <div class="edit-buttons"> <button class="task-card-action-btn save-btn"><i class="fas fa-check mr-1"></i> Save</button> <button class="task-card-action-btn cancel-btn"><i class="fas fa-times mr-1"></i> Cancel</button> </div>
+                    <div><label for="edit-priority-${id}" class="block text-sm font-medium mb-1" style="color: var(--color-text-secondary);">Priority:</label>
+                         <select class="edit-priority input-field-custom !py-2 !text-sm" id="edit-priority-${id}">
+                            <option value="low" ${priority === 'low' ? 'selected' : ''}>Low</option>
+                            <option value="medium" ${priority === 'medium' ? 'selected' : ''}>Medium</option>
+                            <option value="high" ${priority === 'high' ? 'selected' : ''}>High</option>
+                         </select>
+                    </div>
+                    <div><label for="edit-duedate-${id}" class="block text-sm font-medium mb-1" style="color: var(--color-text-secondary);">Due Date:</label>
+                         <input type="date" class="edit-duedate input-field-custom !py-2 !text-sm" id="edit-duedate-${id}" value="${displayDueDate}">
+                    </div>
+                    <div><label for="edit-labels-${id}" class="block text-sm font-medium mb-1" style="color: var(--color-text-secondary);">Labels (comma-sep):</label>
+                         <input type="text" class="edit-labels input-field-custom !py-2 !text-sm" placeholder="e.g., Bug, Feature" id="edit-labels-${id}" value="${labels || ''}">
+                    </div>
+                    <div class="edit-buttons">
+                        <button class="task-card-action-btn save-btn"><i class="fas fa-check mr-1"></i> Save</button>
+                        <button class="task-card-action-btn cancel-btn"><i class="fas fa-times mr-1"></i> Cancel</button>
+                    </div>
                 </div>
-                <div class="task-actions"> <button class="archive-btn" title="Archive task"><i class="fas fa-archive"></i></button> <button class="delete-btn" title="Delete task"><i class="fas fa-trash-alt"></i></button> <button class="edit-btn" title="Edit task"><i class="fas fa-edit"></i></button> </div>`;
-            const checkboxWrapper = taskCard.querySelector('.task-selection-checkbox-wrapper'); const checkbox = taskCard.querySelector('.task-select-checkbox');
-            if (checkbox) { checkbox.addEventListener('change', (event) => handleTaskCheckboxChange(event, String(id))); }
-            if (isSelectionModeActive && checkboxWrapper) { checkboxWrapper.classList.remove('hidden'); }
-            const taskActionsDiv = taskCard.querySelector('.task-actions'); if (isSelectionModeActive && taskActionsDiv) { taskActionsDiv.style.display = 'none'; }
-            taskCard.addEventListener('dragstart', handleDragStart); taskCard.addEventListener('dragend', handleDragEnd); return taskCard;
+                <div class="task-actions">
+                    <button class="archive-btn" title="Archive task"><i class="fas fa-archive"></i></button>
+                    <button class="delete-btn" title="Delete task"><i class="fas fa-trash-alt"></i></button>
+                    <button class="edit-btn" title="Edit task"><i class="fas fa-edit"></i></button>
+                </div>`;
+
+            const checkboxWrapper = taskCard.querySelector('.task-selection-checkbox-wrapper');
+            const checkbox = taskCard.querySelector('.task-select-checkbox');
+            if (checkbox) {
+                checkbox.addEventListener('change', (event) => handleTaskCheckboxChange(event, String(id)));
+            }
+            // If selection mode is active when card is created, show checkbox
+            if (isSelectionModeActive && checkboxWrapper) {
+                checkboxWrapper.classList.remove('hidden');
+            }
+            // If selection mode is active, hide regular actions
+            const taskActionsDiv = taskCard.querySelector('.task-actions');
+            if (isSelectionModeActive && taskActionsDiv) {
+                taskActionsDiv.style.display = 'none';
+            }
+
+
+            taskCard.addEventListener('dragstart', handleDragStart);
+            taskCard.addEventListener('dragend', handleDragEnd);
+            // Click listener for expand/collapse is now delegated to tasks-container
+            return taskCard;
         }
+
         async function handleTaskActionDelegation(event) {
-            if (isSelectionModeActive && (event.target.classList.contains('task-select-checkbox') || event.target.closest('.task-selection-checkbox-wrapper'))) { return; }
-            const taskCard = event.target.closest('.task-card'); if (!taskCard) return;
-            const isArchiveBtn = event.target.closest('.archive-btn'); const isDeleteBtn = event.target.closest('.delete-btn'); const isEditBtn = event.target.closest('.edit-btn'); const isSaveBtn = event.target.closest('.save-btn'); const isCancelBtn = event.target.closest('.cancel-btn');
-            if (isArchiveBtn) { event.stopPropagation(); const taskTextPreview = taskCard.querySelector('.task-description')?.textContent.substring(0,50) + "..." || "this task"; showCustomConfirm( 'Archive Task', `Are you sure you want to archive task: "<strong>${taskTextPreview.replace(/"/g, '&quot;')}</strong>"?`, async () => { try { const { data, responseOk } = await fetchAPI('/tasks_api.php', 'PUT', { id: taskCard.id, is_archived: true }); if (responseOk && data.success) { taskCard.classList.add('removing'); taskCard.addEventListener('animationend', () => { taskCard.remove(); updateProgressStats(); filterTasks(); }, { once: true }); } else { alert("Failed to archive task: " + (data.error || "Server error.")); } } catch (error) { alert("Error archiving task: " + error.message); } }); }
-            else if (isDeleteBtn) { event.stopPropagation(); const textElement = taskCard.querySelector('.task-description'); const taskTextPreview = textElement ? textElement.textContent.substring(0, 50) + (textElement.textContent.length > 50 ? "..." : "") : "this task"; showCustomConfirm( 'Delete Task', `Are you sure you want to delete task: "<strong>${taskTextPreview.replace(/"/g, '&quot;')}</strong>"?`, async () => { try { const { data, responseOk } = await fetchAPI(`/tasks_api.php?id=${taskCard.id}`, 'DELETE'); if (responseOk && data.success) { taskCard.classList.add('removing'); taskCard.addEventListener('animationend', () => { taskCard.remove(); updateProgressStats(); filterTasks(); }, { once: true }); } else alert("Failed to delete task: " + (data.error || "Server error.")); } catch (error) { alert("Error deleting task: " + error.message); } }); }
-            else if (isEditBtn) { event.stopPropagation(); taskCard.classList.add('editing'); const editForm = taskCard.querySelector('.edit-form'); const editTextElement = editForm?.querySelector('.edit-text'); if (editTextElement) editTextElement.focus(); }
-            else if (isSaveBtn) { event.stopPropagation(); const editForm = taskCard.querySelector('.edit-form'); if (editForm) await handleSaveTaskEdit(taskCard, editForm, isSaveBtn); }
-            else if (isCancelBtn) { event.stopPropagation(); taskCard.classList.remove('editing'); }
-            else if (!event.target.closest('.task-actions') && !taskCard.classList.contains('editing') && !isSelectionModeActive) { if (Date.now() - lastDragEnd < DRAG_CLICK_THRESHOLD) return; taskCard.classList.toggle('expanded'); }
-        }
-        async function handleSaveTaskEdit(taskCard, editForm, saveEditButton) {
-            setButtonLoadingState(saveEditButton, true, 'Saving...');
-            const newText = editForm.querySelector('.edit-text').value.trim(); const newPriority = editForm.querySelector('.edit-priority').value; const newDueDateRaw = editForm.querySelector('.edit-duedate').value; const newLabels = editForm.querySelector('.edit-labels').value.trim();
-            if (!newText) { alert("Task description cannot be empty!"); const editTextEl = editForm.querySelector('.edit-text'); if (editTextEl) editTextEl.focus(); setButtonLoadingState(saveEditButton, false); return; }
-            const updatedTaskData = { id: taskCard.id, text: newText, priority: newPriority, dueDate: newDueDateRaw || null, labels: newLabels };
-            try { const { data, responseOk } = await fetchAPI('/tasks_api.php', 'PUT', updatedTaskData);
-                if (responseOk && data.success) {
-                    const taskDescriptionEl = taskCard.querySelector('.task-description'); if (taskDescriptionEl) taskDescriptionEl.textContent = newText;
-                    taskCard.classList.remove('priority-low', 'priority-medium', 'priority-high'); taskCard.classList.add(`priority-${newPriority}`);
-                    const prioritySpanElement = taskCard.querySelector('.task-meta > span:first-child'); if (prioritySpanElement) { prioritySpanElement.innerHTML = `<i class="fas fa-flag"></i> Priority: <strong class="priority-${newPriority}-text">${newPriority.charAt(0).toUpperCase() + newPriority.slice(1)}</strong>`; } else { console.error("Could not find the priority span element to update for task ID:", taskCard.id); }
-                    const dueDateInfo = getDueDateDisplay(newDueDateRaw); const dueDateElement = taskCard.querySelector('.task-meta > span:nth-child(2)'); if (dueDateElement) { dueDateElement.className = ''; dueDateElement.classList.add(dueDateInfo.class || 'normal-date-text'); dueDateElement.innerHTML = `<i class="fas fa-calendar-alt"></i> ${dueDateInfo.iconClass ? `<i class="${dueDateInfo.iconClass} mr-1"></i>` : ''}${dueDateInfo.text || 'Not set'}`; } else { console.error("Could not find the due date span element to update for task ID:", taskCard.id); }
-                    const labelsContainer = taskCard.querySelector('.task-meta .task-labels-container'); if (labelsContainer) { labelsContainer.innerHTML = `<i class="fas fa-tags"></i> ` + (newLabels.split(',').map(l => l.trim()).filter(l => l).map(tag => `<span class="task-label-badge">${tag}</span>`).join('') || 'No labels'); } else { console.error("Could not find the labels container element to update for task ID:", taskCard.id); }
-                    taskCard.dataset.priority = newPriority; taskCard.dataset.duedate = newDueDateRaw || ''; taskCard.dataset.labels = newLabels;
-                    taskCard.classList.remove('editing'); if (!taskCard.classList.contains('expanded')) taskCard.classList.add('expanded');
-                    updateProgressStats(); filterTasks();
-                } else alert("Failed to update task: " + (data.error || "Server error."));
-            } catch (error) { alert("Error updating task: " + error.message); } finally { setButtonLoadingState(saveEditButton, false); }
-        }
-        async function addTask() {
-            if (!taskInput?.value.trim()) { toggleErrorElement(taskErrorMessageElement, true, "Oops! Please add a task description."); taskInput?.focus(); return; }
-            toggleErrorElement(taskErrorMessageElement, false); setButtonLoadingState(addTaskBtn, true, 'Adding...');
-            try { const { data, responseOk } = await fetchAPI('/tasks_api.php', 'POST', { text: taskInput.value.trim(), priority: 'low', dueDate: null, labels: '', columnId: 'todo' });
-                if (responseOk && data.success && data.task) { const newTaskCard = createTaskCard(data.task); newTaskCard.classList.add('new-task-pop'); newTaskCard.addEventListener('animationend', () => { newTaskCard.classList.remove('new-task-pop'); }, { once: true }); todoColumnTasks?.appendChild(newTaskCard); taskInput.value = ''; updateProgressStats(); filterTasks(); }
-                else alert("Failed to add task: " + (data.error || "Server error"));
-            } catch (error) { alert("Error adding task: " + error.message); } finally { setButtonLoadingState(addTaskBtn, false); }
-        }
-        let draggedElement = null;
-        function handleDragStart(event) {
-            if (event.target.classList.contains('editing') || isSelectionModeActive) { event.preventDefault(); return; }
-            event.target.classList.remove('expanded'); draggedElement = event.target; event.dataTransfer.setData('text/plain', event.target.id); event.dataTransfer.effectAllowed = 'move'; setTimeout(() => draggedElement?.classList.add('dragging'), 0);
-        }
-        function handleDragEnd() { draggedElement?.classList.remove('dragging'); draggedElement = null; lastDragEnd = Date.now(); columnsTasksContainers?.forEach(c => c.classList.remove('drag-over')); }
-        function handleDragOver(event) { if(isSelectionModeActive) return; event.preventDefault(); event.dataTransfer.dropEffect = 'move'; event.target.closest('.tasks-container')?.classList.add('drag-over'); }
-        function handleDragLeave(event) { const tc = event.target.closest('.tasks-container'); if (tc) { const r = tc.getBoundingClientRect(); if (event.clientX < r.left || event.clientX >= r.right || event.clientY < r.top || event.clientY >= r.bottom) tc.classList.remove('drag-over'); } }
-        async function handleDrop(event) {
-            if(isSelectionModeActive) return; event.preventDefault(); columnsTasksContainers?.forEach(c => c.classList.remove('drag-over'));
-            const id = event.dataTransfer.getData('text/plain'); const draggableEl = document.getElementById(id); const targetDropZone = event.target.closest('.tasks-container');
-            if (draggableEl && targetDropZone) {
-                const originalColumnId = draggableEl.dataset.column; const targetColumnId = targetDropZone.parentElement.id; let beforeElement = null;
-                const cardsInZone = Array.from(targetDropZone.querySelectorAll('.task-card:not(.dragging)'));
-                for (const child of cardsInZone) { const rect = child.getBoundingClientRect(); if (event.clientY < rect.top + rect.height / 2) { beforeElement = child; break; } }
-                const oldParent = draggableEl.parentElement; targetDropZone.insertBefore(draggableEl, beforeElement); draggableEl.dataset.column = targetColumnId;
-                if (targetColumnId === 'done' && originalColumnId !== 'done') { draggableEl.classList.add('task-completed-burst'); draggableEl.addEventListener('animationend', () => { draggableEl.classList.remove('task-completed-burst'); }, { once: true }); }
-                const tasksToUpdatePayload = [];
-                Array.from(targetDropZone.querySelectorAll('.task-card')).forEach((card, index) => { tasksToUpdatePayload.push({ id: card.id, column_id: targetColumnId, sort_order: index }); card.dataset.sortOrder = index; });
-                if(originalColumnId && originalColumnId !== targetColumnId && oldParent && oldParent.classList.contains('tasks-container')){ Array.from(oldParent.querySelectorAll('.task-card')).forEach((card, index) => { if(!tasksToUpdatePayload.find(t => t.id === card.id)) { tasksToUpdatePayload.push({ id: card.id, column_id: originalColumnId, sort_order: index }); card.dataset.sortOrder = index; } }); }
-                const uniqueTasksToUpdate = Array.from(new Map(tasksToUpdatePayload.map(task => [task.id, task])).values());
-                if (uniqueTasksToUpdate.length > 0) { try { for (const taskData of uniqueTasksToUpdate) { const payload = { id: taskData.id, column_id: taskData.column_id, sort_order: taskData.sort_order }; const { data, responseOk } = await fetchAPI('/tasks_api.php', 'PUT', payload); if (!responseOk || !data.success) { console.error("Error updating task during drag&drop:", taskData.id, data?.error || "Server error."); } } await loadTasksFromServer(); } catch (error) { console.error('Error batch updating tasks after drag&drop:', error.message); await loadTasksFromServer(); } }
-                else { updateProgressStats(); filterTasks(); }
+            // If in selection mode, only checkbox clicks should be processed by its own handler
+            if (isSelectionModeActive && (event.target.classList.contains('task-select-checkbox') || event.target.closest('.task-selection-checkbox-wrapper'))) {
+                return; // Let checkbox handler do its work
+            }
+
+            const taskCard = event.target.closest('.task-card');
+            if (!taskCard) return;
+
+            const isArchiveBtn = event.target.closest('.archive-btn');
+            const isDeleteBtn = event.target.closest('.delete-btn');
+            const isEditBtn = event.target.closest('.edit-btn');
+            const isSaveBtn = event.target.closest('.save-btn');
+            const isCancelBtn = event.target.closest('.cancel-btn');
+
+            if (isArchiveBtn) {
+                event.stopPropagation(); // Prevent card expand/collapse
+                const taskTextPreview = taskCard.querySelector('.task-description')?.textContent.substring(0,50) + "..." || "this task";
+                showCustomConfirm('Archive Task', `Are you sure you want to archive task: "<strong>${taskTextPreview.replace(/"/g, '&quot;')}</strong>"?`, async () => {
+                    try {
+                        const { data, responseOk } = await fetchAPI('/tasks_api.php', 'PUT', { id: taskCard.id, is_archived: true });
+                        if (responseOk && data.success) {
+                            taskCard.classList.add('removing');
+                            taskCard.addEventListener('animationend', () => {
+                                taskCard.remove();
+                                updateProgressStats(); // Update counts and progress
+                                filterTasks(); // Re-apply filter to update column empty messages
+                            }, { once: true });
+                        } else {
+                            alert("Failed to archive task: " + (data.error || "Server error."));
+                        }
+                    } catch (error) {
+                        alert("Error archiving task: " + error.message);
+                    }
+                });
+            } else if (isDeleteBtn) {
+                event.stopPropagation();
+                const textElement = taskCard.querySelector('.task-description');
+                const taskTextPreview = textElement ? textElement.textContent.substring(0, 50) + (textElement.textContent.length > 50 ? "..." : "") : "this task";
+                showCustomConfirm('Delete Task', `Are you sure you want to delete task: "<strong>${taskTextPreview.replace(/"/g, '&quot;')}</strong>"?`, async () => {
+                    try {
+                        const { data, responseOk } = await fetchAPI(`/tasks_api.php?id=${taskCard.id}`, 'DELETE');
+                        if (responseOk && data.success) {
+                            taskCard.classList.add('removing');
+                            taskCard.addEventListener('animationend', () => {
+                                taskCard.remove();
+                                updateProgressStats();
+                                filterTasks();
+                            }, { once: true });
+                        } else alert("Failed to delete task: " + (data.error || "Server error."));
+                    } catch (error) {
+                        alert("Error deleting task: " + error.message);
+                    }
+                });
+            } else if (isEditBtn) {
+                event.stopPropagation();
+                taskCard.classList.add('editing');
+                const editForm = taskCard.querySelector('.edit-form');
+                const editTextElement = editForm?.querySelector('.edit-text');
+                if (editTextElement) editTextElement.focus();
+            } else if (isSaveBtn) {
+                event.stopPropagation();
+                const editForm = taskCard.querySelector('.edit-form');
+                if (editForm) await handleSaveTaskEdit(taskCard, editForm, isSaveBtn); // Pass the button itself
+            } else if (isCancelBtn) {
+                event.stopPropagation();
+                taskCard.classList.remove('editing');
+                // Optionally, reset form fields to original values if needed, though not strictly necessary if not saved.
+            } else if (!event.target.closest('.task-actions') && !taskCard.classList.contains('editing') && !isSelectionModeActive) {
+                // Click on card itself (not actions, not in edit mode, not in selection mode)
+                if (Date.now() - lastDragEnd < DRAG_CLICK_THRESHOLD) return; // Ignore click if it was likely end of drag
+                taskCard.classList.toggle('expanded');
             }
         }
+
+
+        async function handleSaveTaskEdit(taskCard, editForm, saveEditButton) {
+            setButtonLoadingState(saveEditButton, true, 'Saving...'); // Use the passed button
+
+            const newText = editForm.querySelector('.edit-text').value.trim();
+            const newPriority = editForm.querySelector('.edit-priority').value;
+            const newDueDateRaw = editForm.querySelector('.edit-duedate').value; // YYYY-MM-DD or empty
+            const newLabels = editForm.querySelector('.edit-labels').value.trim();
+
+            if (!newText) {
+                alert("Task description cannot be empty!");
+                const editTextEl = editForm.querySelector('.edit-text');
+                if(editTextEl) editTextEl.focus();
+                setButtonLoadingState(saveEditButton, false);
+                return;
+            }
+
+            const updatedTaskData = {
+                id: taskCard.id,
+                text: newText,
+                priority: newPriority,
+                dueDate: newDueDateRaw || null, // Send null if empty, backend should handle
+                labels: newLabels
+            };
+
+            try {
+                const { data, responseOk } = await fetchAPI('/tasks_api.php', 'PUT', updatedTaskData);
+                if (responseOk && data.success) {
+                    // Update card display directly
+                    const taskDescriptionEl = taskCard.querySelector('.task-description');
+                    if (taskDescriptionEl) taskDescriptionEl.textContent = newText;
+
+                    taskCard.classList.remove('priority-low', 'priority-medium', 'priority-high');
+                    taskCard.classList.add(`priority-${newPriority}`);
+
+                    const prioritySpanElement = taskCard.querySelector('.task-meta > span:first-child');
+                    if(prioritySpanElement) {
+                        prioritySpanElement.innerHTML = `<i class="fas fa-flag"></i> Priority: <strong class="priority-${newPriority}-text">${newPriority.charAt(0).toUpperCase() + newPriority.slice(1)}</strong>`;
+                    } else { console.error("Could not find the priority span element to update for task ID:", taskCard.id); }
+
+
+                    const dueDateInfo = getDueDateDisplay(newDueDateRaw); // newDueDateRaw is YYYY-MM-DD
+                    const dueDateElement = taskCard.querySelector('.task-meta > span:nth-child(2)');
+                    if(dueDateElement){
+                        dueDateElement.className = ''; // Clear existing color classes
+                        dueDateElement.classList.add(dueDateInfo.class || 'normal-date-text');
+                        dueDateElement.innerHTML = `<i class="fas fa-calendar-alt"></i> ${dueDateInfo.iconClass ? `<i class="${dueDateInfo.iconClass} mr-1"></i>` : ''}${dueDateInfo.text || 'Not set'}`;
+                    } else { console.error("Could not find the due date span element to update for task ID:", taskCard.id); }
+
+
+                    const labelsContainer = taskCard.querySelector('.task-meta .task-labels-container');
+                    if(labelsContainer){
+                        labelsContainer.innerHTML = `<i class="fas fa-tags"></i> ` +
+                            (newLabels.split(',').map(l => l.trim()).filter(l => l)
+                                .map(tag => `<span class="task-label-badge">${tag}</span>`).join('') || 'No labels');
+                    } else { console.error("Could not find the labels container element to update for task ID:", taskCard.id); }
+
+
+                    // Update dataset attributes for filtering/sorting
+                    taskCard.dataset.priority = newPriority;
+                    taskCard.dataset.duedate = newDueDateRaw || '';
+                    taskCard.dataset.labels = newLabels;
+
+                    taskCard.classList.remove('editing');
+                    if (!taskCard.classList.contains('expanded')) taskCard.classList.add('expanded'); // Auto-expand after edit
+                    updateProgressStats(); // Update overall stats and chart
+                    filterTasks(); // Re-apply search filter if active
+                } else {
+                    alert("Failed to update task: " + (data.error || "Server error."));
+                }
+            } catch (error) {
+                alert("Error updating task: " + error.message);
+            } finally {
+                setButtonLoadingState(saveEditButton, false);
+            }
+        }
+
+
+        async function addTask() {
+            if (!taskInput?.value.trim()) {
+                toggleErrorElement(taskErrorMessageElement, true, "Oops! Please add a task description.");
+                taskInput?.focus();
+                return;
+            }
+            toggleErrorElement(taskErrorMessageElement, false);
+            setButtonLoadingState(addTaskBtn, true, 'Adding...');
+
+            try {
+                // Send null for dueDate and empty string for labels for new tasks by default
+                const { data, responseOk } = await fetchAPI('/tasks_api.php', 'POST', {
+                    text: taskInput.value.trim(),
+                    priority: 'low', // Default priority
+                    dueDate: null,
+                    labels: '',
+                    columnId: 'todo' // New tasks go to 'todo'
+                });
+
+                if (responseOk && data.success && data.task) {
+                    const newTaskCard = createTaskCard(data.task);
+                    newTaskCard.classList.add('new-task-pop');
+                    newTaskCard.addEventListener('animationend', () => {
+                        newTaskCard.classList.remove('new-task-pop');
+                    }, { once: true });
+
+                    todoColumnTasks?.appendChild(newTaskCard); // Add to 'To Do' column
+                    taskInput.value = ''; // Clear input
+                    updateProgressStats();
+                    filterTasks(); // Ensure new task is visible if it matches filter
+                } else {
+                    alert("Failed to add task: " + (data.error || "Server error"));
+                }
+            } catch (error) {
+                alert("Error adding task: " + error.message);
+            } finally {
+                setButtonLoadingState(addTaskBtn, false);
+            }
+        }
+
+
+        let draggedElement = null;
+        function handleDragStart(event) {
+            if (event.target.classList.contains('editing') || isSelectionModeActive) {
+                event.preventDefault(); return; // Prevent drag if editing or in selection mode
+            }
+            event.target.classList.remove('expanded'); // Collapse card on drag start for better UX
+            draggedElement = event.target;
+            event.dataTransfer.setData('text/plain', event.target.id);
+            event.dataTransfer.effectAllowed = 'move';
+            setTimeout(() => draggedElement?.classList.add('dragging'), 0); // Add dragging class after a tick
+        }
+        function handleDragEnd() {
+            draggedElement?.classList.remove('dragging');
+            draggedElement = null;
+            lastDragEnd = Date.now(); // Record time for click vs drag differentiation
+            columnsTasksContainers?.forEach(c => c.classList.remove('drag-over'));
+        }
+        function handleDragOver(event) {
+            if(isSelectionModeActive) return;
+            event.preventDefault();
+            event.dataTransfer.dropEffect = 'move';
+            event.target.closest('.tasks-container')?.classList.add('drag-over');
+        }
+        function handleDragLeave(event) {
+            const tc = event.target.closest('.tasks-container');
+            if (tc) { // Only remove if leaving the actual container, not just an element inside it
+                const r = tc.getBoundingClientRect();
+                if (event.clientX < r.left || event.clientX >= r.right || event.clientY < r.top || event.clientY >= r.bottom) {
+                    tc.classList.remove('drag-over');
+                }
+            }
+        }
+        async function handleDrop(event) {
+            if(isSelectionModeActive) return;
+            event.preventDefault();
+            columnsTasksContainers?.forEach(c => c.classList.remove('drag-over'));
+
+            const id = event.dataTransfer.getData('text/plain');
+            const draggableEl = document.getElementById(id);
+            const targetDropZone = event.target.closest('.tasks-container');
+
+            if (draggableEl && targetDropZone) {
+                const originalColumnId = draggableEl.dataset.column;
+                const targetColumnId = targetDropZone.parentElement.id; // e.g., 'todo', 'inprogress', 'done'
+
+                // Determine insertion point (before which element)
+                let beforeElement = null;
+                const cardsInZone = Array.from(targetDropZone.querySelectorAll('.task-card:not(.dragging)'));
+                for (const child of cardsInZone) {
+                    const rect = child.getBoundingClientRect();
+                    if (event.clientY < rect.top + rect.height / 2) {
+                        beforeElement = child;
+                        break;
+                    }
+                }
+
+                const oldParent = draggableEl.parentElement;
+                targetDropZone.insertBefore(draggableEl, beforeElement); // Insert into new position
+                draggableEl.dataset.column = targetColumnId; // Update card's column attribute
+
+                // Burst animation if moved to 'Done'
+                if (targetColumnId === 'done' && originalColumnId !== 'done') {
+                    draggableEl.classList.add('task-completed-burst');
+                    draggableEl.addEventListener('animationend', () => {
+                        draggableEl.classList.remove('task-completed-burst');
+                    }, { once: true });
+                }
+
+                // Prepare payload for backend update (column and sort order)
+                // This needs to update ALL tasks in both the source (if different) and target columns
+                const tasksToUpdatePayload = [];
+
+                // Update sort order for target column
+                Array.from(targetDropZone.querySelectorAll('.task-card')).forEach((card, index) => {
+                    tasksToUpdatePayload.push({ id: card.id, column_id: targetColumnId, sort_order: index });
+                    card.dataset.sortOrder = index; // Update data attribute for consistency
+                });
+
+                // If task moved from a different column, update sort order for source column too
+                if(originalColumnId && originalColumnId !== targetColumnId && oldParent && oldParent.classList.contains('tasks-container')){
+                    Array.from(oldParent.querySelectorAll('.task-card')).forEach((card, index) => {
+                        // Avoid adding if already in payload (shouldn't happen if logic is correct)
+                        if(!tasksToUpdatePayload.find(t => t.id === card.id)) {
+                             tasksToUpdatePayload.push({ id: card.id, column_id: originalColumnId, sort_order: index });
+                             card.dataset.sortOrder = index;
+                        }
+                    });
+                }
+
+                // Remove duplicates if any (e.g., if a card was in payload from target and source logic overlaps)
+                // This step is more of a safeguard.
+                const uniqueTasksToUpdate = Array.from(new Map(tasksToUpdatePayload.map(task => [task.id, task])).values());
+
+
+                if (uniqueTasksToUpdate.length > 0) {
+                    try {
+                        // Send a batch update for all affected tasks if your API supports it,
+                        // or loop and send individual updates. Looping for now:
+                        for (const taskData of uniqueTasksToUpdate) {
+                            const payload = {
+                                id: taskData.id,
+                                column_id: taskData.column_id,
+                                sort_order: taskData.sort_order
+                            };
+                            // Don't await each one if you want faster UI, but risk data inconsistency if one fails.
+                            // For robustness, one might await or use Promise.all.
+                            const { data, responseOk } = await fetchAPI('/tasks_api.php', 'PUT', payload);
+                            if (!responseOk || !data.success) {
+                                console.error("Error updating task during drag&drop:", taskData.id, data?.error || "Server error.");
+                                // Potentially revert UI changes or notify user
+                            }
+                        }
+                        // After all updates, or if you prefer optimistic UI:
+                        // loadTasksFromServer(); // This re-fetches everything, might be too slow.
+                                           // Simpler to just update stats if individual updates are fine.
+                        updateProgressStats();
+                        filterTasks(); // Update column counts based on filters
+                    } catch (error) {
+                        console.error('Error batch updating tasks after drag&drop:', error.message);
+                        // Consider reverting UI or reloading all tasks for safety
+                        await loadTasksFromServer();
+                    }
+                } else {
+                    // If no tasks needed backend update (e.g. reordering within same empty column - unlikely)
+                    updateProgressStats();
+                    filterTasks();
+                }
+            }
+        }
+
+
         function updateColumnVisuals() {
-            const columnsMeta = [ { id: 'todo', container: todoColumnTasks, countEl: document.getElementById('todo-count'), emptyIcon: 'fas fa-seedling fa-5x', emptyText: "Ready for new ideas!" }, { id: 'inprogress', container: inprogressColumnTasks, countEl: document.getElementById('inprogress-count'), emptyIcon: 'fas fa-person-running fa-5x', emptyText: "Making progress!" }, { id: 'done', container: doneColumnTasks, countEl: document.getElementById('done-count'), emptyIcon: 'fas fa-trophy fa-5x', emptyText: "All done here!" } ];
+            const columnsMeta = [
+                { id: 'todo', container: todoColumnTasks, countEl: document.getElementById('todo-count'), emptyIcon: 'fas fa-seedling fa-5x', emptyText: "Ready for new ideas!" },
+                { id: 'inprogress', container: inprogressColumnTasks, countEl: document.getElementById('inprogress-count'), emptyIcon: 'fas fa-person-running fa-5x', emptyText: "Making progress!" },
+                { id: 'done', container: doneColumnTasks, countEl: document.getElementById('done-count'), emptyIcon: 'fas fa-trophy fa-5x', emptyText: "All done here!" }
+            ];
+
             columnsMeta.forEach(({ container, countEl, emptyIcon, emptyText }) => {
-                if (!container || !countEl) return; const visibleTasks = Array.from(container.children).filter(c => c.classList.contains('task-card') && !c.classList.contains('hidden-by-filter')); countEl.textContent = `(${visibleTasks.length})`;
-                let msgEl = container.querySelector('.empty-column-message'); if (visibleTasks.length === 0) { if (!msgEl) { msgEl = document.createElement('div'); msgEl.className = 'empty-column-message'; container.appendChild(msgEl); } msgEl.innerHTML = `<i class="${emptyIcon} mb-3 opacity-60"></i><p>${emptyText}</p>`; msgEl.style.display = 'flex'; } else if (msgEl) msgEl.style.display = 'none';
+                if (!container || !countEl) return; // Column might not be on the page or fully initialized
+
+                const visibleTasks = Array.from(container.children)
+                                         .filter(c => c.classList.contains('task-card') && !c.classList.contains('hidden-by-filter'));
+                countEl.textContent = `(${visibleTasks.length})`;
+
+                let msgEl = container.querySelector('.empty-column-message');
+                if (visibleTasks.length === 0) {
+                    if (!msgEl) {
+                        msgEl = document.createElement('div');
+                        msgEl.className = 'empty-column-message';
+                        container.appendChild(msgEl);
+                    }
+                    msgEl.innerHTML = `<i class="${emptyIcon} mb-3 opacity-60"></i><p>${emptyText}</p>`;
+                    msgEl.style.display = 'flex'; // Ensure it's visible
+                } else if (msgEl) {
+                    msgEl.style.display = 'none'; // Hide if tasks are present
+                }
             });
         }
+
+
         async function loadTasksFromServer() {
-            if (!views.kanban || views.kanban.classList.contains('view-hidden') || !columnsTasksContainers) return;
-            try { const { data: tasksByColumnData, responseOk, status } = await fetchAPI('/tasks_api.php?archived=false');
-                if (!responseOk) { if (status === 401) navigateTo('login'); console.error("Failed to load tasks from server, status:", status, tasksByColumnData); return; }
-                columnsTasksContainers.forEach(container => container.innerHTML = '');
-                if (!tasksByColumnData || typeof tasksByColumnData !== 'object' || !(tasksByColumnData.hasOwnProperty('todo') && tasksByColumnData.hasOwnProperty('inprogress') && tasksByColumnData.hasOwnProperty('done')) ) { console.error("Invalid task data structure received for active tasks:", tasksByColumnData); updateColumnVisuals(); return; }
-                Object.entries(tasksByColumnData).forEach(([columnKey, tasks]) => { const columnEl = document.getElementById(columnKey)?.querySelector('.tasks-container'); if (columnEl && Array.isArray(tasks)) { tasks.sort((a, b) => (Number(a.sort_order) || 0) - (Number(b.sort_order) || 0)) .forEach(taskData => { if (taskData.is_archived === 0 || taskData.is_archived === false) { try { columnEl.appendChild(createTaskCard(taskData)); } catch (e) { console.error("Error creating/appending card:", e, taskData); } } else { console.warn("Archived task received in active tasks load:", taskData); } }); } });
-                filterTasks(); updateProgressStats();
-            } catch (error) { console.error("Error loading tasks:", error.message); }
+            if (!views.kanban || views.kanban.classList.contains('view-hidden') || !columnsTasksContainers) {
+                return; // Don't load if Kanban view is not active or containers not found
+            }
+            try {
+                const { data: tasksByColumnData, responseOk, status } = await fetchAPI('/tasks_api.php?archived=false');
+
+                if (!responseOk) {
+                    if (status === 401) { // Unauthorized, session likely expired
+                        navigateTo('login');
+                    }
+                    console.error("Failed to load tasks from server, status:", status, tasksByColumnData);
+                    // Optionally, display an error message on the board
+                    return;
+                }
+
+                columnsTasksContainers.forEach(container => container.innerHTML = ''); // Clear columns before repopulating
+
+                // Ensure the data structure is as expected
+                if (!tasksByColumnData || typeof tasksByColumnData !== 'object' ||
+                    !(tasksByColumnData.hasOwnProperty('todo') && tasksByColumnData.hasOwnProperty('inprogress') && tasksByColumnData.hasOwnProperty('done')) ) {
+                    console.error("Invalid task data structure received for active tasks:", tasksByColumnData);
+                    updateColumnVisuals(); // Update visuals even if data is bad/empty
+                    return;
+                }
+
+
+                Object.entries(tasksByColumnData).forEach(([columnKey, tasks]) => {
+                    const columnEl = document.getElementById(columnKey)?.querySelector('.tasks-container');
+                    if (columnEl && Array.isArray(tasks)) {
+                        tasks
+                            .sort((a, b) => (Number(a.sort_order) || 0) - (Number(b.sort_order) || 0)) // Sort by sort_order
+                            .forEach(taskData => {
+                                // Ensure only non-archived tasks are processed here
+                                if (taskData.is_archived === 0 || taskData.is_archived === false) {
+                                    try {
+                                        columnEl.appendChild(createTaskCard(taskData));
+                                    } catch (e) {
+                                        console.error("Error creating/appending card:", e, taskData);
+                                    }
+                                } else {
+                                    console.warn("Archived task received in active tasks load:", taskData);
+                                }
+                            });
+                    }
+                });
+                filterTasks(); // Apply search filter if any
+                updateProgressStats(); // Update progress bar and counts
+
+            } catch (error) { // Catch errors from fetchAPI itself (network, etc.)
+                console.error("Error loading tasks:", error.message);
+                if (error.status === 401) navigateTo('login');
+                // You might want to show a user-friendly error on the board
+            }
         }
-        let RcsCache = {}; function getRootCssVariable(varName) { return RcsCache[varName] || (RcsCache[varName] = getComputedStyle(document.documentElement).getPropertyValue(varName).trim()); } function clearRootCssCache() { RcsCache = {}; }
+
+
+        let RcsCache = {}; // Root CSS Variable Cache
+        function getRootCssVariable(varName) {
+            return RcsCache[varName] || (RcsCache[varName] = getComputedStyle(document.documentElement).getPropertyValue(varName).trim());
+        }
+        function clearRootCssCache() { RcsCache = {}; } // Call this on theme change
+
         function renderOrUpdatePriorityDistributionChart() {
-            const chartCanvas = document.getElementById('priorityDistributionChart'); const kanbanViewIsVisible = views.kanban && !views.kanban.classList.contains('view-hidden');
-            if (!chartCanvas || !kanbanViewIsVisible) { if (myPriorityDistributionChart) { myPriorityDistributionChart.destroy(); myPriorityDistributionChart = null; } const chartSection = document.getElementById('charts-section'); if(chartSection) chartSection.style.display = 'none'; return; }
-            const ctx = chartCanvas.getContext('2d'); if (!ctx) return; let allVisibleTasks = []; if (columnsTasksContainers && columnsTasksContainers.length > 0 ) { columnsTasksContainers.forEach(cont => allVisibleTasks.push(...Array.from(cont.querySelectorAll('.task-card:not(.hidden-by-filter)')))); }
-            const priorityCounts = allVisibleTasks.reduce((acc, task) => { const priority = task.dataset.priority || 'low'; if (!acc[priority]) acc[priority] = 0; acc[priority]++; return acc; }, { low: 0, medium: 0, high: 0 });
-            const chartDataValues = [priorityCounts.low, priorityCounts.medium, priorityCounts.high]; const totalTasksForChart = chartDataValues.reduce((a, b) => a + b, 0);
-            const chartSection = document.getElementById('charts-section'); if (!chartSection) return; if (totalTasksForChart === 0) { if (myPriorityDistributionChart) { myPriorityDistributionChart.destroy(); myPriorityDistributionChart = null; } chartSection.style.display = 'none'; return; } else { chartSection.style.display = 'block'; }
-            const isDarkMode = document.body.classList.contains('dark-mode'); const colors = { primary: getRootCssVariable('--color-text-primary'), secondary: getRootCssVariable('--color-text-secondary'), low: getRootCssVariable('--color-priority-low'), medium: getRootCssVariable('--color-priority-medium'), high: getRootCssVariable('--color-priority-high'), border: getRootCssVariable(isDarkMode ? '--color-bg-page-start' : '--color-card-bg'), hoverBorder: isDarkMode ? '#FFFFFF' : '#333333' };
-            const segmentColors = [colors.low, colors.medium, colors.high]; const segmentHoverColors = segmentColors.map(c => Chart.helpers.color(c).darken(0.1).rgbString());
-            const chartConfig = { type: 'doughnut', data: { labels: ['Low', 'Medium', 'High Priority'], datasets: [{ data: chartDataValues, backgroundColor: segmentColors, hoverBackgroundColor: segmentHoverColors, borderColor: colors.border, borderWidth: 2, hoverBorderColor: colors.hoverBorder }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '60%', plugins: { title: { display: true, text: 'Task Priority Distribution', color: colors.primary, font: { size: 16, family: "'Poppins',sans-serif" }, padding: { bottom: 15 } }, legend: { position: 'bottom', labels: { color: colors.secondary, font: { family: "'Inter',sans-serif" }, padding: 15 } }, tooltip: { titleFont: { family: "'Poppins',sans-serif" }, bodyFont: { family: "'Inter',sans-serif" }, callbacks: { label: ctx => `${ctx.label || ''}: ${ctx.parsed} (${totalTasksForChart > 0 ? (ctx.parsed / totalTasksForChart * 100).toFixed(1) : 0}%)` } } } } };
-            if (myPriorityDistributionChart) { myPriorityDistributionChart.data.datasets[0].data = chartDataValues; myPriorityDistributionChart.data.datasets[0].backgroundColor = segmentColors; myPriorityDistributionChart.data.datasets[0].hoverBackgroundColor = segmentHoverColors; myPriorityDistributionChart.data.datasets[0].borderColor = colors.border; myPriorityDistributionChart.options.plugins.title.color = colors.primary; myPriorityDistributionChart.options.plugins.legend.labels.color = colors.secondary; myPriorityDistributionChart.update(); } else { myPriorityDistributionChart = new Chart(ctx, chartConfig); }
+            const chartCanvas = document.getElementById('priorityDistributionChart');
+            const kanbanViewIsVisible = views.kanban && !views.kanban.classList.contains('view-hidden');
+
+            if (!chartCanvas || !kanbanViewIsVisible) {
+                if (myPriorityDistributionChart) {
+                    myPriorityDistributionChart.destroy();
+                    myPriorityDistributionChart = null;
+                }
+                const chartSection = document.getElementById('charts-section');
+                if(chartSection) chartSection.style.display = 'none'; // Hide section if no chart
+                return;
+            }
+
+            const ctx = chartCanvas.getContext('2d');
+            if (!ctx) return; // Canvas context not available
+
+            let allVisibleTasks = [];
+            if (columnsTasksContainers && columnsTasksContainers.length > 0 ) {
+                columnsTasksContainers.forEach(cont => allVisibleTasks.push(...Array.from(cont.querySelectorAll('.task-card:not(.hidden-by-filter)'))));
+            }
+
+            const priorityCounts = allVisibleTasks.reduce((acc, task) => {
+                const priority = task.dataset.priority || 'low';
+                if (!acc[priority]) acc[priority] = 0;
+                acc[priority]++;
+                return acc;
+            }, { low: 0, medium: 0, high: 0 }); // Initialize all to 0
+
+            const chartDataValues = [priorityCounts.low, priorityCounts.medium, priorityCounts.high];
+            const totalTasksForChart = chartDataValues.reduce((a, b) => a + b, 0);
+
+            const chartSection = document.getElementById('charts-section');
+            if (!chartSection) return;
+
+            if (totalTasksForChart === 0) { // No tasks to show in chart
+                if (myPriorityDistributionChart) {
+                    myPriorityDistributionChart.destroy();
+                    myPriorityDistributionChart = null;
+                }
+                chartSection.style.display = 'none'; // Hide the entire chart section
+                return;
+            } else {
+                chartSection.style.display = 'block'; // Show section if there's data
+            }
+
+            // Get theme-dependent colors
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            const colors = {
+                primary: getRootCssVariable('--color-text-primary'),
+                secondary: getRootCssVariable('--color-text-secondary'),
+                low: getRootCssVariable('--color-priority-low'),
+                medium: getRootCssVariable('--color-priority-medium'),
+                high: getRootCssVariable('--color-priority-high'),
+                border: getRootCssVariable(isDarkMode ? '--color-bg-page-start' : '--color-card-bg'), // Doughnut segment border
+                hoverBorder: isDarkMode ? '#FFFFFF' : '#333333' // Doughnut segment hover border
+            };
+
+            const segmentColors = [colors.low, colors.medium, colors.high];
+            const segmentHoverColors = segmentColors.map(c => Chart.helpers.color(c).darken(0.1).rgbString());
+
+            const chartConfig = {
+                type: 'doughnut',
+                data: {
+                    labels: ['Low', 'Medium', 'High Priority'],
+                    datasets: [{
+                        data: chartDataValues,
+                        backgroundColor: segmentColors,
+                        hoverBackgroundColor: segmentHoverColors,
+                        borderColor: colors.border,
+                        borderWidth: 2,
+                        hoverBorderColor: colors.hoverBorder
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '60%',
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Task Priority Distribution',
+                            color: colors.primary,
+                            font: { size: 16, family: "'Poppins',sans-serif" },
+                            padding: { bottom: 15 }
+                        },
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: colors.secondary,
+                                font: { family: "'Inter',sans-serif" },
+                                padding: 15
+                            }
+                        },
+                        tooltip: {
+                            titleFont: { family: "'Poppins',sans-serif" },
+                            bodyFont: { family: "'Inter',sans-serif" },
+                            callbacks: {
+                                label: ctx => `${ctx.label || ''}: ${ctx.parsed} (${totalTasksForChart > 0 ? (ctx.parsed / totalTasksForChart * 100).toFixed(1) : 0}%)`
+                            }
+                        }
+                    }
+                }
+            };
+
+            if (myPriorityDistributionChart) { // Update existing chart
+                myPriorityDistributionChart.data.datasets[0].data = chartDataValues;
+                myPriorityDistributionChart.data.datasets[0].backgroundColor = segmentColors;
+                myPriorityDistributionChart.data.datasets[0].hoverBackgroundColor = segmentHoverColors;
+                myPriorityDistributionChart.data.datasets[0].borderColor = colors.border;
+                myPriorityDistributionChart.options.plugins.title.color = colors.primary;
+                myPriorityDistributionChart.options.plugins.legend.labels.color = colors.secondary;
+                myPriorityDistributionChart.update();
+            } else { // Create new chart
+                myPriorityDistributionChart = new Chart(ctx, chartConfig);
+            }
         }
+
         function setTheme(theme) {
-            clearRootCssCache(); document.body.classList.toggle('dark-mode', theme === 'dark'); sunIcon?.classList.toggle('hidden', theme === 'dark'); moonIcon?.classList.toggle('hidden', theme === 'light'); localStorage.setItem('strideKanbanTheme', theme);
-            const currentViewName = Object.keys(views).find(key => views[key] && !views[key].classList.contains('view-hidden')); if (currentViewName === 'kanban') { if (document.getElementById('priorityDistributionChart')) { renderOrUpdatePriorityDistributionChart(); } }
+            clearRootCssCache(); // Important for chart colors
+            document.body.classList.toggle('dark-mode', theme === 'dark');
+            sunIcon?.classList.toggle('hidden', theme === 'dark');
+            moonIcon?.classList.toggle('hidden', theme === 'light');
+            localStorage.setItem('strideKanbanTheme', theme);
+
+            // Re-render chart if Kanban view is active, as colors will have changed
+            const currentViewName = Object.keys(views).find(key => views[key] && !views[key].classList.contains('view-hidden'));
+            if (currentViewName === 'kanban') {
+                if (document.getElementById('priorityDistributionChart')) {
+                    renderOrUpdatePriorityDistributionChart();
+                }
+            }
         }
-        function loadThemePreference() { const savedTheme = localStorage.getItem('strideKanbanTheme') || (window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); setTheme(savedTheme); }
+
+        function loadThemePreference() {
+            const savedTheme = localStorage.getItem('strideKanbanTheme') ||
+                               (window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            setTheme(savedTheme);
+        }
+
         function updateProgressStats() {
-            if (!progressFill || !progressText || !progressMascot) return; updateColumnVisuals();
-            const counts = ['todo', 'inprogress', 'done'].map(id => { const col = document.getElementById(id); return col ? col.querySelectorAll('.task-card:not(.hidden-by-filter)').length : 0; });
-            const totalVisible = counts.reduce((a, b) => a + b, 0); const progress = totalVisible > 0 ? (counts[2] / totalVisible) * 100 : 0;
-            progressFill.style.width = `${progress}%`; progressText.textContent = `${Math.round(progress)}% Complete (Visible)`;
-            const mascotOffset = progress > 5 && progress < 95 ? -5 : 5; progressMascot.style.left = `calc(${progress}% + ${mascotOffset}px)`; progressMascot.style.display = (progress > 0 && progress < 100) ? 'block' : 'none';
-            if(document.getElementById('priorityDistributionChart') && !views.archive.classList.contains('view-hidden') === false) { renderOrUpdatePriorityDistributionChart(); }
+            if (!progressFill || !progressText || !progressMascot) return;
+            updateColumnVisuals(); // Update column counts and empty messages first
+
+            const counts = ['todo', 'inprogress', 'done'].map(id => {
+                const col = document.getElementById(id);
+                return col ? col.querySelectorAll('.task-card:not(.hidden-by-filter)').length : 0;
+            });
+            const totalVisible = counts.reduce((a, b) => a + b, 0);
+            const progress = totalVisible > 0 ? (counts[2] / totalVisible) * 100 : 0;
+
+            progressFill.style.width = `${progress}%`;
+            progressText.textContent = `${Math.round(progress)}% Complete (Visible)`;
+
+            // Adjust mascot position slightly so it doesn't sit exactly on the edge at 0% or 100%
+            const mascotOffset = progress > 5 && progress < 95 ? -5 : 5; //px
+            progressMascot.style.left = `calc(${progress}% + ${mascotOffset}px)`;
+            progressMascot.style.display = (progress > 0 && progress < 100) ? 'block' : 'none'; // Hide if 0% or 100%
+
+            // Update chart only if Kanban view is active
+            if(document.getElementById('priorityDistributionChart') && views.kanban && !views.kanban.classList.contains('view-hidden')) {
+                renderOrUpdatePriorityDistributionChart();
+            }
         }
+
         async function exportBoardAsJson() {
             toggleErrorElement(exportErrorMessageElement, false);
-            try { const { data: dataToExport, responseOk } = await fetchAPI('/tasks_api.php?archived=false'); if (!responseOk || Object.values(dataToExport).every(col => col.length === 0)) { toggleErrorElement(exportErrorMessageElement, true, "No active tasks to export!"); return; }
-                const blob = new Blob([JSON.stringify(dataToExport, null, 2)], { type: 'application/json' }); const url = URL.createObjectURL(blob); const a = Object.assign(document.createElement('a'), { href: url, download: `stride_kanban_export_${formatDate(new Date()).replace(/-/g, '')}.json` }); document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
-            } catch (e) { toggleErrorElement(exportErrorMessageElement, true, "Could not export tasks: " + e.message); }
+            try {
+                // Fetch only non-archived tasks for export
+                const { data: dataToExport, responseOk } = await fetchAPI('/tasks_api.php?archived=false');
+                if (!responseOk || (typeof dataToExport === 'object' && Object.values(dataToExport).every(col => Array.isArray(col) && col.length === 0))) {
+                    toggleErrorElement(exportErrorMessageElement, true, "No active tasks to export!");
+                    return;
+                }
+                const blob = new Blob([JSON.stringify(dataToExport, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = Object.assign(document.createElement('a'), {
+                    href: url,
+                    download: `stride_kanban_export_${formatDate(new Date()).replace(/-/g, '')}.json`
+                });
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            } catch (e) {
+                toggleErrorElement(exportErrorMessageElement, true, "Could not export tasks: " + e.message);
+            }
         }
+
         function printBoard() { window.print(); }
+
         function filterTasks() {
-            if (!searchTaskInput || !columnsTasksContainers) return; const searchTerm = searchTaskInput.value.toLowerCase().trim();
-            columnsTasksContainers.forEach(container => { container.querySelectorAll('.task-card').forEach(card => { const text = card.querySelector('.task-description')?.textContent.toLowerCase() || ''; const labels = card.dataset.labels?.toLowerCase() || ''; card.classList.toggle('hidden-by-filter', !(text.includes(searchTerm) || labels.includes(searchTerm))); }); });
-            updateProgressStats();
+            if (!searchTaskInput || !columnsTasksContainers) return;
+            const searchTerm = searchTaskInput.value.toLowerCase().trim();
+
+            columnsTasksContainers.forEach(container => {
+                container.querySelectorAll('.task-card').forEach(card => {
+                    const text = card.querySelector('.task-description')?.textContent.toLowerCase() || '';
+                    const labels = card.dataset.labels?.toLowerCase() || '';
+                    card.classList.toggle('hidden-by-filter', !(text.includes(searchTerm) || labels.includes(searchTerm)));
+                });
+            });
+            updateProgressStats(); // Recalculate progress based on visible tasks
         }
+
+
+        // --- Admin Dashboard Functions ---
+        function initializeAdminDashboardDOM() {
+            adminUserListTbody = document.getElementById('admin-user-list-tbody');
+            adminUsersErrorMessageElement = document.getElementById('admin-users-error-message');
+            adminBackToKanbanBtn = document.getElementById('admin-back-to-kanban-btn');
+            // sidebarLinkAdmin is already initialized in initializeSharedDOM
+
+            adminBackToKanbanBtn?.removeEventListener('click', () => navigateTo('kanban'));
+            adminBackToKanbanBtn?.addEventListener('click', () => navigateTo('kanban'));
+
+            adminUserListTbody?.removeEventListener('click', handleAdminUserAction);
+            adminUserListTbody?.addEventListener('click', handleAdminUserAction);
+        }
+
+        async function loadAdminUsers() {
+            if (!adminUserListTbody) { initializeAdminDashboardDOM(); if(!adminUserListTbody) return; }
+
+            adminUserListTbody.innerHTML = '<tr><td colspan="4" class="text-center p-4 text-[var(--color-text-muted)]">Loading users...</td></tr>';
+            toggleErrorElement(adminUsersErrorMessageElement, false);
+
+            try {
+                const { data, responseOk, status } = await fetchAPI('/admin_api.php?action=get_users', 'GET');
+                if (responseOk && data.success && Array.isArray(data.users)) {
+                    adminUserListTbody.innerHTML = ''; // Clear loading/error
+                    if (data.users.length === 0) {
+                        adminUserListTbody.innerHTML = '<tr><td colspan="4" class="text-center p-4 text-[var(--color-text-muted)]">No users found.</td></tr>';
+                    } else {
+                        data.users.forEach(user => {
+                            const row = adminUserListTbody.insertRow();
+                            row.insertCell().textContent = user.email;
+                            const isAdminCell = row.insertCell();
+                            isAdminCell.innerHTML = user.is_admin
+                                ? '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-700 dark:text-green-100">Yes</span>'
+                                : '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800 dark:bg-red-700 dark:text-red-100">No</span>';
+                            row.insertCell().textContent = new Date(user.created_at).toLocaleDateString();
+
+                            const actionsCell = row.insertCell();
+                            actionsCell.classList.add('space-x-2', 'whitespace-nowrap', 'text-right', 'px-6'); // Align actions to right
+
+                            const toggleAdminBtn = document.createElement('button');
+                            toggleAdminBtn.textContent = user.is_admin ? 'Demote' : 'Promote';
+                            toggleAdminBtn.title = user.is_admin ? 'Demote to User' : 'Promote to Admin';
+                            toggleAdminBtn.className = `btn btn-sm ${user.is_admin ? 'btn-neutral' : 'btn-secondary'} admin-toggle-btn`;
+                            toggleAdminBtn.dataset.userId = user.id;
+                            toggleAdminBtn.dataset.makeAdmin = user.is_admin ? 'false' : 'true';
+
+                            const deleteBtn = document.createElement('button');
+                            // deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i> Delete';
+                            deleteBtn.innerHTML = 'Delete'; // Simpler text for button
+                            deleteBtn.title = 'Delete User';
+                            deleteBtn.className = 'btn btn-sm btn-neutral admin-delete-btn !bg-red-500 hover:!bg-red-600 dark:!bg-red-600 dark:hover:!bg-red-700';
+                            deleteBtn.dataset.userId = user.id;
+                            deleteBtn.dataset.userEmail = user.email;
+
+                            // Disable actions on self (frontend UX, backend enforces this)
+                            const currentUserId = sessionStorage.getItem('current_user_id_from_session');
+                            if (String(user.id) === currentUserId) {
+                               toggleAdminBtn.disabled = true;
+                               toggleAdminBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                               deleteBtn.disabled = true;
+                               deleteBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                            }
+
+                            actionsCell.appendChild(toggleAdminBtn);
+                            actionsCell.appendChild(deleteBtn);
+                        });
+                    }
+                } else {
+                    if (status === 403) { // Forbidden, likely not an admin (or session issue)
+                        navigateTo('kanban'); // Or 'landing' if session is completely invalid
+                        alert("Access Denied: You do not have administrator privileges or your session is invalid.");
+                    } else {
+                        toggleErrorElement(adminUsersErrorMessageElement, true, data.error || 'Failed to load users.');
+                        adminUserListTbody.innerHTML = `<tr><td colspan="4" class="text-center p-4 text-[var(--color-warning-text)]">${data.error || 'Failed to load users.'}</td></tr>`;
+                    }
+                }
+            } catch (error) { // Catch errors from fetchAPI
+                toggleErrorElement(adminUsersErrorMessageElement, true, error.message || 'An error occurred while fetching users.');
+                adminUserListTbody.innerHTML = `<tr><td colspan="4" class="text-center p-4 text-[var(--color-warning-text)]">${error.message || 'An error occurred.'}</td></tr>`;
+                 if (error.status === 403) navigateTo('kanban'); // Or 'landing'
+            }
+        }
+
+        async function handleAdminUserAction(event) {
+            const targetButton = event.target.closest('button.btn'); // Target only buttons with 'btn' class
+            if (!targetButton || !targetButton.dataset.userId) return; // Ensure it's an action button with a userId
+
+            const userId = targetButton.dataset.userId;
+            const originalButtonText = targetButton.innerHTML; // Store original for restoring
+
+            if (targetButton.classList.contains('admin-toggle-btn')) {
+                const makeAdmin = targetButton.dataset.makeAdmin === 'true';
+                const actionText = makeAdmin ? 'promote to admin' : 'demote to regular user';
+                showCustomConfirm(
+                    `${makeAdmin ? 'Promote' : 'Demote'} User`,
+                    `Are you sure you want to ${actionText} this user (ID: ${userId})?`,
+                    async () => {
+                        setButtonLoadingState(targetButton, true, 'Processing...');
+                        try {
+                            const { data, responseOk } = await fetchAPI('/admin_api.php?action=toggle_admin', 'POST', { user_id: userId, make_admin: makeAdmin });
+                            if (responseOk && data.success) {
+                                loadAdminUsers(); // Refresh list
+                            } else {
+                                alert(`Failed to ${actionText}: ${data.error || 'Server error'}`);
+                            }
+                        } catch (error) {
+                            alert(`Error: ${error.message}`);
+                        } finally {
+                            // No need to explicitly call setButtonLoadingState(targetButton, false)
+                            // because loadAdminUsers() will redraw the buttons.
+                            // If loadAdminUsers() wasn't called on error, you would need it.
+                        }
+                    }
+                );
+            } else if (targetButton.classList.contains('admin-delete-btn')) {
+                const userEmail = targetButton.dataset.userEmail || `ID: ${userId}`;
+                showCustomConfirm(
+                    'Delete User',
+                    `Are you sure you want to permanently delete user: <strong>${userEmail.replace(/"/g, '&quot;')}</strong>? This action cannot be undone.`,
+                    async () => {
+                        setButtonLoadingState(targetButton, true, 'Deleting...');
+                        try {
+                            const { data, responseOk } = await fetchAPI(`/admin_api.php?action=delete_user&user_id=${userId}`, 'DELETE');
+                            if (responseOk && data.success) {
+                                loadAdminUsers(); // Refresh list
+                            } else {
+                                alert(`Failed to delete user: ${data.error || 'Server error'}`);
+                            }
+                        } catch (error) {
+                            alert(`Error deleting user: ${error.message}`);
+                        } finally {
+                            // As above, loadAdminUsers() redraws.
+                        }
+                    }
+                );
+            }
+        }
+
+
         function initEventListeners() {
-            initializeAuthDOM(); initializeSharedDOM(); initializeBatchActionDOM();
-            landingLoginBtn?.addEventListener('click', () => navigateTo('login')); landingRegisterBtn?.addEventListener('click', () => navigateTo('register')); gotoRegisterLink?.addEventListener('click', (e) => { e.preventDefault(); navigateTo('register'); }); gotoLoginLink?.addEventListener('click', (e) => { e.preventDefault(); navigateTo('login'); }); forgotPasswordLink?.addEventListener('click', (e) => { e.preventDefault(); navigateTo('forgotPassword'); if (forgotMessageElement) forgotMessageElement.textContent = ''; if(loginErrorMessage) loginErrorMessage.classList.add('hidden'); }); backToLoginFromForgotLink?.addEventListener('click', (e) => { e.preventDefault(); navigateTo('login'); }); backToLoginFromResetLink?.addEventListener('click', (e) => { e.preventDefault(); navigateTo('login'); });
-            loginForm?.addEventListener('submit', handleLogin); registerForm?.addEventListener('submit', handleRegister); forgotPasswordForm?.addEventListener('submit', handleForgotPasswordRequest); resetPasswordForm?.addEventListener('submit', handleResetPassword);
-            logoutBtn?.addEventListener('click', handleLogout); sidebarLogoutBtn?.addEventListener('click', handleLogout); themeToggleBtn?.addEventListener('click', () => setTheme(document.body.classList.contains('dark-mode') ? 'light' : 'dark'));
-            appTitleClickable?.addEventListener('click', toggleSidebar); sidebarOverlay?.addEventListener('click', toggleSidebar); sidebarLinkDashboard?.addEventListener('click', (e) => { e.preventDefault(); navigateTo('kanban'); toggleSidebar(); }); sidebarLinkArchive?.addEventListener('click', (e) => { e.preventDefault(); navigateTo('archive'); toggleSidebar(); }); backToDashboardFromArchiveBtn?.addEventListener('click', () => navigateTo('kanban'));
-            onboardingFinishBtn?.addEventListener('click', () => { localStorage.setItem(ONBOARDING_FLAG_KEY, 'true'); navigateTo('kanban'); });
-            window.matchMedia?.('(prefers-color-scheme: dark)').addEventListener('change', e => { if (!localStorage.getItem('strideKanbanTheme')) setTheme(e.matches ? 'dark' : 'light'); });
-            passwordToggleButtons?.forEach(button => { button.addEventListener('click', function () { const targetInput = document.getElementById(this.dataset.target); const icon = this.querySelector('i'); if (targetInput && icon) { const isPassword = targetInput.type === 'password'; targetInput.type = isPassword ? 'text' : 'password'; icon.classList.toggle('fa-eye', !isPassword); icon.classList.toggle('fa-eye-slash', isPassword); } }); });
-            [loginEmailInput, loginPasswordInput].forEach(el => el?.addEventListener('input', () => toggleErrorElement(loginErrorMessage, false))); [registerEmailInput, registerPasswordInput, registerConfirmPasswordInput].forEach(el => el?.addEventListener('input', () => toggleErrorElement(registerErrorMessage, false))); [forgotEmailInput].forEach(el => el?.addEventListener('input', () => { if (forgotMessageElement) forgotMessageElement.textContent = ''; })); [resetNewPasswordInput, resetConfirmPasswordInput].forEach(el => el?.addEventListener('input', () => { if (resetMessageElement) resetMessageElement.textContent = ''; }));
-            document.addEventListener('keydown', (event) => { if (event.altKey && (event.key === 'n' || event.key === 'N') && !views.kanban.classList.contains('view-hidden')) { event.preventDefault(); taskInput?.focus(); } });
+            initializeAuthDOM();
+            initializeSharedDOM();
+            initializeBatchActionDOM(); // For Kanban batch actions
+            initializeAdminDashboardDOM(); // For Admin dashboard actions
+
+            // Landing Page
+            landingLoginBtn?.addEventListener('click', () => navigateTo('login'));
+            landingRegisterBtn?.addEventListener('click', () => navigateTo('register'));
+
+            // Auth Forms & Links
+            gotoRegisterLink?.addEventListener('click', (e) => { e.preventDefault(); navigateTo('register'); });
+            gotoLoginLink?.addEventListener('click', (e) => { e.preventDefault(); navigateTo('login'); });
+            forgotPasswordLink?.addEventListener('click', (e) => { e.preventDefault(); navigateTo('forgotPassword'); if (forgotMessageElement) forgotMessageElement.textContent = ''; if(loginErrorMessage) loginErrorMessage.classList.add('hidden'); });
+            backToLoginFromForgotLink?.addEventListener('click', (e) => { e.preventDefault(); navigateTo('login'); });
+            backToLoginFromResetLink?.addEventListener('click', (e) => { e.preventDefault(); navigateTo('login'); });
+
+            loginForm?.addEventListener('submit', handleLogin);
+            registerForm?.addEventListener('submit', handleRegister);
+            forgotPasswordForm?.addEventListener('submit', handleForgotPasswordRequest);
+            resetPasswordForm?.addEventListener('submit', handleResetPassword);
+
+            // Global Actions
+            logoutBtn?.addEventListener('click', handleLogout);
+            sidebarLogoutBtn?.addEventListener('click', handleLogout);
+            themeToggleBtn?.addEventListener('click', () => setTheme(document.body.classList.contains('dark-mode') ? 'light' : 'dark'));
+
+            // Sidebar
+            appTitleClickable?.addEventListener('click', toggleSidebar);
+            sidebarOverlay?.addEventListener('click', toggleSidebar);
+            sidebarLinkDashboard?.addEventListener('click', (e) => { e.preventDefault(); navigateTo('kanban'); toggleSidebar(); });
+            sidebarLinkArchive?.addEventListener('click', (e) => { e.preventDefault(); navigateTo('archive'); toggleSidebar(); });
+            sidebarLinkAdmin?.addEventListener('click', handleAdminSidebarClick); // Added for admin dashboard
+
+
+            // Archive View
+            backToDashboardFromArchiveBtn?.addEventListener('click', () => navigateTo('kanban'));
+
+            // Onboarding
+            onboardingFinishBtn?.addEventListener('click', () => {
+                localStorage.setItem(ONBOARDING_FLAG_KEY, 'true');
+                navigateTo('kanban');
+            });
+
+            // Theme preference on system change
+            window.matchMedia?.('(prefers-color-scheme: dark)').addEventListener('change', e => {
+                if (!localStorage.getItem('strideKanbanTheme')) { // Only if no user preference is set
+                    setTheme(e.matches ? 'dark' : 'light');
+                }
+            });
+
+            // Password visibility toggles
+            passwordToggleButtons?.forEach(button => {
+                button.addEventListener('click', function () {
+                    const targetInput = document.getElementById(this.dataset.target);
+                    const icon = this.querySelector('i');
+                    if (targetInput && icon) {
+                        const isPassword = targetInput.type === 'password';
+                        targetInput.type = isPassword ? 'text' : 'password';
+                        icon.classList.toggle('fa-eye', !isPassword);
+                        icon.classList.toggle('fa-eye-slash', isPassword);
+                    }
+                });
+            });
+
+            // Clear error messages on input for auth forms
+            [loginEmailInput, loginPasswordInput].forEach(el => el?.addEventListener('input', () => toggleErrorElement(loginErrorMessage, false)));
+            [registerEmailInput, registerPasswordInput, registerConfirmPasswordInput].forEach(el => el?.addEventListener('input', () => toggleErrorElement(registerErrorMessage, false)));
+            [forgotEmailInput].forEach(el => el?.addEventListener('input', () => { if (forgotMessageElement) forgotMessageElement.textContent = ''; }));
+            [resetNewPasswordInput, resetConfirmPasswordInput].forEach(el => el?.addEventListener('input', () => { if (resetMessageElement) resetMessageElement.textContent = ''; }));
+
+            // Ctrl+N or Alt+N for new task focus (example, adjust as needed)
+            document.addEventListener('keydown', (event) => {
+                if ((event.ctrlKey || event.altKey) && (event.key === 'n' || event.key === 'N') && views.kanban && !views.kanban.classList.contains('view-hidden')) {
+                    event.preventDefault();
+                    taskInput?.focus();
+                }
+            });
         }
-        document.addEventListener('DOMContentLoaded', () => { loadThemePreference(); initEventListeners(); checkLoginStatus(); });
+
+        function handleAdminSidebarClick(e) { // Specific handler for admin sidebar link
+            e.preventDefault();
+            navigateTo('adminDashboard');
+            toggleSidebar(); // Close sidebar after navigation
+        }
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadThemePreference();
+            initEventListeners();
+            checkLoginStatus(); // This will also handle initial view routing
+        });
     </script>
 </body>
 </html>
