@@ -663,44 +663,70 @@
         </div>
     </section>
 
-    <!-- NEW ADMIN DASHBOARD VIEW -->
+    <!-- REVISED ADMIN DASHBOARD VIEW -->
     <section id="admin-dashboard-view" class="w-full view-hidden">
-        <div id="admin-dashboard-header" class="w-full max-w-5xl mx-auto my-8 px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between mb-6">
-                <h1 class="text-3xl font-semibold font-poppins flex items-center" style="color: var(--color-text-primary);">
-                    <i class="fas fa-user-shield mr-4 text-[var(--color-accent)]"></i>
+        <div id="admin-dashboard-header" class="w-full max-w-6xl mx-auto my-8 px-4 sm:px-6 lg:px-8"> 
+            <div class="flex flex-col sm:flex-row items-center justify-between mb-8"> 
+                <h1 class="text-3xl font-semibold font-poppins flex items-center mb-4 sm:mb-0" style="color: var(--color-text-primary);">
+                    <i class="fas fa-user-shield mr-4 text-3xl text-[var(--color-accent)]"></i> 
                     Admin Dashboard
                 </h1>
-                <button id="admin-back-to-kanban-btn" class="btn btn-secondary btn-sm">
-                    <i class="fas fa-columns mr-2"></i>Back to Kanban
-                </button>
+                <div class="flex items-center gap-3">
+                    <button id="admin-back-to-kanban-btn" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-columns mr-2"></i>Back to Kanban
+                    </button>
+                </div>
             </div>
         </div>
 
-        <div class="w-full max-w-5xl mx-auto p-4">
-            <div class="glass p-6 md:p-8 rounded-xl shadow-lg">
-                <h2 class="text-xl font-semibold font-poppins mb-6" style="color: var(--color-text-primary);">User Management</h2>
-                <div id="admin-user-list-container" class="overflow-x-auto">
+        <div class="w-full max-w-6xl mx-auto p-4"> 
+            <div class="glass p-6 md:p-8 rounded-xl shadow-xl mb-8"> 
+                <h2 class="text-xl font-semibold font-poppins mb-6 pb-3 border-b border-[var(--color-ui-border)]" style="color: var(--color-text-primary);">
+                    User Management
+                </h2>
+                <div id="admin-user-list-container" class="overflow-x-auto rounded-lg border border-[var(--color-ui-border)] shadow-sm"> 
                     <table class="min-w-full divide-y divide-[var(--color-ui-border)]">
                         <thead class="bg-[var(--color-ui-bg-medium)]">
                             <tr>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[var(--color-text-secondary)] uppercase tracking-wider">Email</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[var(--color-text-secondary)] uppercase tracking-wider">Is Admin?</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[var(--color-text-secondary)] uppercase tracking-wider">Registered</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[var(--color-text-secondary)] uppercase tracking-wider">Actions</th>
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-medium text-[var(--color-text-secondary)] uppercase tracking-wider">Email</th>
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-medium text-[var(--color-text-secondary)] uppercase tracking-wider">Admin Status</th>
+                                <th scope="col" class="px-6 py-4 text-center text-xs font-medium text-[var(--color-text-secondary)] uppercase tracking-wider">Active Tasks</th> 
+                                <th scope="col" class="px-6 py-4 text-center text-xs font-medium text-[var(--color-text-secondary)] uppercase tracking-wider">Total Tasks</th> 
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-medium text-[var(--color-text-secondary)] uppercase tracking-wider">Registered On</th>
+                                <th scope="col" class="px-6 py-4 text-right text-xs font-medium text-[var(--color-text-secondary)] uppercase tracking-wider">Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="admin-user-list-tbody" class="divide-y divide-[var(--color-ui-border)]">
-                            <!-- User rows will be inserted here by JavaScript -->
-                             <tr><td colspan="4" class="text-center p-4 text-[var(--color-text-muted)]">Loading users...</td></tr>
+                        <tbody id="admin-user-list-tbody" class="divide-y divide-[var(--color-ui-border)] bg-[var(--color-card-bg)]"> 
+                             <tr>
+                                <td colspan="6" class="px-6 py-10 text-center text-sm text-[var(--color-text-muted)]">
+                                    <i class="fas fa-spinner fa-spin fa-2x mb-2"></i><br>Loading users...
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
-                 <p id="admin-users-error-message" class="error-message hidden mt-4"></p>
+                 <p id="admin-users-error-message" class="error-message hidden mt-6"></p> 
+            </div>
+
+            <div id="admin-user-tasks-section" class="glass p-6 md:p-8 rounded-xl shadow-xl view-hidden">
+                <div class="flex justify-between items-center mb-6 pb-3 border-b border-[var(--color-ui-border)]">
+                    <h2 class="text-xl font-semibold font-poppins" style="color: var(--color-text-primary);">
+                        Tasks for: <span id="admin-tasks-for-user-email" class="font-normal text-[var(--color-accent)]"></span>
+                    </h2>
+                    <button id="admin-close-user-tasks-btn" class="btn btn-sm btn-neutral !p-2" title="Close Tasks View">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div id="admin-user-tasks-list-container" class="max-h-[60vh] overflow-y-auto space-y-3 pr-2">
+                    <p id="admin-user-tasks-loading" class="text-center text-sm text-[var(--color-text-muted)] py-4">
+                        <i class="fas fa-spinner fa-spin"></i> Loading tasks...
+                    </p>
+                </div>
+                <p id="admin-user-tasks-error-message" class="error-message hidden mt-4"></p>
             </div>
         </div>
     </section>
-    <!-- END ADMIN DASHBOARD VIEW -->
+    <!-- END REVISED ADMIN DASHBOARD VIEW -->
 
 
     <footer class="global-footer">
@@ -708,7 +734,7 @@
     </footer>
 
     <script>
-        const API_BASE_URL = 'http://127.0.0.1/stride_project/api'; // Make sure this is your correct API path
+        const API_BASE_URL = 'http://127.0.0.1/stride_project/api'; 
         const ONBOARDING_FLAG_KEY = 'stride_onboarding_completed_v1';
         const views = {
             landing: document.getElementById('landing-view'),
@@ -719,7 +745,7 @@
             forgotPassword: document.getElementById('forgot-password-view'),
             resetPassword: document.getElementById('reset-password-view'),
             archive: document.getElementById('archive-view'),
-            adminDashboard: document.getElementById('admin-dashboard-view') // Added Admin Dashboard View
+            adminDashboard: document.getElementById('admin-dashboard-view') 
         };
         const kanbanViewHeader = document.getElementById('kanban-view-header');
         const logoutBtn = document.getElementById('logout-btn');
@@ -730,17 +756,10 @@
         const moonIcon = document.getElementById('moon-icon');
         const onboardingFinishBtn = document.getElementById('onboarding-finish-btn');
 
-        // Kanban specific DOM elements
         let taskInput, addTaskBtn, todoColumnTasks, inprogressColumnTasks, doneColumnTasks, columnsTasksContainers, taskErrorMessageElement, progressFill, progressText, exportJsonBtn, printBoardBtn, searchTaskInput, progressMascot, exportErrorMessageElement, toggleSelectModeBtnKanban, batchActionBar, selectedTasksCountElement, batchArchiveBtn, batchDeleteBtn, exitSelectModeBtn;
-
-        // Auth specific DOM elements
         let loginEmailInput, loginPasswordInput, loginErrorMessage, registerEmailInput, registerPasswordInput, registerConfirmPasswordInput, registerErrorMessage, landingLoginBtn, landingRegisterBtn, gotoRegisterLink, gotoLoginLink, forgotPasswordLink, passwordToggleButtons, forgotPasswordForm, forgotEmailInput, forgotMessageElement, backToLoginFromForgotLink, resetPasswordForm, resetTokenInput, resetNewPasswordInput, resetConfirmPasswordInput, resetMessageElement, backToLoginFromResetLink;
-
-        // Shared/Sidebar/Archive DOM elements
         let sidebar, sidebarOverlay, appTitleClickable, sidebarLinkDashboard, sidebarLinkArchive, archivedTasksContainer, archiveEmptyMessage, backToDashboardFromArchiveBtn, sidebarLogoutBtn;
-
-        // Admin Dashboard specific DOM elements
-        let adminUserListTbody, adminUsersErrorMessageElement, adminBackToKanbanBtn, sidebarLinkAdmin;
+        let adminUserListTbody, adminUsersErrorMessageElement, adminBackToKanbanBtn, sidebarLinkAdmin, adminUserTasksSection, adminTasksForUserEmailElement, adminUserTasksListContainer, adminUserTasksLoadingElement, adminUserTasksErrorMessageElement, adminCloseUserTasksBtn;
 
 
         let lastDragEnd = 0;
@@ -773,16 +792,14 @@
                     button.innerHTML = button.dataset.originalInnerHTML;
                     delete button.dataset.originalInnerHTML;
                 } else {
-                    // Add more specific button original texts if needed, example for logout and add task:
                     if (button.id === 'logout-btn' || button.id === 'sidebar-logout-btn') button.innerHTML = '<i class="fas fa-sign-out-alt mr-1"></i>Logout';
                     else if (button.id === 'addTaskBtn') button.innerHTML = '<i class="fas fa-plus mr-2"></i><span class="font-poppins">Add Task</span>';
-                    // For admin buttons, they are dynamically created, their text will be reset in handleAdminUserAction
                 }
             }
         }
 
         async function fetchAPI(endpoint, method = 'GET', body = null) {
-            const options = { method, credentials: 'include' }; // 'include' is important for session cookies
+            const options = { method, credentials: 'include' }; 
             if (body) { options.headers = { 'Content-Type': 'application/json' }; options.body = JSON.stringify(body); }
             try {
                 const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
@@ -791,7 +808,7 @@
                 if (contentType && contentType.includes("application/json")) {
                     data = await response.json();
                 } else {
-                    data = await response.text(); // Handle cases where response might not be JSON (e.g., unexpected error)
+                    data = await response.text(); 
                 }
 
                 if (!response.ok) {
@@ -803,7 +820,6 @@
             } catch (error) {
                 console.error(`Network or Fetch Error for ${method} ${endpoint}:`, error);
                 const message = error.message || "A network error occurred. Please try again.";
-                // If the error object already has a status (from a !response.ok throw), keep it
                 throw { status: error.status || 503, message, data: error.data || null };
             }
         }
@@ -825,7 +841,7 @@
             const innerPanel = modal?.querySelector('.glass');
 
             if (!modal || !modalTitle || !modalMessage || !okBtn || !cancelBtn || !innerPanel) {
-                if (confirm(message.replace(/<[^>]*>?/gm, ''))) { // Basic fallback
+                if (confirm(message.replace(/<[^>]*>?/gm, ''))) { 
                     if (onOkCallback) onOkCallback();
                 } else {
                     if (onCancelCallback) onCancelCallback();
@@ -834,7 +850,7 @@
             }
 
             modalTitle.textContent = title;
-            modalMessage.innerHTML = message; // Use innerHTML to allow for bolding etc.
+            modalMessage.innerHTML = message; 
 
             if (currentEscapeKeyListener) {
                 document.removeEventListener('keydown', currentEscapeKeyListener);
@@ -845,7 +861,7 @@
                 innerPanel.style.transform = 'translateY(1rem) scale(0.95)';
                 setTimeout(() => {
                     modal.classList.add('view-hidden');
-                }, 200); // Match CSS transition
+                }, 200); 
                 if (currentEscapeKeyListener) {
                     document.removeEventListener('keydown', currentEscapeKeyListener);
                     currentEscapeKeyListener = null;
@@ -855,14 +871,13 @@
             innerPanel.style.opacity = '0';
             innerPanel.style.transform = 'translateY(1rem) scale(0.95)';
             modal.classList.remove('view-hidden');
-            requestAnimationFrame(() => { // Ensure class is removed before triggering transition
-                requestAnimationFrame(() => { // Next frame for transition start
+            requestAnimationFrame(() => { 
+                requestAnimationFrame(() => { 
                     innerPanel.style.opacity = '1';
                     innerPanel.style.transform = 'translateY(0) scale(1)';
                 });
             });
 
-            // Clone and replace buttons to remove old event listeners
             const newOkBtn = okBtn.cloneNode(true);
             okBtn.parentNode.replaceChild(newOkBtn, okBtn);
             const newCancelBtn = cancelBtn.cloneNode(true);
@@ -890,10 +905,10 @@
             Object.values(views).forEach(view => view?.classList.add('view-hidden'));
             if (views[viewName]) {
                 views[viewName].classList.remove('view-hidden');
-                window.scrollTo({ top: 0, behavior: 'auto' }); // 'auto' for instant scroll on view change
+                window.scrollTo({ top: 0, behavior: 'auto' }); 
 
                 const isUserSessionActiveView = ['kanban', 'onboarding', 'archive', 'adminDashboard'].includes(viewName);
-                kanbanViewHeader?.classList.toggle('hidden', !(viewName === 'kanban')); // Header specific to Kanban
+                kanbanViewHeader?.classList.toggle('hidden', !(viewName === 'kanban')); 
                 logoutBtn?.classList.toggle('view-hidden', !isUserSessionActiveView || viewName === 'onboarding');
                 sidebar?.classList.toggle('hidden', !isUserSessionActiveView || viewName === 'onboarding');
 
@@ -903,21 +918,20 @@
                 document.querySelectorAll('.auth-page-header').forEach(header => {
                     header.style.display = authPageHeaderViews.includes(viewName) ? 'block' : 'none';
                 });
-                document.querySelectorAll('.auth-top-logo').forEach(logo => { // Stride logo at top left
+                document.querySelectorAll('.auth-top-logo').forEach(logo => { 
                     logo.style.display = (authPageHeaderViews.includes(viewName) || viewName === 'landing') ? 'none' : 'block';
                 });
 
-                // Specific view initializations
                 if (viewName === 'kanban') {
-                    initializeKanbanDOM(); // Ensure DOM elements are ready
+                    initializeKanbanDOM(); 
                     loadTasksFromServer();
                     updateActiveSidebarLink('kanban');
                 } else if (viewName === 'archive') {
-                    initializeSharedDOM(); // Ensure archive DOM elements are ready
+                    initializeSharedDOM(); 
                     loadArchivedTasks();
                     updateActiveSidebarLink('archive');
                 } else if (viewName === 'adminDashboard') {
-                    initializeAdminDashboardDOM(); // Ensure admin DOM elements are ready
+                    initializeAdminDashboardDOM(); 
                     loadAdminUsers();
                     updateActiveSidebarLink('admin');
                 } else if (viewName === 'landing' && views.landing) {
@@ -931,19 +945,16 @@
                     const token = urlParams.get('token');
                     if (token && resetTokenInput) { resetTokenInput.value = token; }
                     else if (token) { console.warn("Reset token input field not found, but token is in URL.");}
-                    if (resetMessageElement) resetMessageElement.textContent = ''; // Clear previous messages
+                    if (resetMessageElement) resetMessageElement.textContent = ''; 
                     updateActiveSidebarLink('');
                 } else if (['login', 'register', 'forgotPassword'].includes(viewName)) {
                     if(forgotMessageElement && viewName === 'forgotPassword') forgotMessageElement.textContent = '';
                     if(loginErrorMessage && viewName === 'login') loginErrorMessage.classList.add('hidden');
                     updateActiveSidebarLink('');
                 }
-                 // Update window hash for bookmarking/linking (optional)
-                // window.location.hash = viewName;
-
 
             } else {
-                views.landing?.classList.remove('view-hidden'); // Fallback to landing if view not found
+                views.landing?.classList.remove('view-hidden'); 
                 console.error("View not found: ", viewName);
             }
         }
@@ -974,13 +985,13 @@
             backToLoginFromResetLink = document.getElementById('back-to-login-from-reset');
         }
 
-        function initializeSharedDOM() { // For elements used across multiple authenticated views
+        function initializeSharedDOM() { 
             sidebar = document.getElementById('sidebar');
             sidebarOverlay = document.getElementById('sidebar-overlay');
-            appTitleClickable = document.getElementById('app-title-clickable'); // For sidebar toggle
+            appTitleClickable = document.getElementById('app-title-clickable'); 
             sidebarLinkDashboard = document.getElementById('sidebar-link-dashboard');
             sidebarLinkArchive = document.getElementById('sidebar-link-archive');
-            sidebarLinkAdmin = document.getElementById('sidebar-link-admin'); // Get admin link
+            sidebarLinkAdmin = document.getElementById('sidebar-link-admin'); 
             archivedTasksContainer = document.getElementById('archived-tasks-container');
             archiveEmptyMessage = document.getElementById('archive-empty-message');
             backToDashboardFromArchiveBtn = document.getElementById('back-to-dashboard-from-archive');
@@ -1003,7 +1014,7 @@
             toggleErrorElement(registerErrorMessage, false);
 
             const email = registerEmailInput.value.trim();
-            const password = registerPasswordInput.value; // No trim on password
+            const password = registerPasswordInput.value; 
             const confirmPassword = registerConfirmPasswordInput.value;
 
             if (!email || !password || !confirmPassword) {
@@ -1020,10 +1031,15 @@
             }
 
             try {
-                const { data, responseOk } = await fetchAPI('/register.php', 'POST', { email, password }); // Assuming register.php handles this
+                const { data, responseOk } = await fetchAPI('/register.php', 'POST', { email, password });
                 if (responseOk && data.success) {
-                    localStorage.removeItem(ONBOARDING_FLAG_KEY); // New users get onboarding
-                    navigateTo('onboarding'); // Or directly to login if you prefer
+                    localStorage.removeItem(ONBOARDING_FLAG_KEY);
+                    if (data.userId && data.hasOwnProperty('isAdmin')) {
+                        sessionStorage.setItem('current_user_id_from_session', data.userId);
+                        const adminSidebarLink = document.getElementById('sidebar-link-admin');
+                        if(adminSidebarLink) adminSidebarLink.classList.toggle('hidden', !data.isAdmin);
+                    }
+                    navigateTo('onboarding');
                     registerForm.reset();
                 } else {
                     toggleErrorElement(registerErrorMessage, true, data.error || "Registration failed. Please try again.");
@@ -1042,7 +1058,7 @@
             toggleErrorElement(loginErrorMessage, false);
 
             const email = loginEmailInput.value.trim();
-            const password = loginPasswordInput.value; // No trim
+            const password = loginPasswordInput.value; 
             const isAdminLogin = document.getElementById('login-admin-checkbox').checked;
 
             if (!email || !password) {
@@ -1052,14 +1068,13 @@
             try {
                 const { data, responseOk } = await fetchAPI('/login.php', 'POST', { email, password, isAdminLogin });
                 if (responseOk && data.success) {
-                    sessionStorage.setItem('current_user_id_from_session', data.userId); // Store for client-side checks if needed
+                    sessionStorage.setItem('current_user_id_from_session', data.userId); 
 
                     if (isAdminLogin && data.isAdmin) {
                         navigateTo('adminDashboard');
-                    } else if (data.isAdmin && !isAdminLogin) { // Admin user regular login
-                        // Decide where admins go on regular login. Kanban is a good default.
+                    } else if (data.isAdmin && !isAdminLogin) { 
                         navigateTo('kanban');
-                    } else if (!data.isAdmin) { // Regular user login
+                    } else if (!data.isAdmin) { 
                          if (localStorage.getItem(ONBOARDING_FLAG_KEY) !== 'true') {
                             navigateTo('onboarding');
                         } else {
@@ -1067,7 +1082,7 @@
                         }
                     }
                     loginForm.reset();
-                    document.getElementById('login-admin-checkbox').checked = false; // Reset checkbox
+                    document.getElementById('login-admin-checkbox').checked = false; 
                 } else {
                     toggleErrorElement(loginErrorMessage, true, data.error || "Login failed. Please try again.");
                 }
@@ -1085,9 +1100,9 @@
             showCustomConfirm('Logout', 'Are you sure you want to logout?', async () => {
                 setButtonLoadingState(activeLogoutBtn, true, 'Logging out...');
                 try {
-                    const { data, responseOk } = await fetchAPI('/logout.php', 'POST'); // Assuming logout.php handles session destruction
+                    const { data, responseOk } = await fetchAPI('/logout.php', 'POST'); 
                     if (responseOk && data.success) {
-                        sessionStorage.removeItem('current_user_id_from_session'); // Clear stored user ID
+                        sessionStorage.removeItem('current_user_id_from_session'); 
                         navigateTo('landing');
                     } else {
                         alert("Logout failed: " + (data.error || "Please try again."));
@@ -1106,7 +1121,7 @@
             if (!forgotPasswordForm || !forgotEmailInput || !forgotMessageElement) return;
             const forgotButton = forgotPasswordForm.querySelector('button[type="submit"]');
             setButtonLoadingState(forgotButton, true, 'Sending...');
-            forgotMessageElement.textContent = ''; forgotMessageElement.className = 'text-sm mt-4 text-center'; // Reset classes
+            forgotMessageElement.textContent = ''; forgotMessageElement.className = 'text-sm mt-4 text-center'; 
 
             const email = forgotEmailInput.value.trim();
             if (!email) {
@@ -1184,13 +1199,13 @@
             sidebar.classList.toggle('translate-x-0', !isOpen);
             sidebarOverlay.classList.toggle('view-hidden', isOpen);
             sidebarOverlay.classList.toggle('opacity-0', isOpen);
-            sidebarOverlay.classList.toggle('opacity-100', !isOpen); // For transition
+            sidebarOverlay.classList.toggle('opacity-100', !isOpen); 
         }
 
         function updateActiveSidebarLink(activeView) {
             if (!sidebarLinkDashboard || !sidebarLinkArchive || !sidebarLinkAdmin) {
-                initializeSharedDOM(); // Try to get them if not already available
-                if (!sidebarLinkDashboard || !sidebarLinkArchive || !sidebarLinkAdmin) return; // Still not found, exit
+                initializeSharedDOM(); 
+                if (!sidebarLinkDashboard || !sidebarLinkArchive || !sidebarLinkAdmin) return; 
             }
             document.querySelectorAll('.sidebar-link').forEach(link => link.classList.remove('active'));
 
@@ -1208,27 +1223,27 @@
                 initializeSharedDOM();
                 if (!archivedTasksContainer || !archiveEmptyMessage) return;
             }
-            archivedTasksContainer.innerHTML = ''; // Clear previous
+            archivedTasksContainer.innerHTML = ''; 
             try {
                 const { data, responseOk } = await fetchAPI('/tasks_api.php?archived=true');
-                if (responseOk && Array.isArray(data.archived)) {
+                if (responseOk && data.success && Array.isArray(data.archived)) { 
                     if (data.archived.length === 0) {
                         archiveEmptyMessage.classList.remove('hidden');
                     } else {
                         archiveEmptyMessage.classList.add('hidden');
                         data.archived
-                            .sort((a,b) => new Date(b.updated_at) - new Date(a.updated_at)) // Sort by most recently archived
+                            .sort((a,b) => new Date(b.updated_at) - new Date(a.updated_at)) 
                             .forEach(task => archivedTasksContainer.appendChild(createArchivedTaskCard(task)));
                     }
                 } else {
                     console.error("Failed to load archived tasks or invalid format:", data);
                     archiveEmptyMessage.classList.remove('hidden');
-                    archiveEmptyMessage.textContent = "Could not load archived tasks.";
+                    archiveEmptyMessage.textContent = data.error || "Could not load archived tasks.";
                 }
             } catch (error) {
                 console.error("Error loading archived tasks:", error);
                 archiveEmptyMessage.classList.remove('hidden');
-                archiveEmptyMessage.textContent = "An error occurred while loading archived tasks.";
+                archiveEmptyMessage.textContent = error.message || "An error occurred while loading archived tasks.";
             }
         }
 
@@ -1261,11 +1276,10 @@
         async function handleUnarchiveTask(taskId) {
              showCustomConfirm('Unarchive Task', 'Are you sure you want to restore this task to your board? It will be moved to the "To Do" column.', async () => {
                 try {
-                    const payload = { id: taskId, is_archived: false, column_id: 'todo' }; // Explicitly set column
+                    const payload = { id: taskId, is_archived: false, column_id: 'todo' }; 
                     const { data, responseOk } = await fetchAPI('/tasks_api.php', 'PUT', payload);
                     if (responseOk && data.success) {
-                        loadArchivedTasks(); // Refresh archive view
-                        // Optional: Show a success message on the archive page
+                        loadArchivedTasks(); 
                         const archiveHeader = document.getElementById('archive-view-header');
                         if(archiveHeader){
                             let successMsg = archiveHeader.querySelector('.unarchive-success-msg');
@@ -1290,9 +1304,9 @@
             const taskTextPreview = taskText.substring(0,50) + (taskText.length > 50 ? "..." : "");
             showCustomConfirm('Delete Permanently', `This action cannot be undone. Are you sure you want to permanently delete task: "<strong>${taskTextPreview.replace(/"/g, '&quot;')}</strong>"?`, async () => {
                 try {
-                    const { data, responseOk } = await fetchAPI(`/tasks_api.php?id=${taskId}`, 'DELETE'); // Assuming your tasks_api handles deletion this way
+                    const { data, responseOk } = await fetchAPI(`/tasks_api.php?id=${taskId}`, 'DELETE'); 
                     if (responseOk && data.success) {
-                        loadArchivedTasks(); // Refresh archive view
+                        loadArchivedTasks(); 
                     } else {
                         alert("Failed to delete task: " + (data.error || "Server error."));
                     }
@@ -1313,12 +1327,11 @@
                     : `<i class="fas fa-check-square mr-2"></i> Select Tasks`;
             }
 
-            if (!isSelectionModeActive) { // Exiting selection mode
+            if (!isSelectionModeActive) { 
                 selectedTaskIds.clear();
                 document.querySelectorAll('#kanban-view .task-card .task-select-checkbox').forEach(cb => cb.checked = false);
             }
             updateSelectedTasksCount();
-            // Toggle visibility of regular task actions vs selection checkbox
             document.querySelectorAll('#kanban-view .task-card .task-actions').forEach(actions => {
                 actions.style.display = isSelectionModeActive ? 'none' : '';
             });
@@ -1335,7 +1348,6 @@
             if(batchActionBar) {
                 batchActionBar.classList.toggle('hidden', !isSelectionModeActive || !hasSelection);
             }
-            // Enable/disable batch action buttons
             if (batchArchiveBtn && batchDeleteBtn) {
                 [batchArchiveBtn, batchDeleteBtn].forEach(btn => {
                     if(btn) {
@@ -1367,16 +1379,15 @@
                 try {
                     let responseOkOverall = true;
                     let errorMessages = [];
-                    let payload = { ids: taskIdsArray, batch: true }; // Common payload parts
-                    let method = 'PUT'; // Default for archive
+                    let payload = { ids: taskIdsArray, batch: true }; 
+                    let method = 'PUT'; 
 
                     if (actionType === 'archive') {
                         payload.is_archived = true;
                     } else if (actionType === 'delete') {
-                        method = 'DELETE'; // tasks_api.php must handle batch delete with IDs in body
+                        method = 'DELETE'; 
                     }
-                    // Make sure your tasks_api.php can handle a payload like { ids: [...], is_archived: true } for PUT
-                    // and { ids: [...] } for DELETE if method is DELETE.
+                    
                     const { data, responseOk } = await fetchAPI('/tasks_api.php', method, payload);
 
                     if (!responseOk || !data.success) {
@@ -1385,11 +1396,10 @@
                     }
 
                     if (responseOkOverall) {
-                        await loadTasksFromServer(); // Refresh the board
+                        await loadTasksFromServer(); 
                         selectedTaskIds.clear();
                         updateSelectedTasksCount();
-                        toggleSelectionMode(); // Exit selection mode after successful action
-                        // Show a temporary success message
+                        toggleSelectionMode(); 
                         const successAlert = document.createElement('div');
                         successAlert.className = 'fixed top-5 right-5 bg-green-100 border border-green-400 text-green-700 dark:bg-green-700 dark:text-green-100 dark:border-green-600 px-4 py-3 rounded shadow-md z-[2000]';
                         successAlert.textContent = `${taskIdsArray.length} task(s) ${actionType}d successfully.`;
@@ -1406,9 +1416,9 @@
 
 
         async function checkLoginStatus() {
-            const hash = window.location.hash.substring(1); // Get hash without #
-            initializeAuthDOM(); // Ensure auth DOM elements are ready
-            initializeSharedDOM(); // Ensure shared DOM elements are ready (for sidebar link check)
+            const hash = window.location.hash.substring(1); 
+            initializeAuthDOM(); 
+            initializeSharedDOM(); 
 
             if (hash.startsWith('resetPassword?token=')) {
                 const token = new URLSearchParams(hash.split('?')[1]).get('token');
@@ -1422,24 +1432,22 @@
             try {
                 const { data } = await fetchAPI('/check_session.php');
                 if (data.loggedIn) {
-                    sessionStorage.setItem('current_user_id_from_session', data.userId); // Store for client use
-                    // Show/hide admin dashboard link in sidebar based on session
+                    sessionStorage.setItem('current_user_id_from_session', data.userId); 
                     if(sidebarLinkAdmin) sidebarLinkAdmin.classList.toggle('hidden', !data.isAdmin);
 
-                    if (hash === 'adminDashboard' && data.isAdmin) { // If directly trying to access admin and is admin
+                    if (hash === 'adminDashboard' && data.isAdmin) { 
                         navigateTo('adminDashboard');
-                    } else if (localStorage.getItem(ONBOARDING_FLAG_KEY) !== 'true' && !data.isAdmin) { // Onboarding for non-admins only
+                    } else if (localStorage.getItem(ONBOARDING_FLAG_KEY) !== 'true' && !data.isAdmin) { 
                         navigateTo('onboarding');
                     } else {
-                        navigateTo('kanban'); // Default for logged-in users or admins not going to admin dashboard
+                        navigateTo('kanban'); 
                     }
                 } else {
                     sessionStorage.removeItem('current_user_id_from_session');
-                    if(sidebarLinkAdmin) sidebarLinkAdmin.classList.add('hidden'); // Hide admin link if not logged in
+                    if(sidebarLinkAdmin) sidebarLinkAdmin.classList.add('hidden'); 
                     navigateTo('landing');
                 }
-            } catch (error) {
-                // Handle fetch error for check_session - assume not logged in
+            } catch (error) { 
                 sessionStorage.removeItem('current_user_id_from_session');
                 if(sidebarLinkAdmin) sidebarLinkAdmin.classList.add('hidden');
                 navigateTo('landing');
@@ -1463,11 +1471,9 @@
             progressMascot = document.getElementById('progress-mascot');
             exportErrorMessageElement = document.getElementById('export-error-message');
 
-            initializeBatchActionDOM(); // Initialize batch action buttons
+            initializeBatchActionDOM(); 
 
-            // Add event listeners only if elements exist and listeners haven't been added
-            // (Simple check: if element exists, assume listeners need to be (re)added for safety on view switch)
-            addTaskBtn?.removeEventListener('click', addTask); // Remove first to prevent duplicates
+            addTaskBtn?.removeEventListener('click', addTask); 
             addTaskBtn?.addEventListener('click', addTask);
 
             taskInput?.removeEventListener('keypress', handleTaskInputKeypress);
@@ -1482,7 +1488,7 @@
                 container.addEventListener('dragleave', handleDragLeave);
                 container.removeEventListener('drop', handleDrop);
                 container.addEventListener('drop', handleDrop);
-                container.removeEventListener('click', handleTaskActionDelegation); // For edit/delete/expand
+                container.removeEventListener('click', handleTaskActionDelegation); 
                 container.addEventListener('click', handleTaskActionDelegation);
             });
 
@@ -1508,7 +1514,6 @@
 
         function formatDate(date) {
             if (!date) return '';
-            // Check if date is already YYYY-MM-DD string
             if (typeof date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(date)) {
                 return date;
             }
@@ -1519,27 +1524,27 @@
         function getDaysRemaining(dueDateYYYYMMDD) {
             if (!dueDateYYYYMMDD) return null;
             const today = new Date();
-            today.setHours(0, 0, 0, 0); // Normalize today to start of day
+            today.setHours(0, 0, 0, 0); 
 
             const parts = dueDateYYYYMMDD.split('-');
-            if (parts.length !== 3) return null; // Invalid format
+            if (parts.length !== 3) return null; 
 
             const year = parseInt(parts[0], 10);
-            const month = parseInt(parts[1], 10) - 1; // JS months are 0-indexed
+            const month = parseInt(parts[1], 10) - 1; 
             const day = parseInt(parts[2], 10);
 
             if (isNaN(year) || isNaN(month) || isNaN(day)) return null;
 
             const due = new Date(year, month, day);
-            due.setHours(0,0,0,0); // Normalize due date to start of day
+            due.setHours(0,0,0,0); 
 
-            if (isNaN(due.getTime())) return null; // Invalid date object
+            if (isNaN(due.getTime())) return null; 
 
             return Math.ceil((due.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
         }
 
 
-        function getDueDateDisplay(dueDate) { // dueDate should be YYYY-MM-DD string
+        function getDueDateDisplay(dueDate) { 
             if (!dueDate) return { text: '', class: '', iconClass: '' };
             const days = getDaysRemaining(dueDate);
 
@@ -1547,12 +1552,11 @@
             if (days < 0) return { text: `Overdue by ${Math.abs(days)} day${Math.abs(days) > 1 ? 's' : ''}`, class: 'overdue-text', iconClass: 'fas fa-exclamation-circle' };
             if (days === 0) return { text: 'Due Today', class: 'upcoming-text', iconClass: 'fas fa-clock' };
             if (days === 1) return { text: 'Due Tomorrow', class: 'upcoming-text', iconClass: 'fas fa-clock' };
-            if (days <= 7) return { text: `Due in ${days} days`, class: 'upcoming-text', iconClass: '' }; // No specific icon for 2-7 days out
+            if (days <= 7) return { text: `Due in ${days} days`, class: 'upcoming-text', iconClass: '' }; 
 
-            // For dates further out, format them nicely
             const parts = dueDate.split('-');
             const year = parseInt(parts[0],10);
-            const month = parseInt(parts[1],10) -1; // JS month index
+            const month = parseInt(parts[1],10) -1; 
             const day = parseInt(parts[2],10);
             return { text: `Due ${new Date(year,month,day).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}`, class: 'normal-date-text', iconClass: '' };
         }
@@ -1560,27 +1564,27 @@
 
         function createTaskCard({ id, text, priority = 'low', due_date = '', labels = '', column_id = 'todo', sort_order = 0 }) {
             const taskCard = document.createElement('div');
-            taskCard.id = String(id); // Ensure ID is a string for getElementById
+            taskCard.id = String(id); 
             taskCard.className = `task-card priority-${priority}`;
             taskCard.draggable = true;
             taskCard.dataset.column = column_id;
             taskCard.dataset.priority = priority;
 
-            let displayDueDate = ''; // Ensure it's YYYY-MM-DD or empty
+            let displayDueDate = ''; 
             if (due_date && /^\d{4}-\d{2}-\d{2}$/.test(due_date)) {
                 displayDueDate = due_date;
-            } else if (due_date) { // Attempt to format if not already correct
+            } else if (due_date) { 
                 displayDueDate = formatDate(new Date(due_date));
             }
-            taskCard.dataset.duedate = displayDueDate; // Store consistently formatted date or empty string
-            taskCard.dataset.labels = labels || ''; // Store labels or empty string
+            taskCard.dataset.duedate = displayDueDate; 
+            taskCard.dataset.labels = labels || ''; 
             taskCard.dataset.sortOrder = sort_order;
 
 
             const dueDateInfo = getDueDateDisplay(displayDueDate);
             const labelTagsHtml = (labels || '').split(',')
                 .map(l => l.trim())
-                .filter(l => l) // Remove empty labels
+                .filter(l => l) 
                 .map(tag => `<span class="task-label-badge">${tag}</span>`)
                 .join('') || 'No labels';
 
@@ -1627,11 +1631,9 @@
             if (checkbox) {
                 checkbox.addEventListener('change', (event) => handleTaskCheckboxChange(event, String(id)));
             }
-            // If selection mode is active when card is created, show checkbox
             if (isSelectionModeActive && checkboxWrapper) {
                 checkboxWrapper.classList.remove('hidden');
             }
-            // If selection mode is active, hide regular actions
             const taskActionsDiv = taskCard.querySelector('.task-actions');
             if (isSelectionModeActive && taskActionsDiv) {
                 taskActionsDiv.style.display = 'none';
@@ -1640,14 +1642,12 @@
 
             taskCard.addEventListener('dragstart', handleDragStart);
             taskCard.addEventListener('dragend', handleDragEnd);
-            // Click listener for expand/collapse is now delegated to tasks-container
             return taskCard;
         }
 
         async function handleTaskActionDelegation(event) {
-            // If in selection mode, only checkbox clicks should be processed by its own handler
             if (isSelectionModeActive && (event.target.classList.contains('task-select-checkbox') || event.target.closest('.task-selection-checkbox-wrapper'))) {
-                return; // Let checkbox handler do its work
+                return; 
             }
 
             const taskCard = event.target.closest('.task-card');
@@ -1660,7 +1660,7 @@
             const isCancelBtn = event.target.closest('.cancel-btn');
 
             if (isArchiveBtn) {
-                event.stopPropagation(); // Prevent card expand/collapse
+                event.stopPropagation(); 
                 const taskTextPreview = taskCard.querySelector('.task-description')?.textContent.substring(0,50) + "..." || "this task";
                 showCustomConfirm('Archive Task', `Are you sure you want to archive task: "<strong>${taskTextPreview.replace(/"/g, '&quot;')}</strong>"?`, async () => {
                     try {
@@ -1669,8 +1669,8 @@
                             taskCard.classList.add('removing');
                             taskCard.addEventListener('animationend', () => {
                                 taskCard.remove();
-                                updateProgressStats(); // Update counts and progress
-                                filterTasks(); // Re-apply filter to update column empty messages
+                                updateProgressStats(); 
+                                filterTasks(); 
                             }, { once: true });
                         } else {
                             alert("Failed to archive task: " + (data.error || "Server error."));
@@ -1707,25 +1707,23 @@
             } else if (isSaveBtn) {
                 event.stopPropagation();
                 const editForm = taskCard.querySelector('.edit-form');
-                if (editForm) await handleSaveTaskEdit(taskCard, editForm, isSaveBtn); // Pass the button itself
+                if (editForm) await handleSaveTaskEdit(taskCard, editForm, isSaveBtn); 
             } else if (isCancelBtn) {
                 event.stopPropagation();
                 taskCard.classList.remove('editing');
-                // Optionally, reset form fields to original values if needed, though not strictly necessary if not saved.
             } else if (!event.target.closest('.task-actions') && !taskCard.classList.contains('editing') && !isSelectionModeActive) {
-                // Click on card itself (not actions, not in edit mode, not in selection mode)
-                if (Date.now() - lastDragEnd < DRAG_CLICK_THRESHOLD) return; // Ignore click if it was likely end of drag
+                if (Date.now() - lastDragEnd < DRAG_CLICK_THRESHOLD) return; 
                 taskCard.classList.toggle('expanded');
             }
         }
 
 
         async function handleSaveTaskEdit(taskCard, editForm, saveEditButton) {
-            setButtonLoadingState(saveEditButton, true, 'Saving...'); // Use the passed button
+            setButtonLoadingState(saveEditButton, true, 'Saving...'); 
 
             const newText = editForm.querySelector('.edit-text').value.trim();
             const newPriority = editForm.querySelector('.edit-priority').value;
-            const newDueDateRaw = editForm.querySelector('.edit-duedate').value; // YYYY-MM-DD or empty
+            const newDueDateRaw = editForm.querySelector('.edit-duedate').value; 
             const newLabels = editForm.querySelector('.edit-labels').value.trim();
 
             if (!newText) {
@@ -1740,14 +1738,13 @@
                 id: taskCard.id,
                 text: newText,
                 priority: newPriority,
-                dueDate: newDueDateRaw || null, // Send null if empty, backend should handle
+                dueDate: newDueDateRaw || null, 
                 labels: newLabels
             };
 
             try {
                 const { data, responseOk } = await fetchAPI('/tasks_api.php', 'PUT', updatedTaskData);
                 if (responseOk && data.success) {
-                    // Update card display directly
                     const taskDescriptionEl = taskCard.querySelector('.task-description');
                     if (taskDescriptionEl) taskDescriptionEl.textContent = newText;
 
@@ -1760,10 +1757,10 @@
                     } else { console.error("Could not find the priority span element to update for task ID:", taskCard.id); }
 
 
-                    const dueDateInfo = getDueDateDisplay(newDueDateRaw); // newDueDateRaw is YYYY-MM-DD
+                    const dueDateInfo = getDueDateDisplay(newDueDateRaw); 
                     const dueDateElement = taskCard.querySelector('.task-meta > span:nth-child(2)');
                     if(dueDateElement){
-                        dueDateElement.className = ''; // Clear existing color classes
+                        dueDateElement.className = ''; 
                         dueDateElement.classList.add(dueDateInfo.class || 'normal-date-text');
                         dueDateElement.innerHTML = `<i class="fas fa-calendar-alt"></i> ${dueDateInfo.iconClass ? `<i class="${dueDateInfo.iconClass} mr-1"></i>` : ''}${dueDateInfo.text || 'Not set'}`;
                     } else { console.error("Could not find the due date span element to update for task ID:", taskCard.id); }
@@ -1777,15 +1774,14 @@
                     } else { console.error("Could not find the labels container element to update for task ID:", taskCard.id); }
 
 
-                    // Update dataset attributes for filtering/sorting
                     taskCard.dataset.priority = newPriority;
                     taskCard.dataset.duedate = newDueDateRaw || '';
                     taskCard.dataset.labels = newLabels;
 
                     taskCard.classList.remove('editing');
-                    if (!taskCard.classList.contains('expanded')) taskCard.classList.add('expanded'); // Auto-expand after edit
-                    updateProgressStats(); // Update overall stats and chart
-                    filterTasks(); // Re-apply search filter if active
+                    if (!taskCard.classList.contains('expanded')) taskCard.classList.add('expanded'); 
+                    updateProgressStats(); 
+                    filterTasks(); 
                 } else {
                     alert("Failed to update task: " + (data.error || "Server error."));
                 }
@@ -1807,13 +1803,12 @@
             setButtonLoadingState(addTaskBtn, true, 'Adding...');
 
             try {
-                // Send null for dueDate and empty string for labels for new tasks by default
                 const { data, responseOk } = await fetchAPI('/tasks_api.php', 'POST', {
                     text: taskInput.value.trim(),
-                    priority: 'low', // Default priority
+                    priority: 'low', 
                     dueDate: null,
                     labels: '',
-                    columnId: 'todo' // New tasks go to 'todo'
+                    columnId: 'todo' 
                 });
 
                 if (responseOk && data.success && data.task) {
@@ -1823,10 +1818,10 @@
                         newTaskCard.classList.remove('new-task-pop');
                     }, { once: true });
 
-                    todoColumnTasks?.appendChild(newTaskCard); // Add to 'To Do' column
-                    taskInput.value = ''; // Clear input
+                    todoColumnTasks?.appendChild(newTaskCard); 
+                    taskInput.value = ''; 
                     updateProgressStats();
-                    filterTasks(); // Ensure new task is visible if it matches filter
+                    filterTasks(); 
                 } else {
                     alert("Failed to add task: " + (data.error || "Server error"));
                 }
@@ -1841,18 +1836,18 @@
         let draggedElement = null;
         function handleDragStart(event) {
             if (event.target.classList.contains('editing') || isSelectionModeActive) {
-                event.preventDefault(); return; // Prevent drag if editing or in selection mode
+                event.preventDefault(); return; 
             }
-            event.target.classList.remove('expanded'); // Collapse card on drag start for better UX
+            event.target.classList.remove('expanded'); 
             draggedElement = event.target;
             event.dataTransfer.setData('text/plain', event.target.id);
             event.dataTransfer.effectAllowed = 'move';
-            setTimeout(() => draggedElement?.classList.add('dragging'), 0); // Add dragging class after a tick
+            setTimeout(() => draggedElement?.classList.add('dragging'), 0); 
         }
         function handleDragEnd() {
             draggedElement?.classList.remove('dragging');
             draggedElement = null;
-            lastDragEnd = Date.now(); // Record time for click vs drag differentiation
+            lastDragEnd = Date.now(); 
             columnsTasksContainers?.forEach(c => c.classList.remove('drag-over'));
         }
         function handleDragOver(event) {
@@ -1863,7 +1858,7 @@
         }
         function handleDragLeave(event) {
             const tc = event.target.closest('.tasks-container');
-            if (tc) { // Only remove if leaving the actual container, not just an element inside it
+            if (tc) { 
                 const r = tc.getBoundingClientRect();
                 if (event.clientX < r.left || event.clientX >= r.right || event.clientY < r.top || event.clientY >= r.bottom) {
                     tc.classList.remove('drag-over');
@@ -1881,9 +1876,8 @@
 
             if (draggableEl && targetDropZone) {
                 const originalColumnId = draggableEl.dataset.column;
-                const targetColumnId = targetDropZone.parentElement.id; // e.g., 'todo', 'inprogress', 'done'
+                const targetColumnId = targetDropZone.parentElement.id; 
 
-                // Determine insertion point (before which element)
                 let beforeElement = null;
                 const cardsInZone = Array.from(targetDropZone.querySelectorAll('.task-card:not(.dragging)'));
                 for (const child of cardsInZone) {
@@ -1895,10 +1889,9 @@
                 }
 
                 const oldParent = draggableEl.parentElement;
-                targetDropZone.insertBefore(draggableEl, beforeElement); // Insert into new position
-                draggableEl.dataset.column = targetColumnId; // Update card's column attribute
+                targetDropZone.insertBefore(draggableEl, beforeElement); 
+                draggableEl.dataset.column = targetColumnId; 
 
-                // Burst animation if moved to 'Done'
                 if (targetColumnId === 'done' && originalColumnId !== 'done') {
                     draggableEl.classList.add('task-completed-burst');
                     draggableEl.addEventListener('animationend', () => {
@@ -1906,62 +1899,42 @@
                     }, { once: true });
                 }
 
-                // Prepare payload for backend update (column and sort order)
-                // This needs to update ALL tasks in both the source (if different) and target columns
                 const tasksToUpdatePayload = [];
 
-                // Update sort order for target column
                 Array.from(targetDropZone.querySelectorAll('.task-card')).forEach((card, index) => {
                     tasksToUpdatePayload.push({ id: card.id, column_id: targetColumnId, sort_order: index });
-                    card.dataset.sortOrder = index; // Update data attribute for consistency
+                    card.dataset.sortOrder = index; 
                 });
 
-                // If task moved from a different column, update sort order for source column too
                 if(originalColumnId && originalColumnId !== targetColumnId && oldParent && oldParent.classList.contains('tasks-container')){
                     Array.from(oldParent.querySelectorAll('.task-card')).forEach((card, index) => {
-                        // Avoid adding if already in payload (shouldn't happen if logic is correct)
                         if(!tasksToUpdatePayload.find(t => t.id === card.id)) {
                              tasksToUpdatePayload.push({ id: card.id, column_id: originalColumnId, sort_order: index });
                              card.dataset.sortOrder = index;
                         }
                     });
                 }
-
-                // Remove duplicates if any (e.g., if a card was in payload from target and source logic overlaps)
-                // This step is more of a safeguard.
+                
                 const uniqueTasksToUpdate = Array.from(new Map(tasksToUpdatePayload.map(task => [task.id, task])).values());
 
 
                 if (uniqueTasksToUpdate.length > 0) {
                     try {
-                        // Send a batch update for all affected tasks if your API supports it,
-                        // or loop and send individual updates. Looping for now:
-                        for (const taskData of uniqueTasksToUpdate) {
-                            const payload = {
-                                id: taskData.id,
-                                column_id: taskData.column_id,
-                                sort_order: taskData.sort_order
-                            };
-                            // Don't await each one if you want faster UI, but risk data inconsistency if one fails.
-                            // For robustness, one might await or use Promise.all.
-                            const { data, responseOk } = await fetchAPI('/tasks_api.php', 'PUT', payload);
-                            if (!responseOk || !data.success) {
-                                console.error("Error updating task during drag&drop:", taskData.id, data?.error || "Server error.");
-                                // Potentially revert UI changes or notify user
-                            }
+                        const payload = { tasks_order: uniqueTasksToUpdate, batch: true }; // Use tasks_order for batch reorder
+                        const { data, responseOk } = await fetchAPI('/tasks_api.php', 'PUT', payload);
+
+                        if (!responseOk || !data.success) {
+                            console.error("Error batch updating tasks during drag&drop:", data?.error || "Server error.");
+                            await loadTasksFromServer(); // Revert UI on error
+                        } else {
+                            updateProgressStats();
+                            filterTasks();
                         }
-                        // After all updates, or if you prefer optimistic UI:
-                        // loadTasksFromServer(); // This re-fetches everything, might be too slow.
-                                           // Simpler to just update stats if individual updates are fine.
-                        updateProgressStats();
-                        filterTasks(); // Update column counts based on filters
                     } catch (error) {
-                        console.error('Error batch updating tasks after drag&drop:', error.message);
-                        // Consider reverting UI or reloading all tasks for safety
-                        await loadTasksFromServer();
+                        console.error('Error in fetchAPI during batch update tasks after drag&drop:', error.message);
+                        await loadTasksFromServer(); 
                     }
                 } else {
-                    // If no tasks needed backend update (e.g. reordering within same empty column - unlikely)
                     updateProgressStats();
                     filterTasks();
                 }
@@ -1977,7 +1950,7 @@
             ];
 
             columnsMeta.forEach(({ container, countEl, emptyIcon, emptyText }) => {
-                if (!container || !countEl) return; // Column might not be on the page or fully initialized
+                if (!container || !countEl) return; 
 
                 const visibleTasks = Array.from(container.children)
                                          .filter(c => c.classList.contains('task-card') && !c.classList.contains('hidden-by-filter'));
@@ -1991,9 +1964,9 @@
                         container.appendChild(msgEl);
                     }
                     msgEl.innerHTML = `<i class="${emptyIcon} mb-3 opacity-60"></i><p>${emptyText}</p>`;
-                    msgEl.style.display = 'flex'; // Ensure it's visible
+                    msgEl.style.display = 'flex'; 
                 } else if (msgEl) {
-                    msgEl.style.display = 'none'; // Hide if tasks are present
+                    msgEl.style.display = 'none'; 
                 }
             });
         }
@@ -2001,27 +1974,25 @@
 
         async function loadTasksFromServer() {
             if (!views.kanban || views.kanban.classList.contains('view-hidden') || !columnsTasksContainers) {
-                return; // Don't load if Kanban view is not active or containers not found
+                return; 
             }
             try {
                 const { data: tasksByColumnData, responseOk, status } = await fetchAPI('/tasks_api.php?archived=false');
 
                 if (!responseOk) {
-                    if (status === 401) { // Unauthorized, session likely expired
+                    if (status === 401) { 
                         navigateTo('login');
                     }
                     console.error("Failed to load tasks from server, status:", status, tasksByColumnData);
-                    // Optionally, display an error message on the board
                     return;
                 }
 
-                columnsTasksContainers.forEach(container => container.innerHTML = ''); // Clear columns before repopulating
+                columnsTasksContainers.forEach(container => container.innerHTML = ''); 
 
-                // Ensure the data structure is as expected
                 if (!tasksByColumnData || typeof tasksByColumnData !== 'object' ||
                     !(tasksByColumnData.hasOwnProperty('todo') && tasksByColumnData.hasOwnProperty('inprogress') && tasksByColumnData.hasOwnProperty('done')) ) {
                     console.error("Invalid task data structure received for active tasks:", tasksByColumnData);
-                    updateColumnVisuals(); // Update visuals even if data is bad/empty
+                    updateColumnVisuals(); 
                     return;
                 }
 
@@ -2030,9 +2001,8 @@
                     const columnEl = document.getElementById(columnKey)?.querySelector('.tasks-container');
                     if (columnEl && Array.isArray(tasks)) {
                         tasks
-                            .sort((a, b) => (Number(a.sort_order) || 0) - (Number(b.sort_order) || 0)) // Sort by sort_order
+                            .sort((a, b) => (Number(a.sort_order) || 0) - (Number(b.sort_order) || 0)) 
                             .forEach(taskData => {
-                                // Ensure only non-archived tasks are processed here
                                 if (taskData.is_archived === 0 || taskData.is_archived === false) {
                                     try {
                                         columnEl.appendChild(createTaskCard(taskData));
@@ -2045,22 +2015,21 @@
                             });
                     }
                 });
-                filterTasks(); // Apply search filter if any
-                updateProgressStats(); // Update progress bar and counts
+                filterTasks(); 
+                updateProgressStats(); 
 
-            } catch (error) { // Catch errors from fetchAPI itself (network, etc.)
+            } catch (error) { 
                 console.error("Error loading tasks:", error.message);
                 if (error.status === 401) navigateTo('login');
-                // You might want to show a user-friendly error on the board
             }
         }
 
 
-        let RcsCache = {}; // Root CSS Variable Cache
+        let RcsCache = {}; 
         function getRootCssVariable(varName) {
             return RcsCache[varName] || (RcsCache[varName] = getComputedStyle(document.documentElement).getPropertyValue(varName).trim());
         }
-        function clearRootCssCache() { RcsCache = {}; } // Call this on theme change
+        function clearRootCssCache() { RcsCache = {}; } 
 
         function renderOrUpdatePriorityDistributionChart() {
             const chartCanvas = document.getElementById('priorityDistributionChart');
@@ -2072,12 +2041,12 @@
                     myPriorityDistributionChart = null;
                 }
                 const chartSection = document.getElementById('charts-section');
-                if(chartSection) chartSection.style.display = 'none'; // Hide section if no chart
+                if(chartSection) chartSection.style.display = 'none'; 
                 return;
             }
 
             const ctx = chartCanvas.getContext('2d');
-            if (!ctx) return; // Canvas context not available
+            if (!ctx) return; 
 
             let allVisibleTasks = [];
             if (columnsTasksContainers && columnsTasksContainers.length > 0 ) {
@@ -2089,7 +2058,7 @@
                 if (!acc[priority]) acc[priority] = 0;
                 acc[priority]++;
                 return acc;
-            }, { low: 0, medium: 0, high: 0 }); // Initialize all to 0
+            }, { low: 0, medium: 0, high: 0 }); 
 
             const chartDataValues = [priorityCounts.low, priorityCounts.medium, priorityCounts.high];
             const totalTasksForChart = chartDataValues.reduce((a, b) => a + b, 0);
@@ -2097,18 +2066,17 @@
             const chartSection = document.getElementById('charts-section');
             if (!chartSection) return;
 
-            if (totalTasksForChart === 0) { // No tasks to show in chart
+            if (totalTasksForChart === 0) { 
                 if (myPriorityDistributionChart) {
                     myPriorityDistributionChart.destroy();
                     myPriorityDistributionChart = null;
                 }
-                chartSection.style.display = 'none'; // Hide the entire chart section
+                chartSection.style.display = 'none'; 
                 return;
             } else {
-                chartSection.style.display = 'block'; // Show section if there's data
+                chartSection.style.display = 'block'; 
             }
 
-            // Get theme-dependent colors
             const isDarkMode = document.body.classList.contains('dark-mode');
             const colors = {
                 primary: getRootCssVariable('--color-text-primary'),
@@ -2116,8 +2084,8 @@
                 low: getRootCssVariable('--color-priority-low'),
                 medium: getRootCssVariable('--color-priority-medium'),
                 high: getRootCssVariable('--color-priority-high'),
-                border: getRootCssVariable(isDarkMode ? '--color-bg-page-start' : '--color-card-bg'), // Doughnut segment border
-                hoverBorder: isDarkMode ? '#FFFFFF' : '#333333' // Doughnut segment hover border
+                border: getRootCssVariable(isDarkMode ? '--color-bg-page-start' : '--color-card-bg'), 
+                hoverBorder: isDarkMode ? '#FFFFFF' : '#333333' 
             };
 
             const segmentColors = [colors.low, colors.medium, colors.high];
@@ -2167,7 +2135,7 @@
                 }
             };
 
-            if (myPriorityDistributionChart) { // Update existing chart
+            if (myPriorityDistributionChart) { 
                 myPriorityDistributionChart.data.datasets[0].data = chartDataValues;
                 myPriorityDistributionChart.data.datasets[0].backgroundColor = segmentColors;
                 myPriorityDistributionChart.data.datasets[0].hoverBackgroundColor = segmentHoverColors;
@@ -2175,19 +2143,18 @@
                 myPriorityDistributionChart.options.plugins.title.color = colors.primary;
                 myPriorityDistributionChart.options.plugins.legend.labels.color = colors.secondary;
                 myPriorityDistributionChart.update();
-            } else { // Create new chart
+            } else { 
                 myPriorityDistributionChart = new Chart(ctx, chartConfig);
             }
         }
 
         function setTheme(theme) {
-            clearRootCssCache(); // Important for chart colors
+            clearRootCssCache(); 
             document.body.classList.toggle('dark-mode', theme === 'dark');
             sunIcon?.classList.toggle('hidden', theme === 'dark');
             moonIcon?.classList.toggle('hidden', theme === 'light');
             localStorage.setItem('strideKanbanTheme', theme);
 
-            // Re-render chart if Kanban view is active, as colors will have changed
             const currentViewName = Object.keys(views).find(key => views[key] && !views[key].classList.contains('view-hidden'));
             if (currentViewName === 'kanban') {
                 if (document.getElementById('priorityDistributionChart')) {
@@ -2204,7 +2171,7 @@
 
         function updateProgressStats() {
             if (!progressFill || !progressText || !progressMascot) return;
-            updateColumnVisuals(); // Update column counts and empty messages first
+            updateColumnVisuals(); 
 
             const counts = ['todo', 'inprogress', 'done'].map(id => {
                 const col = document.getElementById(id);
@@ -2216,12 +2183,10 @@
             progressFill.style.width = `${progress}%`;
             progressText.textContent = `${Math.round(progress)}% Complete (Visible)`;
 
-            // Adjust mascot position slightly so it doesn't sit exactly on the edge at 0% or 100%
-            const mascotOffset = progress > 5 && progress < 95 ? -5 : 5; //px
+            const mascotOffset = progress > 5 && progress < 95 ? -5 : 5; 
             progressMascot.style.left = `calc(${progress}% + ${mascotOffset}px)`;
-            progressMascot.style.display = (progress > 0 && progress < 100) ? 'block' : 'none'; // Hide if 0% or 100%
+            progressMascot.style.display = (progress > 0 && progress < 100) ? 'block' : 'none'; 
 
-            // Update chart only if Kanban view is active
             if(document.getElementById('priorityDistributionChart') && views.kanban && !views.kanban.classList.contains('view-hidden')) {
                 renderOrUpdatePriorityDistributionChart();
             }
@@ -2230,7 +2195,6 @@
         async function exportBoardAsJson() {
             toggleErrorElement(exportErrorMessageElement, false);
             try {
-                // Fetch only non-archived tasks for export
                 const { data: dataToExport, responseOk } = await fetchAPI('/tasks_api.php?archived=false');
                 if (!responseOk || (typeof dataToExport === 'object' && Object.values(dataToExport).every(col => Array.isArray(col) && col.length === 0))) {
                     toggleErrorElement(exportErrorMessageElement, true, "No active tasks to export!");
@@ -2264,7 +2228,7 @@
                     card.classList.toggle('hidden-by-filter', !(text.includes(searchTerm) || labels.includes(searchTerm)));
                 });
             });
-            updateProgressStats(); // Recalculate progress based on visible tasks
+            updateProgressStats(); 
         }
 
 
@@ -2273,56 +2237,93 @@
             adminUserListTbody = document.getElementById('admin-user-list-tbody');
             adminUsersErrorMessageElement = document.getElementById('admin-users-error-message');
             adminBackToKanbanBtn = document.getElementById('admin-back-to-kanban-btn');
-            // sidebarLinkAdmin is already initialized in initializeSharedDOM
+            adminUserTasksSection = document.getElementById('admin-user-tasks-section');
+            adminTasksForUserEmailElement = document.getElementById('admin-tasks-for-user-email');
+            adminUserTasksListContainer = document.getElementById('admin-user-tasks-list-container');
+            adminUserTasksLoadingElement = document.getElementById('admin-user-tasks-loading');
+            adminUserTasksErrorMessageElement = document.getElementById('admin-user-tasks-error-message');
+            adminCloseUserTasksBtn = document.getElementById('admin-close-user-tasks-btn');
+
 
             adminBackToKanbanBtn?.removeEventListener('click', () => navigateTo('kanban'));
             adminBackToKanbanBtn?.addEventListener('click', () => navigateTo('kanban'));
 
             adminUserListTbody?.removeEventListener('click', handleAdminUserAction);
             adminUserListTbody?.addEventListener('click', handleAdminUserAction);
+
+            adminCloseUserTasksBtn?.removeEventListener('click', hideUserTasksSection);
+            adminCloseUserTasksBtn?.addEventListener('click', hideUserTasksSection);
         }
 
         async function loadAdminUsers() {
             if (!adminUserListTbody) { initializeAdminDashboardDOM(); if(!adminUserListTbody) return; }
 
-            adminUserListTbody.innerHTML = '<tr><td colspan="4" class="text-center p-4 text-[var(--color-text-muted)]">Loading users...</td></tr>';
+            adminUserListTbody.innerHTML = `<tr><td colspan="6" class="px-6 py-10 text-center text-sm text-[var(--color-text-muted)]"><i class="fas fa-spinner fa-spin fa-2x mb-2"></i><br>Loading users...</td></tr>`;
             toggleErrorElement(adminUsersErrorMessageElement, false);
 
             try {
                 const { data, responseOk, status } = await fetchAPI('/admin_api.php?action=get_users', 'GET');
                 if (responseOk && data.success && Array.isArray(data.users)) {
-                    adminUserListTbody.innerHTML = ''; // Clear loading/error
+                    adminUserListTbody.innerHTML = ''; 
                     if (data.users.length === 0) {
-                        adminUserListTbody.innerHTML = '<tr><td colspan="4" class="text-center p-4 text-[var(--color-text-muted)]">No users found.</td></tr>';
+                        adminUserListTbody.innerHTML = `<tr><td colspan="6" class="px-6 py-10 text-center text-sm text-[var(--color-text-muted)]"><i class="fas fa-users-slash fa-2x mb-2"></i><br>No users found.</td></tr>`;
                     } else {
                         data.users.forEach(user => {
                             const row = adminUserListTbody.insertRow();
-                            row.insertCell().textContent = user.email;
+                            row.className = "hover:bg-[var(--color-ui-bg-medium)] transition-colors duration-150"; 
+
+                            const emailCell = row.insertCell();
+                            emailCell.className = "px-6 py-4 whitespace-nowrap text-sm text-[var(--color-text-primary)]";
+                            emailCell.textContent = user.email;
+
                             const isAdminCell = row.insertCell();
+                            isAdminCell.className = "px-6 py-4 whitespace-nowrap text-sm";
                             isAdminCell.innerHTML = user.is_admin
-                                ? '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-700 dark:text-green-100">Yes</span>'
-                                : '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800 dark:bg-red-700 dark:text-red-100">No</span>';
-                            row.insertCell().textContent = new Date(user.created_at).toLocaleDateString();
+                                ? '<span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-700 dark:text-green-100">Admin</span>'
+                                : '<span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">User</span>'; 
+                            
+                            const activeTasksCell = row.insertCell();
+                            activeTasksCell.className = "px-6 py-4 whitespace-nowrap text-sm text-center text-[var(--color-text-secondary)]";
+                            activeTasksCell.textContent = user.active_tasks;
+
+                            const totalTasksCell = row.insertCell();
+                            totalTasksCell.className = "px-6 py-4 whitespace-nowrap text-sm text-center text-[var(--color-text-secondary)]";
+                            totalTasksCell.textContent = user.total_tasks;
+
+                            const registeredCell = row.insertCell();
+                            registeredCell.className = "px-6 py-4 whitespace-nowrap text-sm text-[var(--color-text-secondary)]";
+                            registeredCell.textContent = new Date(user.created_at).toLocaleDateString([], { year: 'numeric', month: 'long', day: 'numeric' }); 
 
                             const actionsCell = row.insertCell();
-                            actionsCell.classList.add('space-x-2', 'whitespace-nowrap', 'text-right', 'px-6'); // Align actions to right
+                            actionsCell.className = "px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-1"; 
+
+                            const viewTasksBtn = document.createElement('button');
+                            viewTasksBtn.innerHTML = `<i class="fas fa-list-alt"></i>`; 
+                            viewTasksBtn.title = `View tasks for ${user.email}`;
+                            viewTasksBtn.className = 'btn btn-sm btn-secondary admin-view-tasks-btn !p-2 text-xs'; 
+                            viewTasksBtn.dataset.userId = user.id;
+                            viewTasksBtn.dataset.userEmail = user.email;
+                            actionsCell.appendChild(viewTasksBtn);
 
                             const toggleAdminBtn = document.createElement('button');
-                            toggleAdminBtn.textContent = user.is_admin ? 'Demote' : 'Promote';
+                            toggleAdminBtn.innerHTML = user.is_admin 
+                                ? `<i class="fas fa-user-minus"></i>` 
+                                : `<i class="fas fa-user-plus"></i>`;
                             toggleAdminBtn.title = user.is_admin ? 'Demote to User' : 'Promote to Admin';
-                            toggleAdminBtn.className = `btn btn-sm ${user.is_admin ? 'btn-neutral' : 'btn-secondary'} admin-toggle-btn`;
+                            toggleAdminBtn.className = `btn btn-sm ${user.is_admin ? 'btn-neutral hover:!bg-orange-500 dark:hover:!bg-orange-600' : 'btn-secondary hover:!bg-sky-500 dark:hover:!bg-sky-600'} admin-toggle-btn !p-2 text-xs`; 
                             toggleAdminBtn.dataset.userId = user.id;
                             toggleAdminBtn.dataset.makeAdmin = user.is_admin ? 'false' : 'true';
+                            actionsCell.appendChild(toggleAdminBtn);
 
                             const deleteBtn = document.createElement('button');
-                            // deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i> Delete';
-                            deleteBtn.innerHTML = 'Delete'; // Simpler text for button
+                            deleteBtn.innerHTML = `<i class="fas fa-trash-alt"></i>`;
                             deleteBtn.title = 'Delete User';
-                            deleteBtn.className = 'btn btn-sm btn-neutral admin-delete-btn !bg-red-500 hover:!bg-red-600 dark:!bg-red-600 dark:hover:!bg-red-700';
+                            deleteBtn.className = 'btn btn-sm btn-neutral hover:!bg-red-600 dark:hover:!bg-red-700 admin-delete-btn !p-2 text-xs !bg-red-500 dark:!bg-red-600'; 
                             deleteBtn.dataset.userId = user.id;
                             deleteBtn.dataset.userEmail = user.email;
+                            actionsCell.appendChild(deleteBtn);
 
-                            // Disable actions on self (frontend UX, backend enforces this)
+
                             const currentUserId = sessionStorage.getItem('current_user_id_from_session');
                             if (String(user.id) === currentUserId) {
                                toggleAdminBtn.disabled = true;
@@ -2330,35 +2331,101 @@
                                deleteBtn.disabled = true;
                                deleteBtn.classList.add('opacity-50', 'cursor-not-allowed');
                             }
-
-                            actionsCell.appendChild(toggleAdminBtn);
-                            actionsCell.appendChild(deleteBtn);
                         });
                     }
                 } else {
-                    if (status === 403) { // Forbidden, likely not an admin (or session issue)
-                        navigateTo('kanban'); // Or 'landing' if session is completely invalid
+                    if (status === 403) { 
+                        navigateTo('kanban');
                         alert("Access Denied: You do not have administrator privileges or your session is invalid.");
                     } else {
                         toggleErrorElement(adminUsersErrorMessageElement, true, data.error || 'Failed to load users.');
-                        adminUserListTbody.innerHTML = `<tr><td colspan="4" class="text-center p-4 text-[var(--color-warning-text)]">${data.error || 'Failed to load users.'}</td></tr>`;
+                        adminUserListTbody.innerHTML = `<tr><td colspan="6" class="px-6 py-10 text-center text-sm text-[var(--color-warning-text)]"><i class="fas fa-exclamation-triangle fa-2x mb-2"></i><br>${data.error || 'Failed to load users.'}</td></tr>`;
                     }
                 }
-            } catch (error) { // Catch errors from fetchAPI
+            } catch (error) { 
                 toggleErrorElement(adminUsersErrorMessageElement, true, error.message || 'An error occurred while fetching users.');
-                adminUserListTbody.innerHTML = `<tr><td colspan="4" class="text-center p-4 text-[var(--color-warning-text)]">${error.message || 'An error occurred.'}</td></tr>`;
-                 if (error.status === 403) navigateTo('kanban'); // Or 'landing'
+                adminUserListTbody.innerHTML = `<tr><td colspan="6" class="px-6 py-10 text-center text-sm text-[var(--color-warning-text)]"><i class="fas fa-exclamation-triangle fa-2x mb-2"></i><br>${error.message || 'An error occurred.'}</td></tr>`;
+                 if (error.status === 403) navigateTo('kanban');
             }
         }
 
+        function hideUserTasksSection() {
+            adminUserTasksSection?.classList.add('view-hidden');
+            if(adminUserTasksListContainer) adminUserTasksListContainer.innerHTML = ''; 
+            if(adminTasksForUserEmailElement) adminTasksForUserEmailElement.textContent = '';
+        }
+
+        async function showUserTasks(targetUserId, targetUserEmail) {
+            if (!adminUserTasksSection || !adminTasksForUserEmailElement || !adminUserTasksListContainer || !adminUserTasksLoadingElement || !adminUserTasksErrorMessageElement) {
+                console.error("Admin user tasks display elements not found.");
+                return;
+            }
+
+            hideUserTasksSection(); 
+            adminUserTasksSection.classList.remove('view-hidden');
+            adminTasksForUserEmailElement.textContent = targetUserEmail || `User ID: ${targetUserId}`;
+            adminUserTasksListContainer.innerHTML = ''; 
+            adminUserTasksLoadingElement.style.display = 'block';
+            toggleErrorElement(adminUserTasksErrorMessageElement, false);
+            adminUserTasksSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+
+            try {
+                const { data, responseOk } = await fetchAPI(`/admin_api.php?action=get_user_tasks&user_id=${targetUserId}`, 'GET');
+                adminUserTasksLoadingElement.style.display = 'none';
+
+                if (responseOk && data.success && Array.isArray(data.tasks)) {
+                    if (data.tasks.length === 0) {
+                        adminUserTasksListContainer.innerHTML = `<p class="text-center text-sm text-[var(--color-text-muted)] py-4">No tasks found for this user.</p>`;
+                    } else {
+                        data.tasks.forEach(task => {
+                            adminUserTasksListContainer.appendChild(renderUserTaskCardAsAdmin(task));
+                        });
+                    }
+                } else {
+                    toggleErrorElement(adminUserTasksErrorMessageElement, true, data.error || "Failed to load user's tasks.");
+                }
+            } catch (error) {
+                adminUserTasksLoadingElement.style.display = 'none';
+                toggleErrorElement(adminUserTasksErrorMessageElement, true, error.message || "An error occurred while fetching user's tasks.");
+            }
+        }
+
+        function renderUserTaskCardAsAdmin(task) {
+            const card = document.createElement('div');
+            card.className = `p-4 rounded-lg border border-[var(--color-ui-border)] bg-[var(--color-card-bg)] shadow-sm`;
+            card.dataset.taskId = task.id;
+
+            const formattedDueDate = task.due_date ? `Due: ${formatDate(new Date(task.due_date))}` : 'No due date';
+            const statusText = task.is_archived ? 'Archived' : (task.column_id ? `Status: ${task.column_id.charAt(0).toUpperCase() + task.column_id.slice(1)}` : 'Status: Unknown');
+            const labelsHtml = (task.labels || '').split(',').map(l => l.trim()).filter(l => l).map(tag => `<span class="task-label-badge !text-xs">${tag}</span>`).join(' ') || 'No labels';
+
+            card.innerHTML = `
+                <p class="font-semibold text-md mb-1 text-[var(--color-text-primary)]">${task.text}</p>
+                <div class="text-xs space-y-1 text-[var(--color-text-secondary)]">
+                    <p>Priority: <span class="font-medium text-[var(--color-priority-${task.priority})]">${task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}</span></p>
+                    <p>${formattedDueDate}</p>
+                    <p>${statusText}</p>
+                    <p>Labels: ${labelsHtml}</p>
+                    <p class="mt-1 pt-1 border-t border-[var(--color-ui-border)] text-[0.7rem]">
+                        Created: ${new Date(task.created_at).toLocaleDateString()} | Updated: ${new Date(task.updated_at).toLocaleDateString()}
+                    </p>
+                </div>
+            `;
+            return card;
+        }
+
+
         async function handleAdminUserAction(event) {
-            const targetButton = event.target.closest('button.btn'); // Target only buttons with 'btn' class
-            if (!targetButton || !targetButton.dataset.userId) return; // Ensure it's an action button with a userId
+            const targetButton = event.target.closest('button.btn'); 
+            if (!targetButton || !targetButton.dataset.userId) return; 
 
             const userId = targetButton.dataset.userId;
-            const originalButtonText = targetButton.innerHTML; // Store original for restoring
+            const userEmail = targetButton.dataset.userEmail; 
 
-            if (targetButton.classList.contains('admin-toggle-btn')) {
+            if (targetButton.classList.contains('admin-view-tasks-btn')) {
+                await showUserTasks(userId, userEmail);
+            } else if (targetButton.classList.contains('admin-toggle-btn')) {
                 const makeAdmin = targetButton.dataset.makeAdmin === 'true';
                 const actionText = makeAdmin ? 'promote to admin' : 'demote to regular user';
                 showCustomConfirm(
@@ -2369,38 +2436,36 @@
                         try {
                             const { data, responseOk } = await fetchAPI('/admin_api.php?action=toggle_admin', 'POST', { user_id: userId, make_admin: makeAdmin });
                             if (responseOk && data.success) {
-                                loadAdminUsers(); // Refresh list
+                                loadAdminUsers(); 
                             } else {
                                 alert(`Failed to ${actionText}: ${data.error || 'Server error'}`);
+                                setButtonLoadingState(targetButton, false); // Reset button on error if list not reloaded
                             }
                         } catch (error) {
                             alert(`Error: ${error.message}`);
-                        } finally {
-                            // No need to explicitly call setButtonLoadingState(targetButton, false)
-                            // because loadAdminUsers() will redraw the buttons.
-                            // If loadAdminUsers() wasn't called on error, you would need it.
-                        }
+                            setButtonLoadingState(targetButton, false); // Reset button on error if list not reloaded
+                        } 
                     }
                 );
             } else if (targetButton.classList.contains('admin-delete-btn')) {
-                const userEmail = targetButton.dataset.userEmail || `ID: ${userId}`;
+                const userEmailForDelete = targetButton.dataset.userEmail || `ID: ${userId}`; // Use a different var name to avoid conflict
                 showCustomConfirm(
                     'Delete User',
-                    `Are you sure you want to permanently delete user: <strong>${userEmail.replace(/"/g, '&quot;')}</strong>? This action cannot be undone.`,
+                    `Are you sure you want to permanently delete user: <strong>${userEmailForDelete.replace(/"/g, '&quot;')}</strong>? This action cannot be undone.`,
                     async () => {
                         setButtonLoadingState(targetButton, true, 'Deleting...');
                         try {
                             const { data, responseOk } = await fetchAPI(`/admin_api.php?action=delete_user&user_id=${userId}`, 'DELETE');
                             if (responseOk && data.success) {
-                                loadAdminUsers(); // Refresh list
+                                loadAdminUsers(); 
                             } else {
                                 alert(`Failed to delete user: ${data.error || 'Server error'}`);
+                                setButtonLoadingState(targetButton, false);
                             }
                         } catch (error) {
                             alert(`Error deleting user: ${error.message}`);
-                        } finally {
-                            // As above, loadAdminUsers() redraws.
-                        }
+                            setButtonLoadingState(targetButton, false);
+                        } 
                     }
                 );
             }
@@ -2410,14 +2475,12 @@
         function initEventListeners() {
             initializeAuthDOM();
             initializeSharedDOM();
-            initializeBatchActionDOM(); // For Kanban batch actions
-            initializeAdminDashboardDOM(); // For Admin dashboard actions
+            initializeBatchActionDOM(); 
+            initializeAdminDashboardDOM(); 
 
-            // Landing Page
             landingLoginBtn?.addEventListener('click', () => navigateTo('login'));
             landingRegisterBtn?.addEventListener('click', () => navigateTo('register'));
 
-            // Auth Forms & Links
             gotoRegisterLink?.addEventListener('click', (e) => { e.preventDefault(); navigateTo('register'); });
             gotoLoginLink?.addEventListener('click', (e) => { e.preventDefault(); navigateTo('login'); });
             forgotPasswordLink?.addEventListener('click', (e) => { e.preventDefault(); navigateTo('forgotPassword'); if (forgotMessageElement) forgotMessageElement.textContent = ''; if(loginErrorMessage) loginErrorMessage.classList.add('hidden'); });
@@ -2429,36 +2492,30 @@
             forgotPasswordForm?.addEventListener('submit', handleForgotPasswordRequest);
             resetPasswordForm?.addEventListener('submit', handleResetPassword);
 
-            // Global Actions
             logoutBtn?.addEventListener('click', handleLogout);
             sidebarLogoutBtn?.addEventListener('click', handleLogout);
             themeToggleBtn?.addEventListener('click', () => setTheme(document.body.classList.contains('dark-mode') ? 'light' : 'dark'));
 
-            // Sidebar
             appTitleClickable?.addEventListener('click', toggleSidebar);
             sidebarOverlay?.addEventListener('click', toggleSidebar);
             sidebarLinkDashboard?.addEventListener('click', (e) => { e.preventDefault(); navigateTo('kanban'); toggleSidebar(); });
             sidebarLinkArchive?.addEventListener('click', (e) => { e.preventDefault(); navigateTo('archive'); toggleSidebar(); });
-            sidebarLinkAdmin?.addEventListener('click', handleAdminSidebarClick); // Added for admin dashboard
+            sidebarLinkAdmin?.addEventListener('click', handleAdminSidebarClick); 
 
 
-            // Archive View
             backToDashboardFromArchiveBtn?.addEventListener('click', () => navigateTo('kanban'));
 
-            // Onboarding
             onboardingFinishBtn?.addEventListener('click', () => {
                 localStorage.setItem(ONBOARDING_FLAG_KEY, 'true');
                 navigateTo('kanban');
             });
 
-            // Theme preference on system change
             window.matchMedia?.('(prefers-color-scheme: dark)').addEventListener('change', e => {
-                if (!localStorage.getItem('strideKanbanTheme')) { // Only if no user preference is set
+                if (!localStorage.getItem('strideKanbanTheme')) { 
                     setTheme(e.matches ? 'dark' : 'light');
                 }
             });
 
-            // Password visibility toggles
             passwordToggleButtons?.forEach(button => {
                 button.addEventListener('click', function () {
                     const targetInput = document.getElementById(this.dataset.target);
@@ -2472,13 +2529,11 @@
                 });
             });
 
-            // Clear error messages on input for auth forms
             [loginEmailInput, loginPasswordInput].forEach(el => el?.addEventListener('input', () => toggleErrorElement(loginErrorMessage, false)));
             [registerEmailInput, registerPasswordInput, registerConfirmPasswordInput].forEach(el => el?.addEventListener('input', () => toggleErrorElement(registerErrorMessage, false)));
             [forgotEmailInput].forEach(el => el?.addEventListener('input', () => { if (forgotMessageElement) forgotMessageElement.textContent = ''; }));
             [resetNewPasswordInput, resetConfirmPasswordInput].forEach(el => el?.addEventListener('input', () => { if (resetMessageElement) resetMessageElement.textContent = ''; }));
 
-            // Ctrl+N or Alt+N for new task focus (example, adjust as needed)
             document.addEventListener('keydown', (event) => {
                 if ((event.ctrlKey || event.altKey) && (event.key === 'n' || event.key === 'N') && views.kanban && !views.kanban.classList.contains('view-hidden')) {
                     event.preventDefault();
@@ -2487,17 +2542,17 @@
             });
         }
 
-        function handleAdminSidebarClick(e) { // Specific handler for admin sidebar link
+        function handleAdminSidebarClick(e) { 
             e.preventDefault();
             navigateTo('adminDashboard');
-            toggleSidebar(); // Close sidebar after navigation
+            toggleSidebar(); 
         }
 
 
         document.addEventListener('DOMContentLoaded', () => {
             loadThemePreference();
             initEventListeners();
-            checkLoginStatus(); // This will also handle initial view routing
+            checkLoginStatus(); 
         });
     </script>
 </body>
